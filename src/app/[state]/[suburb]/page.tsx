@@ -37,6 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
     description: `Find bank branches, ATMs, and live service status in ${suburb.name}, ${stateName} ${suburb.postcode}. Report ATM outages, branch closures, and long queues. Updated by the community.`,
+    alternates: {
+      canonical: `https://banknearme.com.au/${state}/${suburbSlug}`,
+    },
     openGraph: {
       title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
       description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}. Report outages, check service status.`,
