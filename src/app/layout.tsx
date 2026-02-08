@@ -227,7 +227,7 @@ export default function RootLayout({
 
             <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/20">
-                BankNearMe.au
+                BANK NEAR ME®
               </p>
               <div className="flex items-center gap-6 text-[11px] text-white/20">
                 <span>&copy; {new Date().getFullYear()}</span>
