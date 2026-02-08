@@ -79,26 +79,32 @@ export default function RootLayout({
               <SearchBar />
             </div>
 
-            <div className="hidden sm:flex items-center gap-10">
-              <Link
-                href="/"
-                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
-              >
-                Home
-              </Link>
-              <Link
-                href="/#states"
-                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
-              >
-                States
-              </Link>
-              <Link
-                href="/#closures"
-                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
-              >
-                Closures
-              </Link>
-            </div>
+              <div className="hidden sm:flex items-center gap-10">
+                <Link
+                  href="/"
+                  className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/#live-feed"
+                  className="text-[10px] uppercase font-medium tracking-[0.25em] text-red-400/60 transition-colors duration-300 hover:text-red-400 underline-reveal"
+                >
+                  Live Feed
+                </Link>
+                <Link
+                  href="/#states"
+                  className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+                >
+                  States
+                </Link>
+                <Link
+                  href="/#closures"
+                  className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+                >
+                  Closures
+                </Link>
+              </div>
 
             <button
               className="flex h-10 w-10 flex-col items-center justify-center sm:hidden"
