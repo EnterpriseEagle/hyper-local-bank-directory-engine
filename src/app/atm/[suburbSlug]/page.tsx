@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
+    alternates: {
+      canonical: `https://banknearme.com.au/atm/${suburbSlug}`,
+    },
   };
 }
 
