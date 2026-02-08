@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-white text-gray-900 min-h-screen flex flex-col">
+      <body className="antialiased bg-black text-white min-h-screen flex flex-col">
         <Script
           id="orchids-browser-logs"
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
@@ -51,109 +51,88 @@ export default function RootLayout({
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
 
-        {/* Header */}
-        <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <Link href="/" className="flex items-center gap-2 shrink-0">
-                <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </div>
-                <span className="text-xl font-bold text-gray-900">
-                  BankNearMe<span className="text-emerald-600">.au</span>
-                </span>
-              </Link>
+        {/* Navigation - Fixed glassmorphism nav */}
+        <nav className="fixed left-0 right-0 top-0 z-50">
+          <div
+            className="absolute inset-0 backdrop-blur-[32px] backdrop-saturate-150"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
-              <div className="hidden md:block flex-1 max-w-md mx-8">
-                <SearchBar />
-              </div>
+          <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
+            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-3">
+              <span className="font-serif text-2xl font-light tracking-wider text-white">
+                BNM
+              </span>
+              <span className="hidden sm:inline text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">
+                BankNearMe.au
+              </span>
+            </Link>
 
-              <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-gray-600">
-                <Link href="/" className="hover:text-emerald-600 transition-colors">
-                  Home
-                </Link>
-                <Link
-                  href="/#states"
-                  className="hover:text-emerald-600 transition-colors"
-                >
-                  States
-                </Link>
-                <Link
-                  href="/#closures"
-                  className="hover:text-emerald-600 transition-colors"
-                >
-                  Closures
-                </Link>
-              </nav>
-            </div>
-            <div className="md:hidden pb-3">
+            <div className="hidden md:block flex-1 max-w-xs mx-8">
               <SearchBar />
             </div>
+
+            <div className="hidden sm:flex items-center gap-10">
+              <Link
+                href="/"
+                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+              >
+                Home
+              </Link>
+              <Link
+                href="/#states"
+                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+              >
+                States
+              </Link>
+              <Link
+                href="/#closures"
+                className="text-[10px] uppercase font-medium tracking-[0.25em] text-white/40 transition-colors duration-300 hover:text-white underline-reveal"
+              >
+                Closures
+              </Link>
+            </div>
+
+            <button
+              className="flex h-10 w-10 flex-col items-center justify-center sm:hidden"
+              aria-label="Toggle Menu"
+            >
+              <div className="space-y-1.5 flex flex-col items-end">
+                <span className="block h-px w-5 bg-white/80"></span>
+                <span className="block h-px w-3 bg-white/80"></span>
+                <span className="block h-px w-5 bg-white/80"></span>
+              </div>
+            </button>
           </div>
-        </header>
 
-        {/* Main content */}
-        <main className="flex-1">{children}</main>
+          <div className="md:hidden px-6 pb-4 relative">
+            <SearchBar />
+          </div>
+        </nav>
 
-        {/* Footer */}
-        <footer className="bg-gray-900 text-gray-400 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Main content - offset for fixed nav */}
+        <main className="flex-1 pt-[80px]">{children}</main>
+
+        {/* Footer - Minimal dark footer */}
+        <footer className="border-t border-white/5 bg-black px-6 py-12 sm:px-10 mt-auto">
+          <div className="mx-auto max-w-[1000px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-7 h-7 bg-emerald-600 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-lg font-bold text-white">
-                    BankNearMe<span className="text-emerald-500">.au</span>
-                  </span>
-                </div>
-                <p className="text-sm leading-relaxed">
-                  Australia&apos;s most comprehensive database of bank branches,
-                  ATMs, and banking services. Track closures and find
-                  alternatives near you.
+                <span className="font-serif text-lg font-light text-white">BankNearMe</span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 ml-1">.au</span>
+                <p className="mt-3 text-[13px] leading-relaxed text-white/30">
+                  Australia&apos;s comprehensive database of bank branches, ATMs, and banking services.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
                   Browse by State
-                </h3>
-                <ul className="space-y-2 text-sm">
+                </p>
+                <ul className="space-y-2">
                   {[
                     ["New South Wales", "new-south-wales"],
                     ["Victoria", "victoria"],
@@ -163,7 +142,7 @@ export default function RootLayout({
                     <li key={slug}>
                       <Link
                         href={`/${slug}`}
-                        className="hover:text-emerald-400 transition-colors"
+                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
                       >
                         {name}
                       </Link>
@@ -173,10 +152,10 @@ export default function RootLayout({
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
                   More States
-                </h3>
-                <ul className="space-y-2 text-sm">
+                </p>
+                <ul className="space-y-2">
                   {[
                     ["South Australia", "south-australia"],
                     ["Tasmania", "tasmania"],
@@ -186,7 +165,7 @@ export default function RootLayout({
                     <li key={slug}>
                       <Link
                         href={`/${slug}`}
-                        className="hover:text-emerald-400 transition-colors"
+                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
                       >
                         {name}
                       </Link>
@@ -196,10 +175,10 @@ export default function RootLayout({
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
                   Popular Banks
-                </h3>
-                <ul className="space-y-2 text-sm">
+                </p>
+                <ul className="space-y-2 text-[12px] text-white/30">
                   <li>Commonwealth Bank</li>
                   <li>Westpac</li>
                   <li>ANZ</li>
@@ -209,15 +188,14 @@ export default function RootLayout({
               </div>
             </div>
 
-            <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
-              <p>
-                &copy; {new Date().getFullYear()} BankNearMe.au. All rights
-                reserved.
+            <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/20">
+                BankNearMe.au
               </p>
-              <p>
-                Data sourced from publicly available banking information. Not
-                affiliated with any bank.
-              </p>
+              <div className="flex items-center gap-6 text-[11px] text-white/20">
+                <span>&copy; {new Date().getFullYear()}</span>
+                <span>Data sourced from publicly available banking information</span>
+              </div>
             </div>
           </div>
         </footer>
