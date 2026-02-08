@@ -192,7 +192,7 @@ export default async function HomePage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {recentReports.map((r) => {
                 const info = REPORT_LABELS[r.reportType] || {
                   label: r.reportType,
@@ -203,13 +203,13 @@ export default async function HomePage() {
                   <Link
                     key={r.id}
                     href={`/${r.stateSlug}/${r.suburbSlug}`}
-                    className="group bg-black p-6 flex items-start gap-4 transition-all duration-300 hover:bg-white/[0.02]"
+                    className="group bg-white/[0.02] border border-white/[0.05] p-6 flex items-start gap-4 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-0.5"
                   >
-                    <span className="text-xl mt-0.5 shrink-0">{info.icon}</span>
+                    <span className="text-2xl mt-0.5 shrink-0 transform transition-transform duration-300 group-hover:scale-110">{info.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1.5">
                         <span
-                          className={`text-[11px] font-medium uppercase tracking-wide ${info.color}`}
+                          className={`text-[10px] font-bold uppercase tracking-wider ${info.color} bg-white/[0.03] px-1.5 py-0.5`}
                         >
                           {info.label}
                         </span>
@@ -217,14 +217,14 @@ export default async function HomePage() {
                           {timeAgo(r.createdAt)}
                         </span>
                       </div>
-                      <p className="text-[14px] font-light text-white truncate">
+                      <p className="text-[15px] font-light text-white truncate group-hover:text-white/90">
                         {r.branchName}
                       </p>
-                      <p className="text-[11px] text-white/25 mt-0.5">
-                        {r.suburbName} {r.postcode}, {r.state}
+                      <p className="text-[11px] text-white/25 mt-1 uppercase tracking-wide">
+                        {r.suburbName}, {r.state}
                       </p>
                     </div>
-                    <span className="text-white/10 mt-1 transition-all duration-300 group-hover:text-white/30 group-hover:translate-x-1 shrink-0">
+                    <span className="text-white/10 mt-1 transition-all duration-300 group-hover:text-white/40 group-hover:translate-x-1 shrink-0">
                       &rarr;
                     </span>
                   </Link>
@@ -319,7 +319,7 @@ export default async function HomePage() {
               <span className="text-white/30">Crowd-sourced. Real-time. Zero login.</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {[
                 {
                   step: "01",
@@ -342,21 +342,25 @@ export default async function HomePage() {
               ].map((item) => (
                 <div
                   key={item.step}
-                  className="bg-black p-6 sm:p-8"
+                  className="group relative bg-white/[0.02] border border-white/[0.05] p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-1"
                 >
-                  <span className="text-2xl mb-3 block">{item.icon}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-medium">
-                    Step {item.step}
+                  <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity duration-500 group-hover:opacity-10">
+                    <span className="text-6xl font-serif italic">{item.step}</span>
+                  </div>
+                  <span className="text-3xl mb-6 block transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">{item.icon}</span>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-semibold">
+                    Phase {item.step}
                   </span>
-                  <h3 className="font-serif text-[20px] font-light text-white mt-2 mb-2">
+                  <h3 className="font-serif text-[22px] font-light text-white mt-3 mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-[14px] font-light leading-[1.7] text-white/40">
+                  <p className="text-[14px] font-light leading-[1.8] text-white/40">
                     {item.desc}
                   </p>
                 </div>
               ))}
             </div>
+
           </div>
         </section>
 
@@ -374,31 +378,31 @@ export default async function HomePage() {
                 Suburbs with the highest number of service failure reports.
               </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {hotspots.map((h) => (
-                    <Link
-                      key={h.suburbSlug}
-                      href={`/${h.stateSlug}/${h.suburbSlug}`}
-                      className="group relative bg-white/[0.02] border border-white/[0.05] p-6 transition-all duration-500 hover:bg-red-500/[0.02] hover:border-red-500/10"
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-red-400/60 bg-red-400/5 px-2 py-0.5">
-                          {h.reportCount} {h.reportCount === 1 ? "report" : "reports"}
-                        </span>
-                        <span className="text-white/10 transition-all duration-300 group-hover:text-red-400/50 group-hover:translate-x-1">
-                          &rarr;
-                        </span>
-                      </div>
-                      <h3 className="font-serif text-[20px] font-light text-white mb-1 group-hover:text-red-400/90 transition-colors duration-300">
-                        {h.suburbName}
-                      </h3>
-                      <p className="text-[12px] text-white/30">
-                        {h.postcode}, {h.state}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
-
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
+                {hotspots.map((h) => (
+                  <Link
+                    key={h.suburbSlug}
+                    href={`/${h.stateSlug}/${h.suburbSlug}`}
+                    className="group bg-black p-5 sm:p-6 transition-all duration-500 hover:bg-red-500/[0.02]"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-medium uppercase tracking-wide text-red-400/60">
+                        {h.reportCount} {h.reportCount === 1 ? "report" : "reports"}
+                      </span>
+                      <span className="text-white/15 transition-all duration-300 group-hover:text-red-400/50 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-[18px] font-light text-white mb-1">
+                      {h.suburbName}
+                    </h3>
+                    <p className="text-[12px] text-white/30">
+                      {h.postcode}, {h.state}
+                    </p>
+                    <div className="mt-3 h-px w-0 bg-red-400/20 transition-all duration-700 group-hover:w-full" />
+                  </Link>
+                ))}
+              </div>
             </div>
           </section>
         )}
@@ -452,22 +456,21 @@ export default async function HomePage() {
             service status in your suburb.
           </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {states.map((s) => (
-                <Link
-                  key={s.stateSlug}
-                  href={`/${s.stateSlug}`}
-                  className="group relative bg-white/[0.02] border border-white/[0.05] p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-0.5"
-                >
-                  <h3 className="font-serif text-[20px] font-light text-white mb-2 transition-all duration-300 group-hover:translate-x-1">
-                    {STATE_NAMES[s.stateSlug] || s.state}
-                  </h3>
-                  <p className="text-[12px] text-white/30">{s.count} suburbs</p>
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-white/20 transition-all duration-500 group-hover:w-full" />
-                </Link>
-              ))}
-            </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
+            {states.map((s) => (
+              <Link
+                key={s.stateSlug}
+                href={`/${s.stateSlug}`}
+                className="group bg-black p-8 transition-all duration-500 hover:bg-white/[0.02]"
+              >
+                <h3 className="font-serif text-[18px] font-light text-white mb-2 transition-all duration-300 group-hover:translate-x-1">
+                  {STATE_NAMES[s.stateSlug] || s.state}
+                </h3>
+                <p className="text-[12px] text-white/30">{s.count} suburbs</p>
+                <div className="mt-4 h-px w-0 bg-white/20 transition-all duration-700 group-hover:w-full" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
