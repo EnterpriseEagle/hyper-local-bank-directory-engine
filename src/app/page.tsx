@@ -254,48 +254,52 @@ export default async function HomePage() {
 
       {/* ===== OUTAGE STATS BAR ===== */}
       <section className="border-b border-white/5 bg-black">
-        <div className="mx-auto max-w-[1000px] grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
+        <div className="mx-auto max-w-[1000px] grid grid-cols-2 md:grid-cols-4">
           {[
             {
               label: "ATMs Empty",
               value: outageStats.atmEmpty,
               color: "text-red-400",
-              bg: "bg-red-500/5",
+              hoverBg: "hover:bg-red-500/[0.03]",
               icon: "❌",
             },
             {
               label: "Branches Closed",
               value: outageStats.branchClosed,
               color: "text-red-400",
-              bg: "bg-red-500/5",
+              hoverBg: "hover:bg-red-500/[0.03]",
               icon: "🚫",
             },
             {
               label: "Long Queues",
               value: outageStats.longQueue,
               color: "text-amber-400",
-              bg: "bg-amber-500/5",
+              hoverBg: "hover:bg-amber-500/[0.03]",
               icon: "⏳",
             },
             {
               label: "Confirmed Working",
               value: outageStats.working,
               color: "text-emerald-400",
-              bg: "bg-emerald-500/5",
+              hoverBg: "hover:bg-emerald-500/[0.03]",
               icon: "✅",
             },
-          ].map((card) => (
+          ].map((card, idx) => (
             <div
               key={card.label}
-              className={`${card.bg} bg-black p-6 sm:p-8 text-center`}
+              className={`p-8 text-center transition-all duration-300 ${card.hoverBg} border-white/[0.03] ${
+                idx < 3 ? "md:border-r" : ""
+              } ${idx % 2 === 0 ? "border-r md:border-r-0" : ""} ${
+                idx < 2 ? "border-b md:border-b-0" : ""
+              }`}
             >
-              <span className="text-lg">{card.icon}</span>
+              <span className="text-xl">{card.icon}</span>
               <div
-                className={`text-[clamp(1.25rem,2.5vw,2rem)] font-serif font-light mt-2 ${card.color}`}
+                className={`text-[clamp(1.5rem,2.5vw,2.25rem)] font-serif font-light mt-2 ${card.color}`}
               >
                 {card.value}
               </div>
-              <div className="text-[9px] uppercase tracking-[0.2em] text-white/30 mt-1">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1">
                 {card.label}
               </div>
             </div>
