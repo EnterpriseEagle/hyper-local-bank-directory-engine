@@ -103,7 +103,7 @@ export default async function HomePage() {
       </section>
 
       {/* ===== Bank Marquee ===== */}
-      <section className="relative w-full overflow-hidden border-y border-white/[0.06] py-8 bg-black">
+      <section className="relative w-full overflow-hidden border-y border-white/[0.06] py-5 bg-black">
         <style
           dangerouslySetInnerHTML={{
             __html: `
