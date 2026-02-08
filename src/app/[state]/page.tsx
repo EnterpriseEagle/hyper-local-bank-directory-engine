@@ -35,118 +35,118 @@ export default async function StatePage({ params }: Props) {
   return (
     <div>
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/" className="hover:text-emerald-600 transition-colors">
+      <div className="border-b border-white/5">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-3">
+          <nav className="flex items-center gap-2 text-[11px] text-white/30">
+            <Link href="/" className="transition-colors duration-300 hover:text-white underline-reveal">
               Home
             </Link>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="font-medium text-gray-900">{stateName}</span>
+            <span className="text-white/15">/</span>
+            <span className="text-white/60">{stateName}</span>
           </nav>
         </div>
       </div>
 
       {/* Header */}
-      <section className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold">
-            Bank Branches &amp; ATMs in {stateName}
+      <section className="relative overflow-hidden border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
+        {/* Subtle glow */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div
+            className="absolute top-0 right-0 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full blur-[120px] opacity-20"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(30, 58, 138, 0.6) 0%, rgba(30, 58, 138, 0) 70%)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-[1000px] mx-auto">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            {stateAbbr}
+          </p>
+          <h1 className="mb-6 font-serif text-[clamp(2rem,5vw,4rem)] font-light leading-[1.05] text-white">
+            Bank Branches &amp; ATMs
+            <br />
+            in {stateName}
           </h1>
-          <p className="mt-4 text-lg text-emerald-100 max-w-2xl">
+          <p className="max-w-[500px] text-[15px] font-light leading-[1.6] text-white/50">
             Browse {suburbs.length} suburbs across {stateAbbr} to find bank
             branches, ATMs, opening hours and track recent closures.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-5 py-3">
-              <div className="text-2xl font-bold">{suburbs.length}</div>
-              <div className="text-emerald-200 text-sm">Suburbs</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-5 py-3">
-              <div className="text-2xl font-bold">{totalBranches}</div>
-              <div className="text-emerald-200 text-sm">Open Branches</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-5 py-3">
-              <div className="text-2xl font-bold">{totalAtms}</div>
-              <div className="text-emerald-200 text-sm">ATMs</div>
-            </div>
-            {totalClosed > 0 && (
-              <div className="bg-red-500/20 backdrop-blur-sm rounded-lg px-5 py-3">
-                <div className="text-2xl font-bold">{totalClosed}</div>
-                <div className="text-red-200 text-sm">Closures</div>
+          {/* Stats */}
+          <div className="flex flex-wrap gap-10 mt-12">
+            {[
+              { label: "Suburbs", value: suburbs.length },
+              { label: "Open Branches", value: totalBranches },
+              { label: "ATMs", value: totalAtms },
+              ...(totalClosed > 0
+                ? [{ label: "Closures", value: totalClosed }]
+                : []),
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-[clamp(1.25rem,2.5vw,2rem)] font-serif font-light text-white">
+                  {stat.value}
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1">
+                  {stat.label}
+                </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
 
       {/* Suburbs Grid */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            All Suburbs in {stateName}
+      <section className="px-6 sm:px-10 py-16 sm:py-24 bg-black">
+        <div className="max-w-[1200px] mx-auto">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            All Suburbs
+          </p>
+          <h2 className="mb-10 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
+            {stateName}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {suburbs.map((sub) => (
               <Link
                 key={sub.slug}
                 href={`/${state}/${sub.slug}`}
-                className="group bg-white border border-gray-200 rounded-xl p-5 hover:border-emerald-300 hover:shadow-md transition-all"
+                className="group bg-black p-6 transition-all duration-500 hover:bg-white/[0.02]"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
                       {sub.name}
                     </h3>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-[12px] text-white/30 mt-1">
                       {sub.postcode}, {sub.state}
                     </p>
                   </div>
-                  <svg
-                    className="w-5 h-5 text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <span className="text-[14px] text-white/15 transition-all duration-300 group-hover:text-white/40 group-hover:translate-x-1 shrink-0">
+                    &rarr;
+                  </span>
                 </div>
 
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-3">
                   {sub.branchCount > 0 && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21" />
-                      </svg>
+                    <span className="text-[11px] text-white/30">
                       {sub.branchCount} {sub.branchCount === 1 ? "branch" : "branches"}
                     </span>
                   )}
                   {sub.atmCount > 0 && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-700 px-2 py-1 rounded-full">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3" />
-                      </svg>
+                    <span className="text-[11px] text-white/30">
                       {sub.atmCount} {sub.atmCount === 1 ? "ATM" : "ATMs"}
                     </span>
                   )}
                   {sub.closedBranches > 0 && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-red-50 text-red-700 px-2 py-1 rounded-full">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
+                    <span className="text-[11px] text-red-400/60">
                       {sub.closedBranches} closed
                     </span>
                   )}
                 </div>
+
+                <div className="mt-3 h-px w-0 bg-white/15 transition-all duration-700 group-hover:w-full" />
               </Link>
             ))}
           </div>
@@ -154,21 +154,25 @@ export default async function StatePage({ params }: Props) {
       </section>
 
       {/* SEO content */}
-      <section className="py-12 md:py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+      <section className="border-t border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
+        <div className="max-w-[640px] mx-auto">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            About
+          </p>
+          <h2 className="mb-8 font-serif text-[clamp(1.25rem,3vw,2rem)] font-light leading-[1.1] text-white">
             Banking Services in {stateName}
           </h2>
-          <div className="text-gray-600 space-y-4">
-            <p>
+          <div className="space-y-5">
+            <p className="text-[14px] font-light leading-[1.7] text-white/40">
               {stateName} has {suburbs.length} suburbs with banking services
               tracked on BankNearMe.au. Currently there are {totalBranches} open
               bank branches and {totalAtms} ATMs across the state
-              {totalClosed > 0 &&
-                `, with ${totalClosed} branches having recently closed`}
+              {totalClosed > 0
+                ? `, with ${totalClosed} branches having recently closed`
+                : ""}
               .
             </p>
-            <p>
+            <p className="text-[14px] font-light leading-[1.7] text-white/40">
               Major banks operating in {stateAbbr} include Commonwealth Bank,
               Westpac, ANZ, NAB, and regional banks like Bendigo Bank and Bank of
               Queensland. Use the suburb listings above to find detailed branch
