@@ -76,6 +76,9 @@ export default async function ClosuresPage() {
         </div>
       </section>
 
+      {/* Monetization */}
+      <SwitchOfferCard closedBranches={stats.closedBranches} />
+
       <div className="mx-auto max-w-[1200px] px-6 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
         {/* Main List */}
         <div className="lg:col-span-2">
