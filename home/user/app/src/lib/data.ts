@@ -277,7 +277,163 @@ export async function getOutageHotspots(limit = 8) {
     .innerJoin(suburbs, eq(statusReports.suburbId, suburbs.id))
     .where(sql`${statusReports.reportType} != 'working'`)
     .groupBy(suburbs.id, suburbs.name, suburbs.postcode, suburbs.state, suburbs.slug, suburbs.stateSlug)
-    .orderBy(sql`count(*) DESC`)
-    .limit(limit);
-  return results;
+      .orderBy(sql`count(*) DESC`)
+      .limit(limit);
+    return results;
+}
+
+// ===== BANK PAGE DATA =====
+
+export async function getAllBanks() {
+  return db.select().from(banks).orderBy(asc(banks.name));
+}
+
+export async function getBankBySlug(slug: string) {
+  const [bank] = await db.select().from(banks).where(eq(banks.slug, slug)).limit(1);
+  return bank;
+}
+
+export async function getBankBranchStats(bankId: number) {
+  const [openBranches] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(branches)
+    .where(and(eq(branches.bankId, bankId), eq(branches.type, "branch"), eq(branches.status, "open")));
+  const [closedBranches] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(branches)
+    .where(and(eq(branches.bankId, bankId), eq(branches.type, "branch"), eq(branches.status, "closed")));
+  const [atmCount] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(branches)
+    .where(and(eq(branches.bankId, bankId), eq(branches.type, "atm"), eq(branches.status, "open")));
+  return {
+    openBranches: openBranches.count,
+    closedBranches: closedBranches.count,
+    atms: atmCount.count,
+  };
+}
+
+export async function getBankStatesPresence(bankId: number) {
+  return db
+    .select({
+      stateSlug: suburbs.stateSlug,
+      state: suburbs.state,
+      branchCount: sql<number>`count(DISTINCT CASE WHEN ${branches.type} = 'branch' AND ${branches.status} = 'open' THEN ${branches.id} END)`,
+      atmCount: sql<number>`count(DISTINCT CASE WHEN ${branches.type} = 'atm' AND ${branches.status} = 'open' THEN ${branches.id} END)`,
+      closedCount: sql<number>`count(DISTINCT CASE WHEN ${branches.status} = 'closed' THEN ${branches.id} END)`,
+    })
+    .from(branches)
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .where(eq(branches.bankId, bankId))
+    .groupBy(suburbs.stateSlug, suburbs.state)
+    .orderBy(asc(suburbs.state));
+}
+
+export async function getBankSuburbsInState(bankId: number, stateSlug: string) {
+  return db
+    .select({
+      suburbName: suburbs.name,
+      suburbSlug: suburbs.slug,
+      postcode: suburbs.postcode,
+      stateSlug: suburbs.stateSlug,
+      branchCount: sql<number>`count(DISTINCT CASE WHEN ${branches.type} = 'branch' AND ${branches.status} = 'open' THEN ${branches.id} END)`,
+      atmCount: sql<number>`count(DISTINCT CASE WHEN ${branches.type} = 'atm' AND ${branches.status} = 'open' THEN ${branches.id} END)`,
+      closedCount: sql<number>`count(DISTINCT CASE WHEN ${branches.status} = 'closed' THEN ${branches.id} END)`,
+    })
+    .from(branches)
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .where(and(eq(branches.bankId, bankId), eq(suburbs.stateSlug, stateSlug)))
+    .groupBy(suburbs.name, suburbs.slug, suburbs.postcode, suburbs.stateSlug)
+    .orderBy(asc(suburbs.name));
+}
+
+export async function getBankBranchesInSuburb(bankId: number, suburbSlug: string) {
+  return db
+    .select({
+      id: branches.id,
+      name: branches.name,
+      address: branches.address,
+      lat: branches.lat,
+      lng: branches.lng,
+      type: branches.type,
+      status: branches.status,
+      bsb: branches.bsb,
+      openingHours: branches.openingHours,
+      closedDate: branches.closedDate,
+      distanceKm: branches.distanceKm,
+      feeRating: branches.feeRating,
+      suburbName: suburbs.name,
+      postcode: suburbs.postcode,
+      state: suburbs.state,
+      stateSlug: suburbs.stateSlug,
+    })
+    .from(branches)
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .where(and(eq(branches.bankId, bankId), eq(suburbs.slug, suburbSlug)))
+    .orderBy(asc(branches.type), asc(branches.name));
+}
+
+// ===== ATM PAGE DATA =====
+
+export async function getAtmsForSuburb(suburbSlug: string) {
+  return db
+    .select({
+      id: branches.id,
+      name: branches.name,
+      address: branches.address,
+      lat: branches.lat,
+      lng: branches.lng,
+      status: branches.status,
+      feeRating: branches.feeRating,
+      bankName: banks.name,
+      bankSlug: banks.slug,
+      suburbName: suburbs.name,
+      postcode: suburbs.postcode,
+      state: suburbs.state,
+      stateSlug: suburbs.stateSlug,
+    })
+    .from(branches)
+    .innerJoin(banks, eq(branches.bankId, banks.id))
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .where(and(eq(suburbs.slug, suburbSlug), eq(branches.type, "atm")))
+    .orderBy(asc(banks.name));
+}
+
+// ===== COMPARISON DATA =====
+
+export async function getBankComparisonData(bankSlug: string) {
+  const bank = await getBankBySlug(bankSlug);
+  if (!bank) return null;
+  const stats = await getBankBranchStats(bank.id);
+  const statePresence = await getBankStatesPresence(bank.id);
+  return { bank, stats, stateCount: statePresence.length };
+}
+
+// ===== ALL BANK-STATE COMBOS =====
+
+export async function getAllBankStateCombos() {
+  return db
+    .select({
+      bankSlug: banks.slug,
+      stateSlug: suburbs.stateSlug,
+    })
+    .from(branches)
+    .innerJoin(banks, eq(branches.bankId, banks.id))
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .groupBy(banks.slug, suburbs.stateSlug);
+}
+
+// ===== ALL BANK-STATE-SUBURB COMBOS =====
+
+export async function getAllBankStateSuburbCombos() {
+  return db
+    .select({
+      bankSlug: banks.slug,
+      stateSlug: suburbs.stateSlug,
+      suburbSlug: suburbs.slug,
+    })
+    .from(branches)
+    .innerJoin(banks, eq(branches.bankId, banks.id))
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .groupBy(banks.slug, suburbs.stateSlug, suburbs.slug);
 }
