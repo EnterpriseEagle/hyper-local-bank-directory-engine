@@ -9,8 +9,8 @@ import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata: Metadata = {
   title: {
-    default: "BankNearMe.com.au - Is Your Bank Actually Working? Live ATM & Branch Status",
-    template: "%s | BankNearMe.com.au",
+    default: "BANK NEAR ME® - Is Your Bank Actually Working? Live ATM & Branch Status",
+    template: "%s | BANK NEAR ME®",
   },
     description:
       "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across hundreds of suburbs. DownDetector for banks.",
