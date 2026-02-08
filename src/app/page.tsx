@@ -427,16 +427,16 @@ export default async function HomePage() {
       {/* ===== BROWSE STATES ===== */}
       <section
         id="states"
-        className="border-b border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black"
-      >
-        <div className="mx-auto w-full max-w-[1200px]">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
-            Browse
-          </p>
-          <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
-            States &amp; Territories
-          </h2>
-          <p className="mb-12 max-w-[500px] text-[15px] font-light leading-[1.7] text-white/40">
+          className="border-b border-white/5 px-6 py-12 sm:px-10 sm:py-16 bg-black"
+        >
+          <div className="mx-auto w-full max-w-[1200px]">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+              Browse
+            </p>
+            <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+              States &amp; Territories
+            </h2>
+            <p className="mb-8 max-w-[500px] text-[15px] font-light leading-[1.7] text-white/40">
             Select your state to find bank branches, ATMs, and report live
             service status in your suburb.
           </p>
