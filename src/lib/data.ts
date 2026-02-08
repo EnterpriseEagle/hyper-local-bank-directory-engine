@@ -141,12 +141,32 @@ export async function getRecentClosures(limit = 10) {
 }
 
 export async function getNearbySuburbs(suburbId: number, stateSlug: string, limit = 6) {
+  const suburb = await db.select().from(suburbs).where(eq(suburbs.id, suburbId)).limit(1);
+  if (suburb.length === 0) return [];
+  const s = suburb[0];
+
   return db
     .select()
     .from(suburbs)
     .where(and(eq(suburbs.stateSlug, stateSlug), ne(suburbs.id, suburbId)))
-    .limit(limit)
-    .orderBy(sql`RANDOM()`);
+    .orderBy(sql`((${suburbs.lat} - ${s.lat}) * (${suburbs.lat} - ${s.lat}) + (${suburbs.lng} - ${s.lng}) * (${suburbs.lng} - ${s.lng})) ASC`)
+    .limit(limit);
+}
+
+export async function getNearestSuburbsWithBranches(suburbId: number, limit = 6) {
+  const suburb = await db.select().from(suburbs).where(eq(suburbs.id, suburbId)).limit(1);
+  if (suburb.length === 0) return [];
+  const s = suburb[0];
+
+  return db
+    .select()
+    .from(suburbs)
+    .where(and(
+      ne(suburbs.id, suburbId),
+      sql`(${suburbs.branchCount} > 0 OR ${suburbs.atmCount} > 0)`
+    ))
+    .orderBy(sql`((${suburbs.lat} - ${s.lat}) * (${suburbs.lat} - ${s.lat}) + (${suburbs.lng} - ${s.lng}) * (${suburbs.lng} - ${s.lng})) ASC`)
+    .limit(limit);
 }
 
 export async function getRecentReportsForSuburb(suburbId: number, limit = 10) {
