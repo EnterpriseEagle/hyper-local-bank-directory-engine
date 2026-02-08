@@ -153,23 +153,37 @@ export default async function BankPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BankOrCreditUnion",
-            "name": bank.name,
-            "url": bank.website,
-            "description": seo.description,
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "AU"
-            }
-          }),
-        }}
-      />
+        {/* JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "BankOrCreditUnion",
+                "name": bank.name,
+                "url": bank.website,
+                "description": seo.description,
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressCountry": "AU"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": seo.faq.map((item) => ({
+                  "@type": "Question",
+                  "name": item.q,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": item.a,
+                  },
+                })),
+              },
+            ]),
+          }}
+        />
     </div>
   );
 }
