@@ -71,6 +71,20 @@ export default function RootLayout({
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
 
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-BNM_TRACKING_ID"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-BNM_TRACKING_ID');
+          `}
+        </Script>
+
         {/* Navigation - Fixed glassmorphism nav */}
         <nav className="fixed left-0 right-0 top-0 z-50">
           <div
