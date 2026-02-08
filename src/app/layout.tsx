@@ -8,16 +8,20 @@ import { SearchBar } from "@/components/search-bar";
 
 export const metadata: Metadata = {
   title: {
-    default: "BankNearMe.au - Find Bank Branches & ATMs Near You in Australia",
-    template: "%s | BankNearMe.au",
+    default: "BankNearMe.com.au - Is Your Bank Actually Working? Live ATM & Branch Status",
+    template: "%s | BankNearMe.com.au",
   },
   description:
-    "Find bank branches, ATMs, and banking services near you across Australia. Compare opening hours, fees, and track branch closures in your suburb.",
+    "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across 15,000+ suburbs. DownDetector for banks.",
   keywords: [
     "bank branches Australia",
     "ATM near me",
-    "bank closures",
+    "ATM out of cash",
+    "bank branch closed",
+    "bank closures Australia",
     "find bank",
+    "bank status",
+    "ATM empty",
     "Commonwealth Bank branch",
     "Westpac branch",
     "ANZ branch",
