@@ -393,9 +393,9 @@ export default async function HomePage() {
         )}
 
       {/* ===== INFRASTRUCTURE STATS ===== */}
-      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden border-b border-white/5 px-6 py-24 sm:px-8 sm:py-32 bg-black">
+      <section className="relative flex items-center justify-center overflow-hidden border-b border-white/5 px-6 py-14 sm:px-8 sm:py-20 bg-black">
         <div className="mx-auto w-full max-w-[900px] text-center">
-          <p className="mb-10 text-[10px] font-medium uppercase tracking-[0.3em] text-white/50">
+          <p className="mb-6 text-[10px] font-medium uppercase tracking-[0.3em] text-white/50">
             The Numbers
           </p>
           <h2 className="mb-16 font-serif text-[clamp(2rem,6vw,4rem)] font-light leading-[1.15] tracking-[-0.02em] text-white">
