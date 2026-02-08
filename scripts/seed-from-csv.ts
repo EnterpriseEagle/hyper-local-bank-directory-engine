@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import { suburbs, banks, branches } from "../src/lib/db/schema";
+import { suburbs, banks, branches, statusReports } from "../src/lib/db/schema";
 import * as fs from "fs";
 import * as Papa from "papaparse";
 
@@ -88,7 +88,8 @@ function randomFloat(min: number, max: number) {
 async function seed() {
   console.log("Seeding database from CSV...");
 
-  // Clear existing data
+  // Clear existing data in correct order
+  await db.delete(statusReports);
   await db.delete(branches);
   await db.delete(suburbs);
   await db.delete(banks);
