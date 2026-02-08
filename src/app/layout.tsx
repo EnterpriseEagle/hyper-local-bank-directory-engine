@@ -5,6 +5,7 @@ import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import Link from "next/link";
 import { SearchBar } from "@/components/search-bar";
+import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata: Metadata = {
   title: {
