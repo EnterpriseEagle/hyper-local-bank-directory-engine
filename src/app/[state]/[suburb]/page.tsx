@@ -2,15 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  getSuburbBySlug,
-  getBranchesForSuburb,
-  getNearbySuburbs,
-  getRecentReportsForSuburb,
-  getReportCountForSuburb,
-  getAllSuburbSlugs,
-  STATE_NAMES,
-  STATE_ABBR,
-} from "@/lib/data";
+    getSuburbBySlug,
+    getBranchesForSuburb,
+    getNearbySuburbs,
+    getNearestSuburbsWithBranches,
+    getRecentReportsForSuburb,
+    getReportCountForSuburb,
+    getAllSuburbSlugs,
+    STATE_NAMES,
+    STATE_ABBR,
+  } from "@/lib/data";
+
 import { StatusReporter } from "@/components/status-reporter";
 import { SwitchStickyBar } from "@/components/switch-banner";
 
