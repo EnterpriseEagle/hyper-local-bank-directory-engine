@@ -42,3 +42,12 @@ export const branches = sqliteTable("branches", {
   distanceKm: real("distance_km"),
   feeRating: text("fee_rating"), // "none" | "low" | "medium" | "high"
 });
+
+export const statusReports = sqliteTable("status_reports", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  branchId: integer("branch_id").notNull().references(() => branches.id),
+  suburbId: integer("suburb_id").notNull().references(() => suburbs.id),
+  reportType: text("report_type").notNull(), // "working" | "atm_empty" | "branch_closed" | "long_queue"
+  createdAt: text("created_at").notNull(),
+  ipHash: text("ip_hash"), // anonymized
+});
