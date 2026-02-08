@@ -233,15 +233,22 @@ export default async function HomePage() {
             </div>
           )}
 
-          {/* View all reports link */}
-          <div className="mt-6 text-center">
-            <Link
-              href="/#states"
-              className="text-[11px] uppercase tracking-[0.2em] text-white/30 hover:text-white/50 transition-colors"
-            >
-              Browse all suburbs to report &amp; view status &rarr;
-            </Link>
-          </div>
+            {/* View all reports link */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link
+                href="/#states"
+                className="text-[11px] uppercase tracking-[0.2em] text-white/30 hover:text-white/50 transition-colors"
+              >
+                Browse all suburbs to report &amp; view status &rarr;
+              </Link>
+              <Link
+                href="/closures"
+                className="text-[11px] uppercase tracking-[0.2em] text-red-400/50 hover:text-red-400/80 transition-colors"
+              >
+                View National Branch Closures Tracker &rarr;
+              </Link>
+            </div>
+
         </div>
       </section>
 
