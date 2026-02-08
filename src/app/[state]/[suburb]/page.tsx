@@ -314,28 +314,31 @@ export default async function SuburbPage({ params }: Props) {
                     <p className="text-[12px] text-white/30 mt-1">
                       {b.address}
                     </p>
-                    <div className="flex flex-wrap gap-4 mt-2">
-                      {b.bankName && (
-                        <span className="text-[11px] text-white/25">
-                          {b.bankName}
-                        </span>
-                      )}
-                      {b.bsb && (
-                        <span className="text-[11px] text-white/25">
-                          BSB: {b.bsb}
-                        </span>
-                      )}
-                      {b.distanceKm !== null && (
-                        <span className="text-[11px] text-white/25">
-                          {b.distanceKm}km away
-                        </span>
-                      )}
-                      {b.feeRating && (
-                        <span className="text-[11px] text-white/25">
-                          Fees: {b.feeRating}
-                        </span>
-                      )}
-                    </div>
+                      <div className="flex flex-wrap gap-4 mt-2">
+                        {b.bankName && (
+                          <Link 
+                            href={`/bank/${b.bankSlug}/${state}/${suburbSlug}`}
+                            className="text-[11px] text-white/25 hover:text-white underline decoration-white/10"
+                          >
+                            {b.bankName}
+                          </Link>
+                        )}
+                        {b.bsb && (
+                          <span className="text-[11px] text-white/25">
+                            BSB: {b.bsb}
+                          </span>
+                        )}
+                        {b.distanceKm !== null && (
+                          <span className="text-[11px] text-white/25">
+                            {b.distanceKm}km away
+                          </span>
+                        )}
+                        {b.feeRating && (
+                          <span className="text-[11px] text-white/25">
+                            Fees: {b.feeRating}
+                          </span>
+                        )}
+                      </div>
                   </div>
                 </div>
               ))}
