@@ -111,14 +111,14 @@ export function SwitchStickyBar({ suburbName }: { suburbName: string }) {
             Switch to {offer.brand} &mdash; {bonusText} + 100% fee rebates.
           </span>
         </p>
-        <Link
-          href={offer.url}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-          className={`shrink-0 ${offer.theme.buttonBg} ${offer.theme.buttonText} px-6 py-2.5 text-[10px] uppercase tracking-[0.2em] font-semibold ${offer.theme.buttonHover} transition-all duration-300`}
-        >
-          {offer.cta} &rarr;
-        </Link>
+          <AffiliateLink
+            href={offer.url}
+            offerId={offer.id}
+            placement="suburb-sticky"
+            className={`shrink-0 ${offer.theme.buttonBg} ${offer.theme.buttonText} px-6 py-2.5 text-[10px] uppercase tracking-[0.2em] font-semibold ${offer.theme.buttonHover} transition-all duration-300`}
+          >
+            {offer.cta} &rarr;
+          </AffiliateLink>
       </div>
       <p className="text-[9px] text-white/10 text-center pb-2 px-6">
         We may earn a commission if you switch via our links. Not financial advice.
