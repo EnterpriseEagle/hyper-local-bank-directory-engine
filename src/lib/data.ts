@@ -1,6 +1,6 @@
 import { db } from "./db";
-import { suburbs, branches, banks } from "./db/schema";
-import { eq, sql, and, desc, asc } from "drizzle-orm";
+import { suburbs, branches, banks, statusReports } from "./db/schema";
+import { eq, sql, and, desc, asc, ne } from "drizzle-orm";
 
 export const STATE_NAMES: Record<string, string> = {
   "new-south-wales": "New South Wales",
@@ -40,12 +40,16 @@ export async function getStats() {
     .select({ count: sql<number>`count(*)` })
     .from(branches)
     .where(and(eq(branches.type, "atm"), eq(branches.status, "open")));
+  const [reportCount] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports);
 
   return {
     suburbs: suburbCount.count,
     openBranches: branchCount.count,
     closedBranches: closedCount.count,
     atms: atmCount.count,
+    totalReports: reportCount.count,
   };
 }
 
@@ -133,5 +137,80 @@ export async function getRecentClosures(limit = 10) {
     .from(branches)
     .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
     .where(eq(branches.status, "closed"))
+    .limit(limit);
+}
+
+export async function getNearbySuburbs(suburbId: number, stateSlug: string, limit = 6) {
+  return db
+    .select()
+    .from(suburbs)
+    .where(and(eq(suburbs.stateSlug, stateSlug), ne(suburbs.id, suburbId)))
+    .limit(limit)
+    .orderBy(sql`RANDOM()`);
+}
+
+export async function getRecentReportsForSuburb(suburbId: number, limit = 10) {
+  return db
+    .select({
+      id: statusReports.id,
+      reportType: statusReports.reportType,
+      createdAt: statusReports.createdAt,
+      branchName: branches.name,
+      branchType: branches.type,
+    })
+    .from(statusReports)
+    .innerJoin(branches, eq(statusReports.branchId, branches.id))
+    .where(eq(statusReports.suburbId, suburbId))
+    .orderBy(desc(statusReports.createdAt))
+    .limit(limit);
+}
+
+export async function getReportCountForSuburb(suburbId: number) {
+  const [result] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports)
+    .where(eq(statusReports.suburbId, suburbId));
+  return result.count;
+}
+
+export async function submitStatusReport(data: {
+  branchId: number;
+  suburbId: number;
+  reportType: string;
+  ipHash?: string;
+}) {
+  return db.insert(statusReports).values({
+    branchId: data.branchId,
+    suburbId: data.suburbId,
+    reportType: data.reportType,
+    createdAt: new Date().toISOString(),
+    ipHash: data.ipHash || null,
+  });
+}
+
+export async function getClosureStatsForState(stateSlug: string) {
+  const [result] = await db
+    .select({
+      totalClosed: sql<number>`count(*)`,
+    })
+    .from(branches)
+    .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
+    .where(and(eq(suburbs.stateSlug, stateSlug), eq(branches.status, "closed")));
+  return result.totalClosed;
+}
+
+export async function getTopClosureSuburbs(limit = 10) {
+  return db
+    .select({
+      name: suburbs.name,
+      postcode: suburbs.postcode,
+      state: suburbs.state,
+      slug: suburbs.slug,
+      stateSlug: suburbs.stateSlug,
+      closedBranches: suburbs.closedBranches,
+    })
+    .from(suburbs)
+    .where(sql`${suburbs.closedBranches} > 0`)
+    .orderBy(desc(suburbs.closedBranches))
     .limit(limit);
 }
