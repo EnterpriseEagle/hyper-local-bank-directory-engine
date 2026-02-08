@@ -104,8 +104,8 @@ export default function RootLayout({
 
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
             <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-2">
-              <span className="text-[18px] font-bold uppercase tracking-[0.2em] text-white">
-                BANK NEAR ME®
+              <span className="text-[20px] font-bold uppercase tracking-[0.15em] text-white">
+                BANK NEAR ME<sup className="text-[9px] align-super ml-0.5">®</sup>
               </span>
             </Link>
 
