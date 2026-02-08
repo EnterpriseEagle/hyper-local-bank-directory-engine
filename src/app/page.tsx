@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroSearch } from "@/components/hero-search";
 import {
   getStats,
   getStateList,
@@ -35,7 +36,7 @@ export default async function HomePage() {
       getStats(),
       getStateList(),
       getRecentClosures(8),
-      getRecentReportsGlobal(15),
+      getRecentReportsGlobal(4),
       getLiveOutageStats(),
       getOutageHotspots(6),
     ]);
@@ -48,129 +49,55 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* ===== HERO: DownDetector for Banks ===== */}
-      <section className="relative flex min-h-[90vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
-        {/* Atmospheric glows */}
+      {/* ===== HERO: Search & Destroy ===== */}
+      <section className="relative flex min-h-[92vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
+        {/* Blue trust glow */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[1000px] max-h-[1000px] rounded-full blur-[150px] opacity-30"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] max-w-[1100px] max-h-[1100px] rounded-full blur-[180px] opacity-20"
             style={{
               background:
-                "radial-gradient(circle, rgba(220, 38, 38, 0.4) 0%, rgba(30, 58, 138, 0.3) 40%, rgba(0,0,0,0) 70%)",
+                "radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(30, 58, 138, 0.3) 40%, rgba(0,0,0,0) 70%)",
             }}
           />
           <div
-            className="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full blur-[120px] opacity-20"
+            className="absolute top-[30%] right-[5%] w-[35vw] h-[35vw] max-w-[400px] max-h-[400px] rounded-full blur-[120px] opacity-15"
             style={{
               background:
-                "radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, rgba(0,0,0,0) 70%)",
+                "radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(0,0,0,0) 70%)",
             }}
           />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1100px]">
-          {/* Live pulse indicator */}
-          <div className="flex items-center gap-3 mb-8">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-            </span>
-            <span className="text-[11px] uppercase tracking-[0.25em] font-medium text-red-400/80">
-              Live Monitoring &mdash; {totalReports} Reports Submitted
-            </span>
-          </div>
-
-          <h1 className="mb-6 font-serif text-[clamp(2.5rem,7vw,6rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
-            Is Your Bank
-            <br />
-            <span className="text-white/40">Actually Working?</span>
-          </h1>
-
-          <p className="mb-10 max-w-[550px] text-[16px] font-light leading-[1.7] text-white/50">
-            Australia&apos;s crowd-sourced bank status tracker. Report ATM
-            outages, branch closures, and long queues in real-time across{" "}
-            {stats.suburbs.toLocaleString()} suburbs.
+          <p className="mb-5 text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">
+            Australia&apos;s Bank Status Tracker
           </p>
 
-          {/* Live Outage Stat Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 mb-12">
-            {[
-              {
-                label: "ATMs Empty",
-                value: outageStats.atmEmpty,
-                color: "text-red-400",
-                bg: "bg-red-500/5",
-                icon: "❌",
-              },
-              {
-                label: "Branches Closed",
-                value: outageStats.branchClosed,
-                color: "text-red-400",
-                bg: "bg-red-500/5",
-                icon: "🚫",
-              },
-              {
-                label: "Long Queues",
-                value: outageStats.longQueue,
-                color: "text-amber-400",
-                bg: "bg-amber-500/5",
-                icon: "⏳",
-              },
-              {
-                label: "Confirmed Working",
-                value: outageStats.working,
-                color: "text-emerald-400",
-                bg: "bg-emerald-500/5",
-                icon: "✅",
-              },
-            ].map((card) => (
-              <div
-                key={card.label}
-                className={`${card.bg} bg-black p-6 sm:p-8 transition-all duration-300`}
-              >
-                <span className="text-lg">{card.icon}</span>
-                <div
-                  className={`text-[clamp(1.5rem,3vw,2.5rem)] font-serif font-light mt-2 ${card.color}`}
-                >
-                  {card.value}
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1">
-                  {card.label}
-                </div>
-              </div>
-            ))}
+          <h1 className="mb-6 font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
+            Find Your Bank.
+            <br />
+            <span className="text-white/40">See If It&apos;s Actually Working.</span>
+          </h1>
+
+          <p className="mb-10 max-w-[560px] text-[16px] font-light leading-[1.7] text-white/45">
+            Live crowd-sourced status for {stats.suburbs.toLocaleString()} Australian
+            suburbs. Know before you go.
+          </p>
+
+          {/* MASSIVE Search Bar */}
+          <div className="mb-8">
+            <HeroSearch />
           </div>
 
-          {/* CTA */}
-          <div className="flex items-center gap-6">
-            <Link
-              href="#live-feed"
-              className="group relative overflow-hidden border border-red-500/30 px-8 py-3.5 text-[11px] uppercase tracking-[0.2em] text-red-400 transition-all duration-500 hover:border-red-400/60 active:scale-[0.98]"
-            >
-              <span className="relative z-10">View Live Feed</span>
-              <span className="absolute inset-0 -translate-x-full bg-red-500/[0.05] transition-transform duration-500 group-hover:translate-x-0"></span>
+          {/* Dirty secret stat */}
+          <p className="text-[13px] font-light text-white/30">
+            <span className="text-red-400/70 font-medium">{stats.closedBranches.toLocaleString()}</span>{" "}
+            branches have closed across Australia.{" "}
+            <Link href="/#closures" className="underline text-white/40 hover:text-white/60 transition-colors">
+              Check your suburb&apos;s status now
             </Link>
-
-            <Link
-              href="#states"
-              className="group relative flex items-center gap-2.5 px-2 py-3.5 text-[11px] uppercase tracking-[0.2em] text-white/40 transition-all duration-300 hover:text-white"
-            >
-              <span className="underline-reveal">Report a Problem</span>
-              <svg
-                className="h-3 w-3 transition-transform duration-500 ease-out group-hover:translate-x-1.5"
-                viewBox="0 0 12 12"
-                fill="none"
-              >
-                <path
-                  d="M1 6H11M11 6L6 1M11 6L6 11"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
@@ -226,6 +153,223 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ===== THE DENY SECTION: Monetization ===== */}
+      <section className="relative border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black overflow-hidden">
+        {/* Subtle warm glow behind the offer */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[40vw] max-w-[800px] max-h-[500px] rounded-full blur-[150px] opacity-10"
+            style={{
+              background: "radial-gradient(circle, rgba(234, 179, 8, 0.5) 0%, rgba(0,0,0,0) 70%)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-[1000px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left: The pitch */}
+            <div>
+              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-amber-400/50 font-medium">
+                Switch &amp; Save
+              </p>
+              <h2 className="mb-5 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+                Tired of empty ATMs
+                <br />
+                <span className="text-white/35">and closed branches?</span>
+              </h2>
+              <p className="text-[15px] font-light leading-[1.7] text-white/40 max-w-[440px]">
+                The Big Four are closing {stats.closedBranches.toLocaleString()} branches
+                and counting. Stop hoping your ATM has cash. Switch to a bank that
+                actually works for you.
+              </p>
+            </div>
+
+            {/* Right: The offer card */}
+            <div className="border border-white/10 bg-white/[0.02] p-8 sm:p-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-8 w-8 bg-amber-400/10 flex items-center justify-center">
+                  <span className="text-amber-400 text-sm">★</span>
+                </div>
+                <div>
+                  <p className="text-[14px] font-medium text-white">Australia&apos;s Top-Rated Digital Bank</p>
+                  <p className="text-[11px] text-white/30">Partner Offer</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {[
+                  { value: "$0", label: "Monthly Fees" },
+                  { value: "5.50%", label: "Savings Rate" },
+                  { value: "100%", label: "ATM Fee Rebates" },
+                ].map((item) => (
+                  <div key={item.label} className="text-center py-4 bg-white/[0.03]">
+                    <div className="text-[clamp(1.25rem,2vw,1.5rem)] font-serif font-light text-amber-400">
+                      {item.value}
+                    </div>
+                    <div className="text-[9px] uppercase tracking-[0.15em] text-white/30 mt-1">
+                      {item.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button className="w-full py-4 bg-amber-400 text-black text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-amber-300 transition-colors duration-300">
+                Get My $30 Bonus &amp; Switch &rarr;
+              </button>
+              <p className="text-[10px] text-white/20 text-center mt-3">
+                No obligations. Takes 5 minutes. Keep your old account open.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== WHAT'S HAPPENING NOW: Compact Live Feed ===== */}
+      <section
+        id="live-feed"
+        className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black"
+      >
+        <div className="mx-auto max-w-[1000px]">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-400/70 font-medium">
+                  Live Now
+                </p>
+              </div>
+              <h2 className="font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+                What&apos;s Happening Right Now
+              </h2>
+            </div>
+            <div className="text-right">
+              <div className="text-[clamp(1.25rem,2vw,1.75rem)] font-serif font-light text-white">
+                {totalReports}
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-white/30">
+                Total Reports
+              </div>
+            </div>
+          </div>
+
+          {/* 4 compact report cards */}
+          {recentReports.length === 0 ? (
+            <div className="border border-white/5 p-12 text-center">
+              <p className="text-white/30 text-[14px] mb-2">
+                No reports yet. Be the first to report.
+              </p>
+              <p className="text-white/20 text-[12px]">
+                Visit any suburb page and tap a status button.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
+              {recentReports.map((r) => {
+                const info = REPORT_LABELS[r.reportType] || {
+                  label: r.reportType,
+                  icon: "❓",
+                  color: "text-white/50",
+                };
+                return (
+                  <Link
+                    key={r.id}
+                    href={`/${r.stateSlug}/${r.suburbSlug}`}
+                    className="group bg-black p-6 flex items-start gap-4 transition-all duration-300 hover:bg-white/[0.02]"
+                  >
+                    <span className="text-xl mt-0.5 shrink-0">{info.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className={`text-[11px] font-medium uppercase tracking-wide ${info.color}`}
+                        >
+                          {info.label}
+                        </span>
+                        <span className="text-[11px] text-white/15">
+                          {timeAgo(r.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-[14px] font-light text-white truncate">
+                        {r.branchName}
+                      </p>
+                      <p className="text-[11px] text-white/25 mt-0.5">
+                        {r.suburbName} {r.postcode}, {r.state}
+                      </p>
+                    </div>
+                    <span className="text-white/10 mt-1 transition-all duration-300 group-hover:text-white/30 group-hover:translate-x-1 shrink-0">
+                      &rarr;
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* View all reports link */}
+          <div className="mt-6 text-center">
+            <Link
+              href="/#states"
+              className="text-[11px] uppercase tracking-[0.2em] text-white/30 hover:text-white/50 transition-colors"
+            >
+              Browse all suburbs to report &amp; view status &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== OUTAGE STATS BAR ===== */}
+      <section className="border-b border-white/5 bg-black">
+        <div className="mx-auto max-w-[1000px] grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
+          {[
+            {
+              label: "ATMs Empty",
+              value: outageStats.atmEmpty,
+              color: "text-red-400",
+              bg: "bg-red-500/5",
+              icon: "❌",
+            },
+            {
+              label: "Branches Closed",
+              value: outageStats.branchClosed,
+              color: "text-red-400",
+              bg: "bg-red-500/5",
+              icon: "🚫",
+            },
+            {
+              label: "Long Queues",
+              value: outageStats.longQueue,
+              color: "text-amber-400",
+              bg: "bg-amber-500/5",
+              icon: "⏳",
+            },
+            {
+              label: "Confirmed Working",
+              value: outageStats.working,
+              color: "text-emerald-400",
+              bg: "bg-emerald-500/5",
+              icon: "✅",
+            },
+          ].map((card) => (
+            <div
+              key={card.label}
+              className={`${card.bg} bg-black p-6 sm:p-8 text-center`}
+            >
+              <span className="text-lg">{card.icon}</span>
+              <div
+                className={`text-[clamp(1.25rem,2.5vw,2rem)] font-serif font-light mt-2 ${card.color}`}
+              >
+                {card.value}
+              </div>
+              <div className="text-[9px] uppercase tracking-[0.2em] text-white/30 mt-1">
+                {card.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ===== HOW IT WORKS ===== */}
       <section className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black">
         <div className="mx-auto max-w-[1000px]">
@@ -276,93 +420,6 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ===== LIVE FEED: Real-time Reports ===== */}
-      <section
-        id="live-feed"
-        className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black"
-      >
-        <div className="mx-auto max-w-[1000px]">
-          <div className="flex items-center justify-between mb-10">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-400/70 font-medium">
-                  Live Feed
-                </p>
-              </div>
-              <h2 className="font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
-                Recent Reports
-              </h2>
-            </div>
-            <div className="text-right">
-              <div className="text-[clamp(1.25rem,2vw,1.75rem)] font-serif font-light text-white">
-                {totalReports}
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/30">
-                Total Reports
-              </div>
-            </div>
-          </div>
-
-          {recentReports.length === 0 ? (
-            <div className="border border-white/5 p-12 text-center">
-              <p className="text-white/30 text-[14px] mb-2">
-                No reports yet. Be the first to report.
-              </p>
-              <p className="text-white/20 text-[12px]">
-                Visit any suburb page and tap a status button.
-              </p>
-            </div>
-          ) : (
-            <div className="border-t border-white/5">
-              {recentReports.map((r) => {
-                const info = REPORT_LABELS[r.reportType] || {
-                  label: r.reportType,
-                  icon: "❓",
-                  color: "text-white/50",
-                };
-                return (
-                  <Link
-                    key={r.id}
-                    href={`/${r.stateSlug}/${r.suburbSlug}`}
-                    className="group flex items-center gap-4 py-4 border-b border-white/5 transition-all duration-300 hover:pl-2 hover:bg-white/[0.01]"
-                  >
-                    <span className="text-lg shrink-0">{info.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className={`text-[12px] font-medium uppercase tracking-wide ${info.color}`}
-                        >
-                          {info.label}
-                        </span>
-                        <span className="text-white/10">—</span>
-                        <span className="text-[14px] font-light text-white truncate">
-                          {r.branchName}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/25 mt-0.5">
-                        {r.suburbName} {r.postcode}, {r.state}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-[11px] text-white/20">
-                        {timeAgo(r.createdAt)}
-                      </span>
-                      <span className="text-white/15 transition-all duration-300 group-hover:text-white/40 group-hover:translate-x-1">
-                        &rarr;
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
         </div>
       </section>
 
@@ -566,7 +623,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== CTA ===== */}
+      {/* ===== BOTTOM CTA ===== */}
       <section className="px-6 py-24 sm:px-10 sm:py-32 bg-black">
         <div className="mx-auto w-full max-w-[600px] text-center">
           <h2 className="mb-6 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white tracking-[-0.01em]">
