@@ -493,24 +493,8 @@ export default async function SuburbPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Sticky "Deny" Banner */}
-      <div className="sticky bottom-0 z-40 border-t border-red-500/20 bg-black/95 backdrop-blur-sm">
-        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[13px] font-light text-white/60 text-center sm:text-left">
-            Tired of broken ATMs in{" "}
-            <span className="text-white font-normal">{suburb.name}</span>?{" "}
-            <span className="text-red-400/80">
-              Switch to a bank that works &mdash; 100% fee rebates.
-            </span>
-          </p>
-          <Link
-            href="#"
-            className="shrink-0 border border-red-500/30 px-6 py-2 text-[10px] uppercase tracking-[0.2em] text-red-400 transition-all duration-300 hover:border-red-400/60 hover:bg-red-500/5"
-          >
-            Switch &amp; Save
-          </Link>
-        </div>
-      </div>
+        {/* Sticky "Deny" Banner */}
+        <SwitchStickyBar suburbName={suburb.name} />
 
       {/* JSON-LD */}
       <script
