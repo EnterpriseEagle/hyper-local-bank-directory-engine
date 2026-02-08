@@ -2,17 +2,6 @@ import Link from "next/link";
 import { getStats, getStateList, getRecentClosures } from "@/lib/data";
 import { STATE_NAMES } from "@/lib/data";
 
-const STATE_ICONS: Record<string, string> = {
-  "new-south-wales": "🏙️",
-  victoria: "🏛️",
-  queensland: "☀️",
-  "western-australia": "⛏️",
-  "south-australia": "🍷",
-  tasmania: "🌿",
-  "northern-territory": "🐊",
-  "australian-capital-territory": "🏛️",
-};
-
 export default async function HomePage() {
   const [stats, states, closures] = await Promise.all([
     getStats(),
@@ -22,124 +11,194 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-              Find Bank Branches &amp; ATMs
-              <span className="text-emerald-200"> Near You</span>
-            </h1>
-            <p className="mt-6 text-lg md:text-xl text-emerald-100 leading-relaxed max-w-2xl">
-              Search {stats.suburbs.toLocaleString()} Australian suburbs to find
-              open bank branches, ATMs, opening hours, and track recent
-              closures in your area.
-            </p>
-          </div>
+      {/* Hero Section - Atmospheric dark with blue glow */}
+      <section className="relative flex min-h-[85vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
+        {/* Dynamic Background Glow */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-[-10%] -translate-y-[40%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full blur-[120px] opacity-40"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(30, 58, 138, 0.8) 0%, rgba(30, 58, 138, 0) 70%)",
+            }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-[-30%] -translate-y-[20%] w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] rounded-full blur-[100px] opacity-20"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0) 70%)",
+            }}
+          />
+        </div>
 
-          {/* Stats bar */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="relative z-10 mx-auto w-full max-w-[1000px]">
+          <h1 className="mb-6 font-serif text-[clamp(2.25rem,6vw,5.5rem)] font-light leading-[1] text-white tracking-normal">
+            Find Bank Branches
+            <br />
+            &amp; ATMs Near You.
+          </h1>
+
+          <p className="mb-8 max-w-[500px] text-[15px] font-light leading-[1.6] text-white/60">
+            Search {stats.suburbs.toLocaleString()} Australian suburbs to find
+            open bank branches, ATMs, opening hours, and track recent closures in
+            your area.
+          </p>
+
+          {/* Stats Row */}
+          <div className="flex flex-wrap gap-10 mt-12">
             {[
-              {
-                label: "Suburbs Covered",
-                value: stats.suburbs.toLocaleString(),
-                icon: (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
-                  </svg>
-                ),
-              },
-              {
-                label: "Open Branches",
-                value: stats.openBranches.toLocaleString(),
-                icon: (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21" />
-                  </svg>
-                ),
-              },
-              {
-                label: "ATMs Available",
-                value: stats.atms.toLocaleString(),
-                icon: (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-                  </svg>
-                ),
-              },
-              {
-                label: "Recent Closures",
-                value: stats.closedBranches.toLocaleString(),
-                icon: (
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                  </svg>
-                ),
-              },
+              { label: "Suburbs Covered", value: stats.suburbs.toLocaleString() },
+              { label: "Open Branches", value: stats.openBranches.toLocaleString() },
+              { label: "ATMs Available", value: stats.atms.toLocaleString() },
+              { label: "Recent Closures", value: stats.closedBranches.toLocaleString() },
             ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-5"
-              >
-                <div className="text-emerald-200 mb-2">{stat.icon}</div>
-                <div className="text-2xl md:text-3xl font-bold">
+              <div key={stat.label}>
+                <div className="text-[clamp(1.5rem,3vw,2.5rem)] font-serif font-light text-white">
                   {stat.value}
                 </div>
-                <div className="text-emerald-200 text-sm mt-1">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1">
                   {stat.label}
                 </div>
               </div>
             ))}
           </div>
+
+          {/* CTA Buttons */}
+          <div className="flex items-center gap-6 mt-12">
+            <Link
+              href="#states"
+              className="group relative overflow-hidden border border-white/30 px-8 py-3.5 text-[11px] uppercase tracking-[0.2em] text-white transition-all duration-500 hover:border-white/70 active:scale-[0.98]"
+            >
+              <span className="relative z-10">Browse States</span>
+              <span className="absolute inset-0 -translate-x-full bg-white/[0.03] transition-transform duration-500 group-hover:translate-x-0"></span>
+            </Link>
+
+            <Link
+              href="#closures"
+              className="group relative flex items-center gap-2.5 px-2 py-3.5 text-[11px] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:text-white"
+            >
+              <span className="underline-reveal">View Closures</span>
+              <svg
+                className="h-3 w-3 transition-transform duration-500 ease-out group-hover:translate-x-1.5"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path
+                  d="M1 6H11M11 6L6 1M11 6L6 11"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Bank Marquee */}
+      <section className="relative w-full overflow-hidden border-y border-white/[0.08] py-10 bg-black">
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          @keyframes marqueeScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+          .bank-marquee {
+            display: flex;
+            width: max-content;
+            animation: marqueeScroll 30s linear infinite;
+          }
+        `,
+          }}
+        />
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-black via-black/40 to-transparent sm:w-32" />
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-black via-black/40 to-transparent sm:w-32" />
+        <div className="bank-marquee">
+          {[
+            "Commonwealth Bank",
+            "Westpac",
+            "ANZ",
+            "NAB",
+            "Bendigo Bank",
+            "Bank of Queensland",
+            "Suncorp",
+            "Macquarie Bank",
+            "ING",
+            "HSBC",
+          ]
+            .concat([
+              "Commonwealth Bank",
+              "Westpac",
+              "ANZ",
+              "NAB",
+              "Bendigo Bank",
+              "Bank of Queensland",
+              "Suncorp",
+              "Macquarie Bank",
+              "ING",
+              "HSBC",
+            ])
+            .map((bank, i) => (
+              <span
+                key={i}
+                className="whitespace-nowrap px-10 sm:px-14 font-sans text-[13px] font-medium tracking-wide text-white/40 sm:text-[14px]"
+              >
+                {bank}
+              </span>
+            ))}
+        </div>
+      </section>
+
+      {/* Statement Section */}
+      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden border-t border-white/5 px-6 py-24 sm:px-8 sm:py-32 bg-black">
+        <div className="mx-auto w-full max-w-[900px] text-center">
+          <p className="mb-10 text-[10px] font-medium uppercase tracking-[0.3em] text-white/50">
+            What We Track
+          </p>
+          <h2 className="mb-16 font-serif text-[clamp(2rem,6vw,4rem)] font-light leading-[1.15] tracking-[-0.02em] text-white">
+            Banking infrastructure
+            <br />
+            across every suburb.
+          </h2>
+          <div className="mx-auto max-w-[650px] space-y-6">
+            <p className="text-[16px] leading-[1.7] text-white/60 font-light">
+              As Australian banks continue to close branches across suburban and
+              regional areas, it has never been more important to know which
+              banking services remain available in your suburb.
+            </p>
+            <p className="text-[16px] leading-[1.7] text-white/60 font-light">
+              We track every branch, ATM, and closure so communities stay informed.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Browse by State */}
-      <section id="states" className="py-16 md:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Browse by State & Territory
-            </h2>
-            <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
-              Select your state to find bank branches and ATMs in your local
-              suburb
-            </p>
-          </div>
+      <section id="states" className="border-t border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black">
+        <div className="mx-auto w-full max-w-[1200px]">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            Browse
+          </p>
+          <h2 className="mb-12 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+            States &amp; Territories
+          </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
             {states.map((s) => (
               <Link
                 key={s.stateSlug}
                 href={`/${s.stateSlug}`}
-                className="group bg-white rounded-xl border border-gray-200 p-6 hover:border-emerald-300 hover:shadow-lg transition-all duration-200"
+                className="group bg-black p-8 transition-all duration-500 hover:bg-white/[0.02]"
               >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-2xl">
-                      {STATE_ICONS[s.stateSlug] || "📍"}
-                    </span>
-                    <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">
-                      {STATE_NAMES[s.stateSlug] || s.state}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {s.count} suburbs
-                    </p>
-                  </div>
-                  <svg
-                    className="w-5 h-5 text-gray-400 group-hover:text-emerald-500 transition-colors mt-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
+                <h3 className="font-serif text-[18px] font-light text-white mb-2 transition-all duration-300 group-hover:translate-x-1">
+                  {STATE_NAMES[s.stateSlug] || s.state}
+                </h3>
+                <p className="text-[12px] text-white/30">
+                  {s.count} suburbs
+                </p>
+                <div className="mt-4 h-px w-0 bg-white/20 transition-all duration-700 group-hover:w-full" />
               </Link>
             ))}
           </div>
@@ -147,57 +206,46 @@ export default async function HomePage() {
       </section>
 
       {/* Recent Closures */}
-      <section id="closures" className="py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Recent Branch Closures
-            </h2>
-            <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">
-              Track bank branch closures across Australia. Stay informed about
-              changes to banking services in your area.
-            </p>
-          </div>
+      <section id="closures" className="border-t border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black">
+        <div className="mx-auto w-full max-w-[1000px]">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            Monitoring
+          </p>
+          <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+            Recent Branch Closures
+          </h2>
+          <p className="mb-12 max-w-[600px] text-[15px] font-light leading-[1.7] text-white/40">
+            Track bank branch closures across Australia. Stay informed about
+            changes to banking services in your area.
+          </p>
 
           {closures.length === 0 ? (
-            <p className="text-center text-gray-500">
-              No recent closures recorded.
-            </p>
+            <p className="text-white/30 text-[14px]">No recent closures recorded.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border-t border-white/5">
               {closures.map((c, i) => (
                 <Link
                   key={i}
                   href={`/${c.stateSlug}/${c.suburbSlug}`}
-                  className="flex items-start gap-4 bg-white border border-gray-200 rounded-xl p-5 hover:border-red-200 hover:shadow-md transition-all group"
+                  className="group flex items-center justify-between py-5 border-b border-white/5 transition-all duration-300 hover:pl-2"
                 >
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
-                    <svg
-                      className="w-5 h-5 text-red-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors truncate">
+                    <p className="font-sans text-[15px] font-light text-white transition-colors duration-300 group-hover:text-white/80">
                       {c.branchName}
                     </p>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-[12px] text-white/30 mt-1">
                       {c.suburbName} {c.postcode}, {c.state}
                     </p>
+                  </div>
+                  <div className="flex items-center gap-4 shrink-0">
                     {c.closedDate && (
-                      <span className="inline-block mt-2 text-xs font-medium bg-red-50 text-red-700 px-2 py-0.5 rounded-full">
-                        Closed {c.closedDate}
+                      <span className="text-[11px] text-red-400/70">
+                        {c.closedDate}
                       </span>
                     )}
+                    <span className="text-[14px] text-white/20 transition-all duration-300 group-hover:text-white/50 group-hover:translate-x-1">
+                      &rarr;
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -206,36 +254,50 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SEO Content Block */}
-      <section className="py-16 md:py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+      {/* About / SEO Content */}
+      <section className="border-t border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black">
+        <div className="mx-auto w-full max-w-[640px]">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-sans font-medium">
+            About
+          </p>
+          <h2 className="mb-10 font-serif text-[clamp(1.5rem,3.5vw,2.5rem)] font-light leading-[1.1] text-white">
             About BankNearMe.au
           </h2>
-          <div className="prose prose-gray max-w-none text-gray-600 space-y-4">
-            <p>
+          <div className="space-y-6">
+            <p className="text-[14px] font-light leading-[1.7] text-white/50">
               BankNearMe.au is Australia&apos;s most comprehensive guide to
-              finding bank branches and ATMs near you. As Australian banks
-              continue to close branches across suburban and regional areas, it
-              has never been more important to know which banking services
-              remain available in your suburb.
+              finding bank branches and ATMs near you. Our database covers all
+              major banks including the Big Four &mdash; Commonwealth Bank,
+              Westpac, ANZ, and NAB &mdash; as well as regional banks like
+              Bendigo Bank, Bank of Queensland, Suncorp, and credit unions.
             </p>
-            <p>
-              Our database covers all major banks including the Big Four &mdash;
-              Commonwealth Bank, Westpac, ANZ, and NAB &mdash; as well as
-              regional banks like Bendigo Bank, Bank of Queensland, Suncorp,
-              and credit unions. We track opening hours, fee ratings, BSB
-              numbers, and distance information to help you find the most
-              convenient branch.
-            </p>
-            <p>
-              We also track branch closures in real-time, helping communities
-              understand how the banking landscape is changing. Whether
-              you&apos;re looking for a branch with Saturday hours, a fee-free
-              ATM, or want to know if your local branch has closed, BankNearMe
-              has you covered.
+            <p className="text-[14px] font-light leading-[1.7] text-white/50">
+              We track opening hours, fee ratings, BSB numbers, and distance
+              information to help you find the most convenient branch. We also
+              track branch closures in real-time, helping communities understand
+              how the banking landscape is changing.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="border-t border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black">
+        <div className="mx-auto w-full max-w-[600px] text-center">
+          <h2 className="mb-6 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white tracking-[-0.01em]">
+            Find your local branch today.
+          </h2>
+          <p className="mb-8 text-[14px] font-light leading-[1.7] text-white/50">
+            Search by suburb or postcode to find bank branches, ATMs, and track
+            closures in your area.
+          </p>
+          <Link
+            href="#states"
+            className="group relative inline-block overflow-hidden border border-white/30 px-10 py-4 text-[11px] uppercase tracking-[0.2em] text-white transition-all duration-500 hover:border-white/70"
+          >
+            <span className="relative z-10">Explore Now</span>
+            <span className="absolute inset-0 -translate-x-full bg-white/[0.03] transition-transform duration-500 group-hover:translate-x-0"></span>
+          </Link>
         </div>
       </section>
     </div>
