@@ -25,14 +25,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllBankStateSuburbCombos(),
   ]);
 
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-  ];
+    const staticPages: MetadataRoute.Sitemap = [
+      {
+        url: BASE_URL,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 1,
+      },
+      {
+        url: `${BASE_URL}/closures`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.9,
+      },
+    ];
+
 
   const statePages: MetadataRoute.Sitemap = states.map((s) => ({
     url: `${BASE_URL}/${s.stateSlug}`,

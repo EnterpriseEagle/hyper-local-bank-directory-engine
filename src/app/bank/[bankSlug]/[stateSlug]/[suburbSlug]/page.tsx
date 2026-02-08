@@ -6,6 +6,7 @@ import {
   getBankBySlug, 
   getBankBranchesInSuburb,
   getSuburbBySlug,
+  getAllBankStateSuburbCombos,
   STATE_NAMES 
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
@@ -14,6 +15,15 @@ import { ErrorReporter } from "@/components/ErrorReporter";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string; suburbSlug: string }>;
+}
+
+export async function generateStaticParams() {
+  const combos = await getAllBankStateSuburbCombos();
+  return combos.map((c) => ({ 
+    bankSlug: c.bankSlug, 
+    stateSlug: c.stateSlug, 
+    suburbSlug: c.suburbSlug 
+  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

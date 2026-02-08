@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getSuburbsByState, STATE_NAMES, STATE_ABBR } from "@/lib/data";
+import { getSuburbsByState, STATE_NAMES, STATE_ABBR, getStateList } from "@/lib/data";
 
 interface Props {
   params: Promise<{ state: string }>;
+}
+
+export async function generateStaticParams() {
+  const states = await getStateList();
+  return states.map((s) => ({ state: s.stateSlug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

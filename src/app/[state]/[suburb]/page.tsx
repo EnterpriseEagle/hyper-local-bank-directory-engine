@@ -133,6 +133,33 @@ export default async function SuburbPage({ params }: Props) {
     isPartOf: { "@type": "WebSite", name: "BankNearMe.com.au" },
   };
 
+  const jsonLdFaq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `Are there any bank branches in ${suburb.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: openBranches.length > 0 
+            ? `Yes, there are ${openBranches.length} active bank branches in ${suburb.name}.`
+            : `Currently, there are no active bank branches tracked in ${suburb.name}. The nearest branches can be found in ${nearestWithBranches.map(n => n.name).slice(0, 3).join(", ")}.`
+        }
+      },
+      {
+        "@type": "Question",
+        name: `How many ATMs are in ${suburb.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: atms.length > 0
+            ? `There are ${atms.length} ATMs in ${suburb.name}.`
+            : `We currently have no ATMs tracked in ${suburb.name}. Check nearby suburbs for ATM access.`
+        }
+      }
+    ]
+  };
+
   return (
     <div>
       {/* Breadcrumb */}
@@ -241,7 +268,7 @@ export default async function SuburbPage({ params }: Props) {
         </section>
 
         {/* Empty suburb - guide users to nearby suburbs with branches */}
-        {branches.length === 0 && nearby.length > 0 && (
+        {branches.length === 0 && nearestWithBranches.length > 0 && (
           <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
             <div className="max-w-[1000px] mx-auto">
               <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
@@ -257,10 +284,10 @@ export default async function SuburbPage({ params }: Props) {
                 a branch or ATM in {suburb.name}.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-                {nearby.filter(n => n.branchCount > 0 || n.atmCount > 0).slice(0, 6).map((sub) => (
+                {nearestWithBranches.map((sub) => (
                   <Link
                     key={sub.slug}
-                    href={`/${state}/${sub.slug}`}
+                    href={`/${sub.stateSlug}/${sub.slug}`}
                     className="group bg-black p-6 transition-all duration-500 hover:bg-white/[0.02]"
                   >
                     <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
@@ -558,7 +585,7 @@ export default async function SuburbPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([jsonLdPage, ...jsonLdItems]),
+          __html: JSON.stringify([jsonLdPage, jsonLdFaq, ...jsonLdItems]),
         }}
       />
     </div>
