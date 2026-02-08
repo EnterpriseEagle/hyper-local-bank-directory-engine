@@ -12,6 +12,7 @@ import {
   STATE_ABBR,
 } from "@/lib/data";
 import { StatusReporter } from "@/components/status-reporter";
+import { SwitchStickyBar } from "@/components/switch-banner";
 
 interface Props {
   params: Promise<{ state: string; suburb: string }>;
