@@ -214,3 +214,70 @@ export async function getTopClosureSuburbs(limit = 10) {
     .orderBy(desc(suburbs.closedBranches))
     .limit(limit);
 }
+
+export async function getRecentReportsGlobal(limit = 20) {
+  return db
+    .select({
+      id: statusReports.id,
+      reportType: statusReports.reportType,
+      createdAt: statusReports.createdAt,
+      branchName: branches.name,
+      branchType: branches.type,
+      suburbName: suburbs.name,
+      postcode: suburbs.postcode,
+      state: suburbs.state,
+      suburbSlug: suburbs.slug,
+      stateSlug: suburbs.stateSlug,
+    })
+    .from(statusReports)
+    .innerJoin(branches, eq(statusReports.branchId, branches.id))
+    .innerJoin(suburbs, eq(statusReports.suburbId, suburbs.id))
+    .orderBy(desc(statusReports.createdAt))
+    .limit(limit);
+}
+
+export async function getLiveOutageStats() {
+  const [atmEmpty] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports)
+    .where(eq(statusReports.reportType, "atm_empty"));
+  const [branchClosed] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports)
+    .where(eq(statusReports.reportType, "branch_closed"));
+  const [longQueue] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports)
+    .where(eq(statusReports.reportType, "long_queue"));
+  const [working] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(statusReports)
+    .where(eq(statusReports.reportType, "working"));
+
+  return {
+    atmEmpty: atmEmpty.count,
+    branchClosed: branchClosed.count,
+    longQueue: longQueue.count,
+    working: working.count,
+  };
+}
+
+export async function getOutageHotspots(limit = 8) {
+  // Suburbs with the most non-working reports
+  const results = await db
+    .select({
+      suburbName: suburbs.name,
+      postcode: suburbs.postcode,
+      state: suburbs.state,
+      suburbSlug: suburbs.slug,
+      stateSlug: suburbs.stateSlug,
+      reportCount: sql<number>`count(*)`,
+    })
+    .from(statusReports)
+    .innerJoin(suburbs, eq(statusReports.suburbId, suburbs.id))
+    .where(sql`${statusReports.reportType} != 'working'`)
+    .groupBy(suburbs.id, suburbs.name, suburbs.postcode, suburbs.state, suburbs.slug, suburbs.stateSlug)
+    .orderBy(sql`count(*) DESC`)
+    .limit(limit);
+  return results;
+}
