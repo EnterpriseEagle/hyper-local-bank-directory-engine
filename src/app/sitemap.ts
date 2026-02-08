@@ -1,12 +1,28 @@
+
 import type { MetadataRoute } from "next";
-import { getAllSuburbSlugs, getStateList } from "@/lib/data";
+import { 
+  getAllSuburbSlugs, 
+  getStateList, 
+  getAllBanks, 
+  getAllBankStateCombos, 
+  getAllBankStateSuburbCombos 
+} from "@/lib/data";
 
 const BASE_URL = "https://banknearme.com.au";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [slugs, states] = await Promise.all([
+  const [
+    suburbs, 
+    states, 
+    banks, 
+    bankStates, 
+    bankSuburbs
+  ] = await Promise.all([
     getAllSuburbSlugs(),
     getStateList(),
+    getAllBanks(),
+    getAllBankStateCombos(),
+    getAllBankStateSuburbCombos(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -25,12 +41,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const suburbPages: MetadataRoute.Sitemap = slugs.map((s) => ({
+  const suburbPages: MetadataRoute.Sitemap = suburbs.map((s) => ({
     url: `${BASE_URL}/${s.stateSlug}/${s.slug}`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,
     priority: 0.6,
   }));
 
-  return [...staticPages, ...statePages, ...suburbPages];
+  const atmPages: MetadataRoute.Sitemap = suburbs.map((s) => ({
+    url: `${BASE_URL}/atm/${s.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.5,
+  }));
+
+  const bankPages: MetadataRoute.Sitemap = banks.map((b) => ({
+    url: `${BASE_URL}/bank/${b.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  const bankStatePages: MetadataRoute.Sitemap = bankStates.map((bs) => ({
+    url: `${BASE_URL}/bank/${bs.bankSlug}/${bs.stateSlug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
+
+  const bankSuburbPages: MetadataRoute.Sitemap = bankSuburbs.map((bs) => ({
+    url: `${BASE_URL}/bank/${bs.bankSlug}/${bs.stateSlug}/${bs.suburbSlug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticPages, 
+    ...statePages, 
+    ...suburbPages, 
+    ...atmPages, 
+    ...bankPages, 
+    ...bankStatePages, 
+    ...bankSuburbPages
+  ];
 }
