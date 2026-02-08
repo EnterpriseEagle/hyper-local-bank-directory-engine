@@ -9,10 +9,10 @@ interface StatusReporterProps {
 }
 
 const REPORT_TYPES = [
-  { value: "working", label: "Working", icon: "check-circle", color: "emerald" },
-  { value: "atm_empty", label: "ATM Empty", icon: "x-circle", color: "red" },
-  { value: "branch_closed", label: "Branch Closed", icon: "x-circle", color: "red" },
-  { value: "long_queue", label: "Long Queue", icon: "clock", color: "amber" },
+  { value: "working", label: "Working", emoji: "✅", color: "emerald" },
+  { value: "atm_empty", label: "ATM Empty", emoji: "❌", color: "red" },
+  { value: "branch_closed", label: "Branch Closed", emoji: "🚫", color: "red" },
+  { value: "long_queue", label: "Long Queue", emoji: "⏳", color: "amber" },
 ];
 
 export function StatusReporter({ branches, suburbId, suburbName }: StatusReporterProps) {
@@ -25,7 +25,7 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
 
   async function handleReport(reportType: string) {
     if (!selectedBranch) {
-      setError("Please select a branch or ATM first");
+      setError("Select a branch or ATM first");
       return;
     }
     setSubmitting(true);
@@ -42,41 +42,48 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
       });
       if (!res.ok) throw new Error("Failed");
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 4000);
+      setTimeout(() => setSubmitted(false), 5000);
     } catch {
-      setError("Failed to submit report. Please try again.");
+      setError("Failed to submit. Try again.");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-white">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-          <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        </div>
+    <div className="border border-white/10 bg-white/[0.02]">
+      {/* Header */}
+      <div className="border-b border-white/5 px-6 py-5 flex items-center gap-4">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        </span>
         <div>
-          <h3 className="text-lg font-bold">Live Status Reporter</h3>
-          <p className="text-sm text-slate-400">Help others in {suburbName} - report real-time status</p>
+          <h3 className="font-serif text-[18px] font-light text-white">
+            Live Status Reporter
+          </h3>
+          <p className="text-[12px] text-white/30 mt-0.5">
+            No login required. Help {suburbName} stay informed.
+          </p>
         </div>
       </div>
 
       {submitted ? (
-        <div className="mt-4 bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 text-center">
-          <svg className="w-8 h-8 text-emerald-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p className="font-semibold text-emerald-300">Report Submitted!</p>
-          <p className="text-sm text-slate-400 mt-1">Thank you for keeping {suburbName} updated.</p>
+        <div className="px-6 py-10 text-center">
+          <span className="text-3xl block mb-3">✅</span>
+          <p className="font-serif text-[18px] font-light text-emerald-400 mb-1">
+            Report Submitted
+          </p>
+          <p className="text-[13px] text-white/30">
+            Thank you for keeping {suburbName} updated. Page freshness improved.
+          </p>
         </div>
       ) : (
-        <>
-          <div className="mt-4">
-            <label className="text-sm font-medium text-slate-300 mb-2 block">
-              Select Branch or ATM
+        <div className="px-6 py-6">
+          {/* Branch Selector */}
+          <div className="mb-5">
+            <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-2 block">
+              Select Location
             </label>
             <select
               value={selectedBranch || ""}
@@ -84,11 +91,18 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
                 setSelectedBranch(Number(e.target.value) || null);
                 setError("");
               }}
-              className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full bg-white/[0.03] border border-white/10 px-4 py-3 text-[13px] font-light text-white focus:outline-none focus:border-white/25 transition-colors duration-300 appearance-none cursor-pointer"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='rgba(255,255,255,0.3)' stroke-width='1.2'/%3E%3C/svg%3E")`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "right 12px center",
+              }}
             >
-              <option value="">Choose a location...</option>
+              <option value="" className="bg-black text-white/50">
+                Choose a branch or ATM...
+              </option>
               {activeBranches.map((b) => (
-                <option key={b.id} value={b.id}>
+                <option key={b.id} value={b.id} className="bg-black text-white">
                   {b.name} ({b.type === "atm" ? "ATM" : "Branch"})
                 </option>
               ))}
@@ -96,47 +110,49 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
           </div>
 
           {error && (
-            <p className="mt-2 text-sm text-red-400">{error}</p>
+            <p className="mb-4 text-[12px] text-red-400/80 border border-red-500/20 bg-red-500/5 px-3 py-2">
+              {error}
+            </p>
           )}
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
+          {/* Status Buttons */}
+          <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-3 block">
+            Report Status
+          </label>
+          <div className="grid grid-cols-2 gap-px bg-white/5">
             {REPORT_TYPES.map((rt) => (
               <button
                 key={rt.value}
                 onClick={() => handleReport(rt.value)}
                 disabled={submitting}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-50 ${
+                className={`group bg-black px-4 py-4 text-center transition-all duration-300 disabled:opacity-40 ${
                   rt.color === "emerald"
-                    ? "bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30"
+                    ? "hover:bg-emerald-500/[0.05]"
                     : rt.color === "red"
-                    ? "bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30"
-                    : "bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30"
+                    ? "hover:bg-red-500/[0.05]"
+                    : "hover:bg-amber-500/[0.05]"
                 }`}
               >
-                {rt.value === "working" && (
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
-                {(rt.value === "atm_empty" || rt.value === "branch_closed") && (
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
-                {rt.value === "long_queue" && (
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
-                {rt.label}
+                <span className="text-xl block mb-2">{rt.emoji}</span>
+                <span
+                  className={`text-[11px] uppercase tracking-[0.15em] font-medium ${
+                    rt.color === "emerald"
+                      ? "text-emerald-400/70 group-hover:text-emerald-400"
+                      : rt.color === "red"
+                      ? "text-red-400/70 group-hover:text-red-400"
+                      : "text-amber-400/70 group-hover:text-amber-400"
+                  } transition-colors duration-300`}
+                >
+                  {rt.label}
+                </span>
               </button>
             ))}
           </div>
 
-          <p className="mt-3 text-xs text-slate-500 text-center">
-            No login required. Reports are anonymous and help your community.
+          <p className="mt-4 text-[11px] text-white/20 text-center">
+            One tap. Anonymous. Updates the page timestamp for Google freshness.
           </p>
-        </>
+        </div>
       )}
     </div>
   );
