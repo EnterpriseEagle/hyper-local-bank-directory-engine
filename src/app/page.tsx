@@ -304,7 +304,7 @@ export default async function HomePage() {
       </section>
 
       {/* ===== HOW IT WORKS ===== */}
-      <section className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black">
+      <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
         <div className="mx-auto max-w-[1000px]">
           <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
             How It Works
@@ -358,7 +358,7 @@ export default async function HomePage() {
 
       {/* ===== OUTAGE HOTSPOTS ===== */}
       {hotspots.length > 0 && (
-        <section className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black">
+        <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
           <div className="mx-auto max-w-[1000px]">
             <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-red-400/50 font-medium">
               Hotspots
