@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     default: "BankNearMe.com.au - Is Your Bank Actually Working? Live ATM & Branch Status",
     template: "%s | BankNearMe.com.au",
   },
-  description:
-    "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across 15,000+ suburbs. DownDetector for banks.",
+    description:
+      "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across hundreds of suburbs. DownDetector for banks.",
   keywords: [
     "bank branches Australia",
     "ATM near me",
