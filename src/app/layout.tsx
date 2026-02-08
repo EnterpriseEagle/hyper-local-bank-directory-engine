@@ -105,12 +105,12 @@ export default function RootLayout({
           <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
-            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-3">
+            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-2">
               <span className="font-serif text-2xl font-light tracking-wider text-white">
                 BNM
               </span>
-              <span className="hidden sm:inline text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">
-                BankNearMe.au
+              <span className="text-[14px] font-medium uppercase tracking-[0.1em] text-white/80">
+                BankNearMe<span className="text-white/30">.au</span>
               </span>
             </Link>
 
