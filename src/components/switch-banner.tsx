@@ -65,14 +65,14 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
               ))}
             </div>
 
-            <Link
-              href={offer.url}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              className={`block w-full py-4 ${offer.theme.buttonBg} ${offer.theme.buttonText} text-[11px] uppercase tracking-[0.2em] font-semibold ${offer.theme.buttonHover} transition-colors duration-300 text-center`}
-            >
-              {offer.cta} &rarr;
-            </Link>
+            <AffiliateLink
+                href={offer.url}
+                offerId={offer.id}
+                placement="homepage-card"
+                className={`block w-full py-4 ${offer.theme.buttonBg} ${offer.theme.buttonText} text-[11px] uppercase tracking-[0.2em] font-semibold ${offer.theme.buttonHover} transition-colors duration-300 text-center`}
+              >
+                {offer.cta} &rarr;
+              </AffiliateLink>
             <p className="text-[10px] text-white/20 text-center mt-3">
               {offer.finePrint}
             </p>
