@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getActiveOffer } from "@/lib/affiliate-offers";
+import { AffiliateLink } from "@/components/affiliate-link";
 
 /**
  * Full-width "deny" card for the homepage.
