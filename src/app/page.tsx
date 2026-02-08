@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroSearch } from "@/components/hero-search";
+import { SwitchOfferCard } from "@/components/switch-banner";
 import {
   getStats,
   getStateList,
