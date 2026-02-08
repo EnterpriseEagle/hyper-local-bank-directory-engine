@@ -43,6 +43,11 @@ export const metadata: Metadata = {
     "ANZ branch",
     "NAB branch",
   ],
+  other: {
+    "geo.region": "AU",
+    "geo.placename": "Australia",
+    "ICBM": "-25.2744, 133.7751",
+  },
 };
 
 export default function RootLayout({
