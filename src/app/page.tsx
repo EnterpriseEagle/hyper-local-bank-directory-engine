@@ -452,21 +452,22 @@ export default async function HomePage() {
             service status in your suburb.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
-            {states.map((s) => (
-              <Link
-                key={s.stateSlug}
-                href={`/${s.stateSlug}`}
-                className="group bg-black p-8 transition-all duration-500 hover:bg-white/[0.02]"
-              >
-                <h3 className="font-serif text-[18px] font-light text-white mb-2 transition-all duration-300 group-hover:translate-x-1">
-                  {STATE_NAMES[s.stateSlug] || s.state}
-                </h3>
-                <p className="text-[12px] text-white/30">{s.count} suburbs</p>
-                <div className="mt-4 h-px w-0 bg-white/20 transition-all duration-700 group-hover:w-full" />
-              </Link>
-            ))}
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {states.map((s) => (
+                <Link
+                  key={s.stateSlug}
+                  href={`/${s.stateSlug}`}
+                  className="group relative bg-white/[0.02] border border-white/[0.05] p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-0.5"
+                >
+                  <h3 className="font-serif text-[20px] font-light text-white mb-2 transition-all duration-300 group-hover:translate-x-1">
+                    {STATE_NAMES[s.stateSlug] || s.state}
+                  </h3>
+                  <p className="text-[12px] text-white/30">{s.count} suburbs</p>
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-white/20 transition-all duration-500 group-hover:w-full" />
+                </Link>
+              ))}
+            </div>
+
         </div>
       </section>
 
