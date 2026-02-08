@@ -51,7 +51,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* ===== HERO: Search & Destroy ===== */}
-      <section className="relative flex min-h-[92vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
+      <section className="relative flex min-h-[82vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
         {/* Blue trust glow */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div
