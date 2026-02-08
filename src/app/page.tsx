@@ -313,7 +313,7 @@ export default async function HomePage() {
                 {
                   step: "01",
                   title: "Find Your Suburb",
-                  desc: "Search any of 15,000+ Australian suburbs to see banks & ATMs near you.",
+                  desc: "Search Australian suburbs to see banks & ATMs near you.",
                   icon: "🔍",
                 },
                 {
