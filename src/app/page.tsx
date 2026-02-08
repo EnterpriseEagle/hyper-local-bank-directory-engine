@@ -514,7 +514,7 @@ export default async function HomePage() {
       </section>
 
       {/* ===== THE MISSION / SEO CONTENT ===== */}
-      <section className="border-b border-white/5 px-6 py-20 sm:px-10 sm:py-28 bg-black">
+        <section className="border-b border-white/5 px-6 py-12 sm:px-10 sm:py-16 bg-black">
         <div className="mx-auto w-full max-w-[640px]">
           <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
             The Mission
