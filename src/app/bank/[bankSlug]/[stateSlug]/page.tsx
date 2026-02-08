@@ -5,13 +5,17 @@ import { notFound } from "next/navigation";
 import { 
   getBankBySlug, 
   getBankSuburbsInState,
+  getAllBankStateCombos,
   STATE_NAMES 
 } from "@/lib/data";
-import { generateBankSEOContent } from "@/lib/seo-content";
-import { SwitchOfferCard } from "@/components/switch-banner";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string }>;
+}
+
+export async function generateStaticParams() {
+  const combos = await getAllBankStateCombos();
+  return combos.map((c) => ({ bankSlug: c.bankSlug, stateSlug: c.stateSlug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

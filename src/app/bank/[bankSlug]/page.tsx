@@ -6,13 +6,17 @@ import {
   getBankBySlug, 
   getBankBranchStats, 
   getBankStatesPresence,
+  getAllBanks,
   STATE_NAMES 
 } from "@/lib/data";
-import { generateBankSEOContent } from "@/lib/seo-content";
-import { SwitchOfferCard } from "@/components/switch-banner";
 
 interface PageProps {
   params: Promise<{ bankSlug: string }>;
+}
+
+export async function generateStaticParams() {
+  const allBanks = await getAllBanks();
+  return allBanks.map((b) => ({ bankSlug: b.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
