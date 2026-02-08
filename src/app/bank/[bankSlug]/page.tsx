@@ -29,7 +29,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: `https://banknearme.com.au/bank/${bankSlug}`,
     },
-  };({ params }: PageProps) {
+    };
+}
+
+export default async function BankPage({ params }: PageProps) {
   const { bankSlug } = await params;
   const bank = await getBankBySlug(bankSlug);
   if (!bank) notFound();
