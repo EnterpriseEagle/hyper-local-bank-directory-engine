@@ -114,9 +114,6 @@ export default function RootLayout({
               </span>
             </Link>
 
-            <div className="hidden md:block flex-1 max-w-xs mx-8">
-              <SearchBar />
-            </div>
 
               <MobileNav />
             </div>
