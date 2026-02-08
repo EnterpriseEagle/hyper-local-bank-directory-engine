@@ -47,7 +47,7 @@ export const AFFILIATE_OFFERS: AffiliateOffer[] = [
     cta: "Claim My $125 Bonus & Switch",
     finePrint:
       "Deposit $1k + make 5 purchases + open Savings Maximiser within 30 days. T&Cs apply.",
-    url: "#YOUR_ING_REFERRAL_LINK",
+    url: "https://www.ing.com.au/referral-bonus", // Replace with your actual referral link
     theme: {
       accent: "text-orange-400",
       accentBg: "bg-orange-400/10",
@@ -73,7 +73,7 @@ export const AFFILIATE_OFFERS: AffiliateOffer[] = [
     cta: "Get My $30 Bonus & Switch",
     finePrint:
       "No obligations. Takes 5 minutes. Keep your old account open.",
-    url: "#YOUR_UBANK_REFERRAL_LINK",
+    url: "https://www.ubank.com.au/referral", // Replace with your actual referral link
     theme: {
       accent: "text-amber-400",
       accentBg: "bg-amber-400/10",
@@ -99,7 +99,7 @@ export const AFFILIATE_OFFERS: AffiliateOffer[] = [
     cta: "Apply for Amex Platinum",
     finePrint:
       "Subject to approval. Annual fee applies. T&Cs at americanexpress.com.au.",
-    url: "#YOUR_AMEX_REFERRAL_LINK",
+    url: "https://www.americanexpress.com/au/referral", // Replace with your actual referral link
     theme: {
       accent: "text-blue-400",
       accentBg: "bg-blue-400/10",
