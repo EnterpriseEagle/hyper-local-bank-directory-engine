@@ -160,7 +160,7 @@ export default async function HomePage() {
       {/* ===== WHAT'S HAPPENING NOW: Compact Live Feed ===== */}
       <section
         id="live-feed"
-        className="border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black"
+        className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black"
       >
         <div className="mx-auto max-w-[1000px]">
           <div className="flex items-center justify-between mb-10">
