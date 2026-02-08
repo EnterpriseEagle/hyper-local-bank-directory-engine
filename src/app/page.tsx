@@ -319,7 +319,7 @@ export default async function HomePage() {
               <span className="text-white/30">Crowd-sourced. Real-time. Zero login.</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {[
                 {
                   step: "01",
@@ -342,21 +342,25 @@ export default async function HomePage() {
               ].map((item) => (
                 <div
                   key={item.step}
-                  className="bg-black p-6 sm:p-8"
+                  className="group relative bg-white/[0.02] border border-white/[0.05] p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-1"
                 >
-                  <span className="text-2xl mb-3 block">{item.icon}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-medium">
-                    Step {item.step}
+                  <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity duration-500 group-hover:opacity-10">
+                    <span className="text-6xl font-serif italic">{item.step}</span>
+                  </div>
+                  <span className="text-3xl mb-6 block transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">{item.icon}</span>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-semibold">
+                    Phase {item.step}
                   </span>
-                  <h3 className="font-serif text-[20px] font-light text-white mt-2 mb-2">
+                  <h3 className="font-serif text-[22px] font-light text-white mt-3 mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-[14px] font-light leading-[1.7] text-white/40">
+                  <p className="text-[14px] font-light leading-[1.8] text-white/40">
                     {item.desc}
                   </p>
                 </div>
               ))}
             </div>
+
           </div>
         </section>
 
