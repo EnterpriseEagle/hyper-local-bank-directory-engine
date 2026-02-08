@@ -124,8 +124,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-[1000px]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div>
-                <span className="font-serif text-lg font-light text-white">BankNearMe</span>
-                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 ml-1">.au</span>
+                <span className="text-sm font-bold uppercase tracking-[0.15em] text-white">BANK NEAR ME®</span>
                 <p className="mt-3 text-[13px] leading-relaxed text-white/30">
                   Australia&apos;s comprehensive database of bank branches, ATMs, and banking services.
                 </p>
