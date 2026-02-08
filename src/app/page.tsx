@@ -156,7 +156,7 @@ export default async function HomePage() {
           className="border-b border-white/5 px-6 sm:px-10 py-12 sm:py-16 bg-black"
       >
         <div className="mx-auto max-w-[1000px]">
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-8">
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <span className="relative flex h-2.5 w-2.5">
