@@ -296,101 +296,101 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== HOW IT WORKS ===== */}
-      <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
-        <div className="mx-auto max-w-[1000px]">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
-            How It Works
-          </p>
-          <h2 className="mb-16 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
-            DownDetector for Banks.
-            <br />
-            <span className="text-white/30">Crowd-sourced. Real-time. Zero login.</span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
-            {[
-              {
-                step: "01",
-                title: "Find Your Suburb",
-                desc: "Search any of 15,000+ Australian suburbs to see banks & ATMs near you.",
-                icon: "🔍",
-              },
-              {
-                step: "02",
-                title: "Report Status",
-                desc: "One tap. No login. Report if an ATM is empty, branch closed, or queues are long.",
-                icon: "📡",
-              },
-              {
-                step: "03",
-                title: "Community Benefits",
-                desc: "Every report updates live status. Know before you go. Switch if you're fed up.",
-                icon: "⚡",
-              },
-            ].map((item) => (
-              <div
-                key={item.step}
-                className="bg-black p-8 sm:p-10"
-              >
-                <span className="text-2xl mb-4 block">{item.icon}</span>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-medium">
-                  Step {item.step}
-                </span>
-                <h3 className="font-serif text-[20px] font-light text-white mt-2 mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-[14px] font-light leading-[1.7] text-white/40">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== OUTAGE HOTSPOTS ===== */}
-      {hotspots.length > 0 && (
-        <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black">
+        {/* ===== HOW IT WORKS ===== */}
+        <section className="border-b border-white/5 px-6 sm:px-10 py-12 sm:py-16 bg-black">
           <div className="mx-auto max-w-[1000px]">
-            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-red-400/50 font-medium">
-              Hotspots
+            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+              How It Works
             </p>
-            <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
-              Outage Hotspots
+            <h2 className="mb-10 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+              DownDetector for Banks.
+              <br />
+              <span className="text-white/30">Crowd-sourced. Real-time. Zero login.</span>
             </h2>
-            <p className="mb-12 max-w-[500px] text-[15px] font-light leading-[1.7] text-white/40">
-              Suburbs with the highest number of service failure reports.
-            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-              {hotspots.map((h) => (
-                <Link
-                  key={h.suburbSlug}
-                  href={`/${h.stateSlug}/${h.suburbSlug}`}
-                  className="group bg-black p-6 sm:p-8 transition-all duration-500 hover:bg-red-500/[0.02]"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
+              {[
+                {
+                  step: "01",
+                  title: "Find Your Suburb",
+                  desc: "Search any of 15,000+ Australian suburbs to see banks & ATMs near you.",
+                  icon: "🔍",
+                },
+                {
+                  step: "02",
+                  title: "Report Status",
+                  desc: "One tap. No login. Report if an ATM is empty, branch closed, or queues are long.",
+                  icon: "📡",
+                },
+                {
+                  step: "03",
+                  title: "Community Benefits",
+                  desc: "Every report updates live status. Know before you go. Switch if you're fed up.",
+                  icon: "⚡",
+                },
+              ].map((item) => (
+                <div
+                  key={item.step}
+                  className="bg-black p-6 sm:p-8"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-medium uppercase tracking-wide text-red-400/60">
-                      {h.reportCount} {h.reportCount === 1 ? "report" : "reports"}
-                    </span>
-                    <span className="text-white/15 transition-all duration-300 group-hover:text-red-400/50 group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-[18px] font-light text-white mb-1">
-                    {h.suburbName}
+                  <span className="text-2xl mb-3 block">{item.icon}</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-medium">
+                    Step {item.step}
+                  </span>
+                  <h3 className="font-serif text-[20px] font-light text-white mt-2 mb-2">
+                    {item.title}
                   </h3>
-                  <p className="text-[12px] text-white/30">
-                    {h.postcode}, {h.state}
+                  <p className="text-[14px] font-light leading-[1.7] text-white/40">
+                    {item.desc}
                   </p>
-                  <div className="mt-4 h-px w-0 bg-red-400/20 transition-all duration-700 group-hover:w-full" />
-                </Link>
+                </div>
               ))}
             </div>
           </div>
         </section>
-      )}
+
+        {/* ===== OUTAGE HOTSPOTS ===== */}
+        {hotspots.length > 0 && (
+          <section className="border-b border-white/5 px-6 sm:px-10 py-12 sm:py-16 bg-black">
+            <div className="mx-auto max-w-[1000px]">
+              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-red-400/50 font-medium">
+                Hotspots
+              </p>
+              <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+                Outage Hotspots
+              </h2>
+              <p className="mb-8 max-w-[500px] text-[15px] font-light leading-[1.7] text-white/40">
+                Suburbs with the highest number of service failure reports.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
+                {hotspots.map((h) => (
+                  <Link
+                    key={h.suburbSlug}
+                    href={`/${h.stateSlug}/${h.suburbSlug}`}
+                    className="group bg-black p-5 sm:p-6 transition-all duration-500 hover:bg-red-500/[0.02]"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-medium uppercase tracking-wide text-red-400/60">
+                        {h.reportCount} {h.reportCount === 1 ? "report" : "reports"}
+                      </span>
+                      <span className="text-white/15 transition-all duration-300 group-hover:text-red-400/50 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-[18px] font-light text-white mb-1">
+                      {h.suburbName}
+                    </h3>
+                    <p className="text-[12px] text-white/30">
+                      {h.postcode}, {h.state}
+                    </p>
+                    <div className="mt-3 h-px w-0 bg-red-400/20 transition-all duration-700 group-hover:w-full" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
       {/* ===== INFRASTRUCTURE STATS ===== */}
       <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden border-b border-white/5 px-6 py-24 sm:px-8 sm:py-32 bg-black">
