@@ -550,7 +550,7 @@ export default async function HomePage() {
       </section>
 
       {/* ===== BOTTOM CTA ===== */}
-      <section className="px-6 py-24 sm:px-10 sm:py-32 bg-black">
+        <section className="px-6 py-14 sm:px-10 sm:py-20 bg-black">
         <div className="mx-auto w-full max-w-[600px] text-center">
           <h2 className="mb-6 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white tracking-[-0.01em]">
             Know before you go.
