@@ -50,57 +50,50 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* ===== HERO: Search & Destroy ===== */}
-      <section className="relative flex min-h-[75vh] flex-col justify-center px-6 sm:px-10 overflow-hidden bg-black">
-        {/* Blue trust glow */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] max-w-[1100px] max-h-[1100px] rounded-full blur-[180px] opacity-20"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(30, 58, 138, 0.3) 40%, rgba(0,0,0,0) 70%)",
-            }}
-          />
-          <div
-            className="absolute top-[30%] right-[5%] w-[35vw] h-[35vw] max-w-[400px] max-h-[400px] rounded-full blur-[120px] opacity-15"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(0,0,0,0) 70%)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 mx-auto w-full max-w-[900px]">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">
-            Australia&apos;s Bank Status Tracker
-          </p>
-
-          <h1 className="mb-4 font-serif text-[clamp(2.5rem,7vw,5rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
-            Find Your Bank.
-            <br />
-            <span className="text-white/40">See If It&apos;s Actually Working.</span>
-          </h1>
-
-          <p className="mb-6 max-w-[560px] text-[16px] font-light leading-[1.7] text-white/45">
-            Live crowd-sourced status for {stats.suburbs.toLocaleString()} Australian
-            suburbs. Know before you go.
-          </p>
-
-          {/* MASSIVE Search Bar */}
-          <div className="mb-5">
-            <HeroSearch />
+        {/* ===== HERO: Search & Destroy ===== */}
+        <section className="relative flex flex-col justify-center px-6 sm:px-10 pt-16 pb-10 sm:pt-24 sm:pb-14 overflow-hidden bg-black">
+          {/* Blue trust glow */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] max-w-[1100px] max-h-[1100px] rounded-full blur-[180px] opacity-20"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(30, 58, 138, 0.3) 40%, rgba(0,0,0,0) 70%)",
+              }}
+            />
           </div>
 
-          {/* Dirty secret stat */}
-          <p className="text-[13px] font-light text-white/30">
-            <span className="text-red-400/70 font-medium">{stats.closedBranches.toLocaleString()}</span>{" "}
-            branches have closed across Australia.{" "}
-            <Link href="/#closures" className="underline text-white/40 hover:text-white/60 transition-colors">
-              Check your suburb&apos;s status now
-            </Link>
-          </p>
-        </div>
-      </section>
+          <div className="relative z-10 mx-auto w-full max-w-[900px]">
+            <p className="mb-2 text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">
+              Australia&apos;s Bank Status Tracker
+            </p>
+
+            <h1 className="mb-3 font-serif text-[clamp(2rem,6vw,4rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
+              Find Your Bank.
+              <br />
+              <span className="text-white/40">See If It&apos;s Actually Working.</span>
+            </h1>
+
+            <p className="mb-5 max-w-[560px] text-[15px] font-light leading-[1.6] text-white/45">
+              Live crowd-sourced status for {stats.suburbs.toLocaleString()} Australian
+              suburbs. Know before you go.
+            </p>
+
+            {/* Search Bar */}
+            <div className="mb-4">
+              <HeroSearch />
+            </div>
+
+            {/* Dirty secret stat */}
+            <p className="text-[12px] font-light text-white/30">
+              <span className="text-red-400/70 font-medium">{stats.closedBranches.toLocaleString()}</span>{" "}
+              branches have closed across Australia.{" "}
+              <Link href="/#closures" className="underline text-white/40 hover:text-white/60 transition-colors">
+                Check your suburb&apos;s status now
+              </Link>
+            </p>
+          </div>
+        </section>
 
       {/* ===== Bank Marquee ===== */}
       <section className="relative w-full overflow-hidden border-y border-white/[0.06] py-5 bg-black">
