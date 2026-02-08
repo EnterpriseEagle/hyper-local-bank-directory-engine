@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import { suburbs, banks, branches, statusReports } from "../src/lib/db/schema";
+import { eq } from "drizzle-orm";
 import * as fs from "fs";
 import * as Papa from "papaparse";
 
@@ -164,7 +165,7 @@ async function seed() {
     // Update suburb counts
     await db.update(suburbs)
       .set({ branchCount, atmCount })
-      .where({ id: sub.id });
+      .where(eq(suburbs.id, sub.id));
 
     // Insert branches
     for (let i = 0; i < branchCount; i++) {
