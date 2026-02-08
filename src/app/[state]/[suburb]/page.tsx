@@ -77,9 +77,10 @@ export default async function SuburbPage({ params }: Props) {
   const suburb = await getSuburbBySlug(suburbSlug);
   if (!suburb || suburb.stateSlug !== state) notFound();
 
-  const [branches, nearby, recentReports, reportCount] = await Promise.all([
+  const [branches, nearby, nearestWithBranches, recentReports, reportCount] = await Promise.all([
     getBranchesForSuburb(suburb.id),
     getNearbySuburbs(suburb.id, state, 6),
+    getNearestSuburbsWithBranches(suburb.id, 6),
     getRecentReportsForSuburb(suburb.id, 10),
     getReportCountForSuburb(suburb.id),
   ]);
