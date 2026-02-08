@@ -200,17 +200,6 @@
     background-color: rgba(0, 0, 0, 0.7);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
-
-  .snap-container {
-    scroll-snap-type: y mandatory;
-    height: 100vh;
-    overflow-y: scroll;
-  }
-
-  .snap-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
 }
 
 @layer base {
