@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { suburbs, branches, banks, statusReports } from "./db/schema";
-import { eq, sql, and, desc, asc, ne } from "drizzle-orm";
+import { eq, sql, and, desc, asc, ne, like } from "drizzle-orm";
 
 export const STATE_NAMES: Record<string, string> = {
   "new-south-wales": "New South Wales",
