@@ -235,9 +235,58 @@ export default async function SuburbPage({ params }: Props) {
             suburbName={suburb.name}
           />
         </div>
-      </section>
+        </section>
 
-      {/* Recent Reports Feed */}
+        {/* Empty suburb - guide users to nearby suburbs with branches */}
+        {branches.length === 0 && nearby.length > 0 && (
+          <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
+            <div className="max-w-[1000px] mx-auto">
+              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+                No Branches Found
+              </p>
+              <h2 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
+                No bank branches in {suburb.name}?
+              </h2>
+              <p className="mb-8 max-w-[600px] text-[14px] font-light leading-[1.8] text-white/40">
+                {suburb.name} ({suburb.postcode}) in {stateName} currently has no tracked bank branches or ATMs.
+                Many Australian suburbs have lost banking services due to branch closures.
+                Check nearby suburbs below for the closest banking services, or be the first to report
+                a branch or ATM in {suburb.name}.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
+                {nearby.filter(n => n.branchCount > 0 || n.atmCount > 0).slice(0, 6).map((sub) => (
+                  <Link
+                    key={sub.slug}
+                    href={`/${state}/${sub.slug}`}
+                    className="group bg-black p-6 transition-all duration-500 hover:bg-white/[0.02]"
+                  >
+                    <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
+                      {sub.name}
+                    </h3>
+                    <p className="text-[12px] text-white/30 mt-1">
+                      {sub.postcode}, {sub.state}
+                    </p>
+                    <div className="mt-2 flex gap-3">
+                      {sub.branchCount > 0 && (
+                        <span className="text-[11px] text-emerald-400/60">
+                          {sub.branchCount} {sub.branchCount === 1 ? "branch" : "branches"}
+                        </span>
+                      )}
+                      {sub.atmCount > 0 && (
+                        <span className="text-[11px] text-emerald-400/60">
+                          {sub.atmCount} {sub.atmCount === 1 ? "ATM" : "ATMs"}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-3 h-px w-0 bg-white/15 transition-all duration-700 group-hover:w-full" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Recent Reports Feed */}
       {recentReports.length > 0 && (
         <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
           <div className="max-w-[1000px] mx-auto">
