@@ -14,6 +14,21 @@ export const metadata: Metadata = {
   },
     description:
       "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across hundreds of suburbs. DownDetector for banks.",
+  metadataBase: new URL("https://banknearme.com.au"),
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: "BankNearMe.com.au",
+    title: "BankNearMe.com.au - Is Your Bank Actually Working?",
+    description:
+      "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BankNearMe.com.au - Live Bank Status Tracker",
+    description:
+      "Live crowd-sourced status for Australian banks. Report ATM outages and branch closures.",
+  },
   keywords: [
     "bank branches Australia",
     "ATM near me",
