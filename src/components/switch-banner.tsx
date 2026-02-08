@@ -21,7 +21,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1000px]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
           {/* Left: The pitch */}
           <div>
             <p className={`mb-3 text-[10px] uppercase tracking-[0.2em] ${offer.theme.accent} opacity-50 font-medium`}>
