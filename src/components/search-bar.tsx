@@ -63,7 +63,7 @@ export function SearchBar() {
     <div ref={ref} className="relative w-full">
       <div className="relative">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -81,25 +81,25 @@ export function SearchBar() {
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => results.length > 0 && setOpen(true)}
           placeholder="Search suburb or postcode..."
-          className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-gray-50"
+          className="w-full pl-9 pr-4 py-2 text-[12px] font-light tracking-wide border border-white/10 bg-white/[0.03] text-white placeholder:text-white/25 focus:outline-none focus:border-white/25 transition-colors duration-300"
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-3.5 h-3.5 border border-white/30 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
       </div>
 
       {open && results.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto">
+        <div className="absolute z-50 top-full mt-1 w-full bg-[#0a0a0a] border border-white/10 max-h-64 overflow-y-auto">
           {results.map((r) => (
             <button
               key={r.slug}
               onClick={() => selectResult(r)}
-              className="w-full px-4 py-3 text-left hover:bg-emerald-50 flex items-center justify-between text-sm border-b border-gray-100 last:border-0 transition-colors"
+              className="w-full px-4 py-3 text-left hover:bg-white/[0.03] flex items-center justify-between text-[13px] border-b border-white/5 last:border-0 transition-colors duration-300"
             >
-              <span className="font-medium text-gray-900">{r.name}</span>
-              <span className="text-gray-500 text-xs">
+              <span className="font-light text-white">{r.name}</span>
+              <span className="text-white/30 text-[11px]">
                 {r.postcode}, {r.state}
               </span>
             </button>
