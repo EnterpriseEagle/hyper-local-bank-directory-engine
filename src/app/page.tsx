@@ -398,7 +398,7 @@ export default async function HomePage() {
           <p className="mb-6 text-[10px] font-medium uppercase tracking-[0.3em] text-white/50">
             The Numbers
           </p>
-          <h2 className="mb-16 font-serif text-[clamp(2rem,6vw,4rem)] font-light leading-[1.15] tracking-[-0.02em] text-white">
+          <h2 className="mb-10 font-serif text-[clamp(1.75rem,5vw,3rem)] font-light leading-[1.15] tracking-[-0.02em] text-white">
             Australia&apos;s banking infrastructure,
             <br />
             <span className="text-white/30">monitored by the people.</span>
