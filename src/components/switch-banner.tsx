@@ -8,8 +8,8 @@ import { getActiveOffer } from "@/lib/affiliate-offers";
 export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) {
   const offer = getActiveOffer();
 
-  return (
-    <section className="relative border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black overflow-hidden">
+    return (
+      <section className="relative border-b border-white/5 px-6 sm:px-10 py-16 sm:py-24 bg-black overflow-hidden">
       {/* Glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
