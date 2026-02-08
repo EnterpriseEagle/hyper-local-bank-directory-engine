@@ -580,8 +580,8 @@ export default async function HomePage() {
             "@type": "WebSite",
             name: "BankNearMe.com.au",
             url: "https://banknearme.com.au",
-            description:
-              "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports across 15,000+ suburbs.",
+              description:
+                "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports across hundreds of suburbs.",
             potentialAction: {
               "@type": "SearchAction",
               target: "https://banknearme.com.au/search?q={search_term_string}",
