@@ -70,24 +70,24 @@ export default async function HomePage() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-[1100px]">
-          <p className="mb-5 text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">
+        <div className="relative z-10 mx-auto w-full max-w-[1000px]">
+          <p className="mb-4 text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">
             Australia&apos;s Bank Status Tracker
           </p>
 
-          <h1 className="mb-6 font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
+          <h1 className="mb-5 font-serif text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[0.95] text-white tracking-[-0.02em]">
             Find Your Bank.
             <br />
             <span className="text-white/40">See If It&apos;s Actually Working.</span>
           </h1>
 
-          <p className="mb-10 max-w-[560px] text-[16px] font-light leading-[1.7] text-white/45">
+          <p className="mb-8 max-w-[560px] text-[16px] font-light leading-[1.7] text-white/45">
             Live crowd-sourced status for {stats.suburbs.toLocaleString()} Australian
             suburbs. Know before you go.
           </p>
 
           {/* MASSIVE Search Bar */}
-          <div className="mb-8">
+          <div className="mb-6">
             <HeroSearch />
           </div>
 
