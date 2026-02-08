@@ -18,14 +18,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_AU",
-    siteName: "BankNearMe.com.au",
-    title: "BankNearMe.com.au - Is Your Bank Actually Working?",
-    description:
-      "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports.",
+    siteName: "BANK NEAR ME®",
+    title: "BANK NEAR ME® - Is Your Bank Actually Working?",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BankNearMe.com.au - Live Bank Status Tracker",
+    title: "BANK NEAR ME® - Live Bank Status Tracker",
     description:
       "Live crowd-sourced status for Australian banks. Report ATM outages and branch closures.",
   },
