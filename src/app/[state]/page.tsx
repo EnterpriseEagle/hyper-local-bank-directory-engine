@@ -15,6 +15,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Bank Branches & ATMs in ${stateName} - Find Your Local Branch`,
     description: `Find bank branches, ATMs, and banking services across ${stateName}. Browse suburbs, compare opening hours, and track branch closures in ${STATE_ABBR[state]}.`,
+    alternates: {
+      canonical: `https://banknearme.com.au/${state}`,
+    },
   };
 }
 
