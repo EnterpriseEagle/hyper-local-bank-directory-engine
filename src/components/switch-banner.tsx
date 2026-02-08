@@ -41,7 +41,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
 
           {/* Right: The offer card */}
           <div className="border border-white/10 bg-white/[0.02] p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-4">
               <div className={`h-8 w-8 ${offer.theme.accentBg} flex items-center justify-center`}>
                 <span className={`${offer.theme.accent} text-sm`}>★</span>
               </div>
