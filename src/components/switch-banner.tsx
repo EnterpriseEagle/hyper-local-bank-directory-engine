@@ -27,7 +27,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
             <p className={`mb-3 text-[10px] uppercase tracking-[0.2em] ${offer.theme.accent} opacity-50 font-medium`}>
               Switch &amp; Save
             </p>
-            <h2 className="mb-5 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
+            <h2 className="mb-3 font-serif text-[clamp(1.5rem,3.5vw,2.25rem)] font-light leading-[1.1] text-white">
               Tired of empty ATMs
               <br />
               <span className="text-white/35">and closed branches?</span>
