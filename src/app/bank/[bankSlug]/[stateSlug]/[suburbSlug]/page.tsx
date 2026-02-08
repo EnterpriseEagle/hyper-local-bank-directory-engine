@@ -35,10 +35,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
-  };
-}
-
-export default async function BankSuburbPage({ params }: PageProps) {
+    alternates: {
+      canonical: `https://banknearme.com.au/bank/${bankSlug}/${stateSlug}/${suburbSlug}`,
+    },
+  };({ params }: PageProps) {
   const { bankSlug, stateSlug, suburbSlug } = await params;
   const [bank, suburb] = await Promise.all([
     getBankBySlug(bankSlug),
