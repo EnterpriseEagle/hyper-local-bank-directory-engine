@@ -185,6 +185,30 @@ export default function RootLayout({
 
                 <div>
                   <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
+                    Monitoring
+                  </p>
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/closures"
+                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
+                      >
+                        Recent Branch Closures
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/#live-feed"
+                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
+                      >
+                        Live Status Feed
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
                     Popular Banks
                   </p>
                   <ul className="space-y-2">
