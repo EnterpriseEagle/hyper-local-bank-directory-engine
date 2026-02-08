@@ -53,7 +53,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
 
               <div className="grid grid-cols-3 gap-3 mb-6">
               {offer.stats.map((item) => (
-                <div key={item.label} className="text-center py-4 bg-white/[0.03]">
+                <div key={item.label} className="text-center py-3 bg-white/[0.03]">
                   <div className={`text-[clamp(1.25rem,2vw,1.5rem)] font-serif font-light ${offer.theme.accent}`}>
                     {item.value}
                   </div>
