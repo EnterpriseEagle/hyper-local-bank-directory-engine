@@ -154,76 +154,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== THE DENY SECTION: Monetization ===== */}
-      <section className="relative border-b border-white/5 px-6 sm:px-10 py-20 sm:py-28 bg-black overflow-hidden">
-        {/* Subtle warm glow behind the offer */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[40vw] max-w-[800px] max-h-[500px] rounded-full blur-[150px] opacity-10"
-            style={{
-              background: "radial-gradient(circle, rgba(234, 179, 8, 0.5) 0%, rgba(0,0,0,0) 70%)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-[1000px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: The pitch */}
-            <div>
-              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-amber-400/50 font-medium">
-                Switch &amp; Save
-              </p>
-              <h2 className="mb-5 font-serif text-[clamp(1.75rem,4vw,3rem)] font-light leading-[1.1] text-white">
-                Tired of empty ATMs
-                <br />
-                <span className="text-white/35">and closed branches?</span>
-              </h2>
-              <p className="text-[15px] font-light leading-[1.7] text-white/40 max-w-[440px]">
-                The Big Four are closing {stats.closedBranches.toLocaleString()} branches
-                and counting. Stop hoping your ATM has cash. Switch to a bank that
-                actually works for you.
-              </p>
-            </div>
-
-            {/* Right: The offer card */}
-            <div className="border border-white/10 bg-white/[0.02] p-8 sm:p-10">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-8 w-8 bg-amber-400/10 flex items-center justify-center">
-                  <span className="text-amber-400 text-sm">★</span>
-                </div>
-                <div>
-                  <p className="text-[14px] font-medium text-white">Australia&apos;s Top-Rated Digital Bank</p>
-                  <p className="text-[11px] text-white/30">Partner Offer</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                {[
-                  { value: "$0", label: "Monthly Fees" },
-                  { value: "5.50%", label: "Savings Rate" },
-                  { value: "100%", label: "ATM Fee Rebates" },
-                ].map((item) => (
-                  <div key={item.label} className="text-center py-4 bg-white/[0.03]">
-                    <div className="text-[clamp(1.25rem,2vw,1.5rem)] font-serif font-light text-amber-400">
-                      {item.value}
-                    </div>
-                    <div className="text-[9px] uppercase tracking-[0.15em] text-white/30 mt-1">
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="w-full py-4 bg-amber-400 text-black text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-amber-300 transition-colors duration-300">
-                Get My $30 Bonus &amp; Switch &rarr;
-              </button>
-              <p className="text-[10px] text-white/20 text-center mt-3">
-                No obligations. Takes 5 minutes. Keep your old account open.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* ===== THE DENY SECTION: Monetization ===== */}
+        <SwitchOfferCard closedBranches={stats.closedBranches} />
 
       {/* ===== WHAT'S HAPPENING NOW: Compact Live Feed ===== */}
       <section
