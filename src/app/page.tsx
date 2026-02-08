@@ -519,7 +519,7 @@ export default async function HomePage() {
           <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
             The Mission
           </p>
-          <h2 className="mb-10 font-serif text-[clamp(1.5rem,3.5vw,2.5rem)] font-light leading-[1.1] text-white">
+          <h2 className="mb-6 font-serif text-[clamp(1.5rem,3.5vw,2.5rem)] font-light leading-[1.1] text-white">
             The Consumer Complaint Hub
             <br />
             <span className="text-white/30">for Australian Banking.</span>
