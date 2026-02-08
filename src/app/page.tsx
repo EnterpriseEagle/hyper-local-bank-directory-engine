@@ -520,41 +520,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== THE MISSION / SEO CONTENT ===== */}
-        <section className="border-b border-white/5 px-6 py-12 sm:px-10 sm:py-16 bg-black">
-        <div className="mx-auto w-full max-w-[640px]">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
-            The Mission
-          </p>
-          <h2 className="mb-6 font-serif text-[clamp(1.5rem,3.5vw,2.5rem)] font-light leading-[1.1] text-white">
-            The Consumer Complaint Hub
-            <br />
-            <span className="text-white/30">for Australian Banking.</span>
-          </h2>
-          <div className="space-y-6">
-            <p className="text-[15px] font-light leading-[1.8] text-white/50">
-              BankNearMe.com.au isn&apos;t just a directory. It&apos;s a
-              live, crowd-sourced monitoring platform for every bank branch
-              and ATM in Australia. When the Big Four close another branch or
-              leave an ATM empty for days, we know &mdash; because you tell
-              us.
-            </p>
-            <p className="text-[15px] font-light leading-[1.8] text-white/50">
-              Our database covers {stats.suburbs.toLocaleString()} suburbs,{" "}
-              {stats.openBranches.toLocaleString()} open branches, and{" "}
-              {stats.atms.toLocaleString()} ATMs across all states and
-              territories. Every status report updates the page in real-time,
-              making this the most current banking infrastructure data in the
-              country.
-            </p>
-            <p className="text-[15px] font-light leading-[1.8] text-white/50">
-              Banks publish static data. We publish{" "}
-              <em className="text-white/70">live</em> data. That&apos;s the
-              difference.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* ===== BOTTOM CTA ===== */}
         <section className="px-6 py-14 sm:px-10 sm:py-20 bg-black">
