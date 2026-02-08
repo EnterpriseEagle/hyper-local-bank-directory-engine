@@ -174,18 +174,29 @@ export default function RootLayout({
                 </ul>
               </div>
 
-              <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
-                  Popular Banks
-                </p>
-                <ul className="space-y-2 text-[12px] text-white/30">
-                  <li>Commonwealth Bank</li>
-                  <li>Westpac</li>
-                  <li>ANZ</li>
-                  <li>NAB</li>
-                  <li>Bendigo Bank</li>
-                </ul>
-              </div>
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
+                    Popular Banks
+                  </p>
+                  <ul className="space-y-2">
+                    {[
+                      ["Commonwealth Bank", "commonwealth-bank"],
+                      ["Westpac", "westpac"],
+                      ["ANZ", "anz"],
+                      ["NAB", "nab"],
+                      ["Bendigo Bank", "bendigo-bank"],
+                    ].map(([name, slug]) => (
+                      <li key={slug}>
+                        <Link
+                          href={`/bank/${slug}`}
+                          className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
+                        >
+                          {name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
             </div>
 
             <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
