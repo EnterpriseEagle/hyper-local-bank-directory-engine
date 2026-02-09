@@ -40,7 +40,7 @@ export default async function BanksPage() {
           </h1>
 
           <p className="max-w-[600px] text-[17px] font-light leading-relaxed text-white/50">
-            Find branches and ATMs for all {banks.length} banks tracked on BankNearMe. From the Big Four to local credit unions, we monitor service status across the country.
+            Find branches and ATMs for all {banks.length} banks tracked on BANK NEAR ME&reg;. From the Big Four to local credit unions, we monitor service status across the country.
           </p>
         </div>
       </section>

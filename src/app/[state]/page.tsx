@@ -165,7 +165,7 @@ export default async function StatePage({ params }: Props) {
           <div className="space-y-5">
             <p className="text-[14px] font-light leading-[1.7] text-white/40">
               {stateName} has {suburbs.length} suburbs with banking services
-              tracked on BankNearMe.au. Currently there are {totalBranches} open
+              tracked on BANK NEAR ME&reg;. Currently there are {totalBranches} open
               bank branches and {totalAtms} ATMs across the state
               {totalClosed > 0
                 ? `, with ${totalClosed} branches having recently closed`
@@ -195,7 +195,7 @@ export default async function StatePage({ params }: Props) {
             numberOfItems: suburbs.length,
             isPartOf: {
               "@type": "WebSite",
-              name: "BankNearMe.au",
+              name: "BANK NEAR ME\u00ae",
             },
           }),
         }}

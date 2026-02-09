@@ -124,7 +124,7 @@ export default async function SuburbPage({ params }: Props) {
     name: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
     description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}`,
     dateModified: new Date().toISOString(),
-    isPartOf: { "@type": "WebSite", name: "BankNearMe.com.au" },
+    isPartOf: { "@type": "WebSite", name: "BANK NEAR ME\u00ae" },
   };
 
   return (
@@ -480,7 +480,7 @@ export default async function SuburbPage({ params }: Props) {
               {openBranches.length} open bank{" "}
               {openBranches.length === 1 ? "branch" : "branches"} and{" "}
               {atms.length} {atms.length === 1 ? "ATM" : "ATMs"} tracked on
-              BankNearMe.com.au
+              BANK NEAR ME&reg;
               {closedBranches.length > 0 &&
                 `, with ${closedBranches.length} ${closedBranches.length === 1 ? "branch" : "branches"} having recently closed`}
               . The community has submitted {reportCount} live status{" "}

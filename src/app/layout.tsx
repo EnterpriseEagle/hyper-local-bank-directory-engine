@@ -8,27 +8,27 @@ import { SearchBar } from "@/components/search-bar";
 import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata: Metadata = {
-  title: {
-    default: "BankNearMe.com.au - Is Your Bank Actually Working? Live ATM & Branch Status",
-    template: "%s | BankNearMe.com.au",
-  },
-    description:
-      "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across hundreds of suburbs. DownDetector for banks.",
-  metadataBase: new URL("https://banknearme.com.au"),
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    siteName: "BankNearMe.com.au",
-    title: "BankNearMe.com.au - Is Your Bank Actually Working?",
-    description:
-      "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "BankNearMe.com.au - Live Bank Status Tracker",
-    description:
-      "Live crowd-sourced status for Australian banks. Report ATM outages and branch closures.",
-  },
+    title: {
+      default: "BANK NEAR ME\u00ae - Is Your Bank Actually Working? Live ATM & Branch Status",
+      template: "%s | BANK NEAR ME\u00ae",
+    },
+      description:
+        "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across 15,000+ suburbs. DownDetector for banks.",
+    metadataBase: new URL("https://banknearme.com.au"),
+    openGraph: {
+      type: "website",
+      locale: "en_AU",
+      siteName: "BANK NEAR ME\u00ae",
+      title: "BANK NEAR ME\u00ae - Is Your Bank Actually Working?",
+      description:
+        "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports across 15,000+ suburbs.",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "BANK NEAR ME\u00ae - Live Bank Status Tracker",
+      description:
+        "Live crowd-sourced status for Australian banks. Report ATM outages and branch closures across 15,000+ suburbs.",
+    },
   keywords: [
     "bank branches Australia",
     "ATM near me",
@@ -96,14 +96,11 @@ export default function RootLayout({
           <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
-            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-3">
-              <span className="font-serif text-2xl font-light tracking-wider text-white">
-                BNM
-              </span>
-              <span className="hidden sm:inline text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">
-                BankNearMe.au
-              </span>
-            </Link>
+            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-2">
+                <span className="font-sans text-[13px] font-bold uppercase tracking-[0.15em] text-white">
+                  BANK NEAR ME<sup className="text-[7px] relative -top-1">®</sup>
+                </span>
+              </Link>
 
             <div className="hidden md:block flex-1 max-w-xs mx-8">
               <SearchBar />
@@ -121,8 +118,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-[1000px]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div>
-                <span className="font-serif text-lg font-light text-white">BankNearMe</span>
-                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 ml-1">.au</span>
+                <span className="font-sans text-[13px] font-bold uppercase tracking-[0.15em] text-white">BANK NEAR ME<sup className="text-[7px]">®</sup></span>
                 <p className="mt-3 text-[13px] leading-relaxed text-white/30">
                   Australia&apos;s comprehensive database of bank branches, ATMs, and banking services.
                 </p>
@@ -201,8 +197,8 @@ export default function RootLayout({
 
             <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/20">
-                BankNearMe.au
-              </p>
+                  BANK NEAR ME&reg;
+                </p>
               <div className="flex items-center gap-6 text-[11px] text-white/20">
                 <span>&copy; {new Date().getFullYear()}</span>
                 <span>Data sourced from publicly available banking information</span>

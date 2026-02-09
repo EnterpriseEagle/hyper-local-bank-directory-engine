@@ -141,7 +141,7 @@ export default async function ClosuresPage() {
           <div className="p-8 bg-red-500/5 border border-red-500/10 rounded-2xl">
             <h3 className="font-serif text-[20px] mb-4">Why the closures?</h3>
             <p className="text-[14px] leading-relaxed text-white/50 font-light">
-              Australian banks are rapidly consolidating their physical networks as more customers move to digital banking. However, this leaves many regional areas and vulnerable populations without essential in-person services. BankNearMe tracks these closures to maintain transparency and help you find the nearest remaining services.
+              Australian banks are rapidly consolidating their physical networks as more customers move to digital banking. However, this leaves many regional areas and vulnerable populations without essential in-person services. BANK NEAR ME&reg; tracks these closures to maintain transparency and help you find the nearest remaining services.
             </p>
           </div>
         </div>
