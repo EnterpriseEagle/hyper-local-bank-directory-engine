@@ -5,17 +5,13 @@ import { notFound } from "next/navigation";
 import { 
   getBankBySlug, 
   getBankSuburbsInState,
-  getAllBankStateCombos,
   STATE_NAMES 
 } from "@/lib/data";
+import { generateBankSEOContent } from "@/lib/seo-content";
+import { SwitchOfferCard } from "@/components/switch-banner";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string }>;
-}
-
-export async function generateStaticParams() {
-  const combos = await getAllBankStateCombos();
-  return combos.map((c) => ({ bankSlug: c.bankSlug, stateSlug: c.stateSlug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -34,10 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
-    alternates: {
-      canonical: `https://banknearme.com.au/bank/${bankSlug}/${stateSlug}`,
-    },
-    };
+  };
 }
 
 export default async function BankStatePage({ params }: PageProps) {
@@ -144,27 +137,8 @@ export default async function BankStatePage({ params }: PageProps) {
               </div>
             ))}
           </div>
-          </div>
-        </section>
-
-        {/* FAQ JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": seo.faq.map((item) => ({
-                "@type": "Question",
-                "name": item.q,
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": item.a,
-                },
-              })),
-            }),
-          }}
-        />
-      </div>
-    );
-  }
+        </div>
+      </section>
+    </div>
+  );
+}

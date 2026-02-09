@@ -45,17 +45,10 @@ export function generateBankSEOContent(
     suburb: `${bankName} in ${locationName} serves the local community with banking services. Whether you need to visit a teller or find a fee-free ATM, we provide the latest details on the ${bankName} ${locationName} location.`
   };
 
-  // Deterministic selection based on input string hash - no flickering titles between builds
-  const selectDeterministic = (arr: string[], seed: string) => {
-    let hash = 0;
-    for (let i = 0; i < seed.length; i++) {
-      hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
-    }
-    return arr[Math.abs(hash) % arr.length];
-  };
+  const selectRandom = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
   return {
-    title: selectDeterministic(titles[type], `${bankName}-${locationName}-${type}`),
+    title: selectRandom(titles[type]),
     description: descriptions[type],
     h1: `${bankName} Locations in ${locationName}`,
     intro: intros[type],

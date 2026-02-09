@@ -25,9 +25,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
-    alternates: {
-      canonical: `https://banknearme.com.au/atm/${suburbSlug}`,
-    },
   };
 }
 
@@ -120,26 +117,7 @@ export default async function ATMSuburbPage({ params }: PageProps) {
             ))}
           </div>
         </div>
-        </section>
-
-        {/* FAQ JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": seo.faq.map((item) => ({
-                "@type": "Question",
-                "name": item.q,
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": item.a,
-                },
-              })),
-            }),
-          }}
-        />
-      </div>
-    );
-  }
+      </section>
+    </div>
+  );
+}

@@ -9,8 +9,8 @@ import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata: Metadata = {
   title: {
-    default: "BANK NEAR ME® - Is Your Bank Actually Working? Live ATM & Branch Status",
-    template: "%s | BANK NEAR ME®",
+    default: "BankNearMe.com.au - Is Your Bank Actually Working? Live ATM & Branch Status",
+    template: "%s | BankNearMe.com.au",
   },
     description:
       "Australia's crowd-sourced bank status tracker. Report ATM outages, branch closures, and long queues in real-time across hundreds of suburbs. DownDetector for banks.",
@@ -18,12 +18,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_AU",
-    siteName: "BANK NEAR ME®",
-    title: "BANK NEAR ME® - Is Your Bank Actually Working?",
+    siteName: "BankNearMe.com.au",
+    title: "BankNearMe.com.au - Is Your Bank Actually Working?",
+    description:
+      "Australia's crowd-sourced bank status tracker. Live ATM outages, branch closures, and queue reports.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BANK NEAR ME® - Live Bank Status Tracker",
+    title: "BankNearMe.com.au - Live Bank Status Tracker",
     description:
       "Live crowd-sourced status for Australian banks. Report ATM outages and branch closures.",
   },
@@ -41,11 +43,6 @@ export const metadata: Metadata = {
     "ANZ branch",
     "NAB branch",
   ],
-  other: {
-    "geo.region": "AU",
-    "geo.placename": "Australia",
-    "ICBM": "-25.2744, 133.7751",
-  },
 };
 
 export default function RootLayout({
@@ -74,23 +71,19 @@ export default function RootLayout({
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
 
-        {/* Google Analytics - only loads when GA_MEASUREMENT_ID env var is set */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
-              `}
-            </Script>
-          </>
-        )}
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-BNM_TRACKING_ID"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-BNM_TRACKING_ID');
+          `}
+        </Script>
 
         {/* Navigation - Fixed glassmorphism nav */}
         <nav className="fixed left-0 right-0 top-0 z-50">
@@ -103,12 +96,18 @@ export default function RootLayout({
           <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
-            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-2">
-              <span className="text-[20px] font-bold uppercase tracking-[0.15em] text-white">
-                BANK NEAR ME<sup className="text-[9px] align-super ml-0.5">®</sup>
+            <Link href="/" className="group transition-opacity hover:opacity-70 flex items-center gap-3">
+              <span className="font-serif text-2xl font-light tracking-wider text-white">
+                BNM
+              </span>
+              <span className="hidden sm:inline text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">
+                BankNearMe.au
               </span>
             </Link>
 
+            <div className="hidden md:block flex-1 max-w-xs mx-8">
+              <SearchBar />
+            </div>
 
               <MobileNav />
             </div>
@@ -122,7 +121,8 @@ export default function RootLayout({
           <div className="mx-auto max-w-[1000px]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div>
-                <span className="text-sm font-bold uppercase tracking-[0.15em] text-white">BANK NEAR ME®</span>
+                <span className="font-serif text-lg font-light text-white">BankNearMe</span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 ml-1">.au</span>
                 <p className="mt-3 text-[13px] leading-relaxed text-white/30">
                   Australia&apos;s comprehensive database of bank branches, ATMs, and banking services.
                 </p>
@@ -176,30 +176,6 @@ export default function RootLayout({
 
                 <div>
                   <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
-                    Monitoring
-                  </p>
-                  <ul className="space-y-2">
-                    <li>
-                      <Link
-                        href="/closures"
-                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
-                      >
-                        Recent Branch Closures
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/#live-feed"
-                        className="text-[12px] text-white/30 transition-colors duration-300 hover:text-white underline-reveal"
-                      >
-                        Live Status Feed
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-4">
                     Popular Banks
                   </p>
                   <ul className="space-y-2">
@@ -225,7 +201,7 @@ export default function RootLayout({
 
             <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/20">
-                BANK NEAR ME®
+                BankNearMe.au
               </p>
               <div className="flex items-center gap-6 text-[11px] text-white/20">
                 <span>&copy; {new Date().getFullYear()}</span>

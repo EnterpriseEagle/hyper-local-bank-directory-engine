@@ -173,14 +173,11 @@ async function seed() {
       const bsbPrefix = BSB_PREFIXES[bankName] || "99";
       const bsb = `${bsbPrefix}${Math.floor(Math.random() * 9000 + 1000).toString().slice(0,4)}`;
 
-      const streets = ["George St", "Collins St", "Queen St", "Bourke St", "William St", "Elizabeth St", "Pitt St", "Adelaide St"];
-      const street = streets[Math.floor(Math.random() * streets.length)];
-
       await db.insert(branches).values({
         bankId: bankIds[bankName],
         suburbId: sub.id,
         name: `${bankName} ${sub.name}`,
-        address: `${Math.floor(Math.random() * 300 + 1)} ${street}, ${sub.name} ${sub.state} ${sub.postcode}`,
+        address: `${Math.floor(Math.random() * 300 + 1)} High St, ${sub.name} ${sub.state} ${sub.postcode}`,
         postcode: sub.postcode,
         lat: sub.lat + (Math.random() - 0.5) * 0.01,
         lng: sub.lng + (Math.random() - 0.5) * 0.01,

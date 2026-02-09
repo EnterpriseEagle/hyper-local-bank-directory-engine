@@ -2,17 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-    getSuburbBySlug,
-    getBranchesForSuburb,
-    getNearbySuburbs,
-    getNearestSuburbsWithBranches,
-    getRecentReportsForSuburb,
-    getReportCountForSuburb,
-    getAllSuburbSlugs,
-    STATE_NAMES,
-    STATE_ABBR,
-  } from "@/lib/data";
-
+  getSuburbBySlug,
+  getBranchesForSuburb,
+  getNearbySuburbs,
+  getRecentReportsForSuburb,
+  getReportCountForSuburb,
+  getAllSuburbSlugs,
+  STATE_NAMES,
+  STATE_ABBR,
+} from "@/lib/data";
 import { StatusReporter } from "@/components/status-reporter";
 import { SwitchStickyBar } from "@/components/switch-banner";
 
@@ -39,9 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
     description: `Find bank branches, ATMs, and live service status in ${suburb.name}, ${stateName} ${suburb.postcode}. Report ATM outages, branch closures, and long queues. Updated by the community.`,
-    alternates: {
-      canonical: `https://banknearme.com.au/${state}/${suburbSlug}`,
-    },
     openGraph: {
       title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
       description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}. Report outages, check service status.`,
@@ -77,10 +72,9 @@ export default async function SuburbPage({ params }: Props) {
   const suburb = await getSuburbBySlug(suburbSlug);
   if (!suburb || suburb.stateSlug !== state) notFound();
 
-  const [branches, nearby, nearestWithBranches, recentReports, reportCount] = await Promise.all([
+  const [branches, nearby, recentReports, reportCount] = await Promise.all([
     getBranchesForSuburb(suburb.id),
     getNearbySuburbs(suburb.id, state, 6),
-    getNearestSuburbsWithBranches(suburb.id, 6),
     getRecentReportsForSuburb(suburb.id, 10),
     getReportCountForSuburb(suburb.id),
   ]);
@@ -131,33 +125,6 @@ export default async function SuburbPage({ params }: Props) {
     description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}`,
     dateModified: new Date().toISOString(),
     isPartOf: { "@type": "WebSite", name: "BankNearMe.com.au" },
-  };
-
-  const jsonLdFaq = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `Are there any bank branches in ${suburb.name}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: openBranches.length > 0 
-            ? `Yes, there are ${openBranches.length} active bank branches in ${suburb.name}.`
-            : `Currently, there are no active bank branches tracked in ${suburb.name}. The nearest branches can be found in ${nearestWithBranches.map(n => n.name).slice(0, 3).join(", ")}.`
-        }
-      },
-      {
-        "@type": "Question",
-        name: `How many ATMs are in ${suburb.name}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: atms.length > 0
-            ? `There are ${atms.length} ATMs in ${suburb.name}.`
-            : `We currently have no ATMs tracked in ${suburb.name}. Check nearby suburbs for ATM access.`
-        }
-      }
-    ]
   };
 
   return (
@@ -265,58 +232,9 @@ export default async function SuburbPage({ params }: Props) {
             suburbName={suburb.name}
           />
         </div>
-        </section>
+      </section>
 
-        {/* Empty suburb - guide users to nearby suburbs with branches */}
-        {branches.length === 0 && nearestWithBranches.length > 0 && (
-          <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
-            <div className="max-w-[1000px] mx-auto">
-              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
-                No Branches Found
-              </p>
-              <h2 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
-                No bank branches in {suburb.name}?
-              </h2>
-              <p className="mb-8 max-w-[600px] text-[14px] font-light leading-[1.8] text-white/40">
-                {suburb.name} ({suburb.postcode}) in {stateName} currently has no tracked bank branches or ATMs.
-                Many Australian suburbs have lost banking services due to branch closures.
-                Check nearby suburbs below for the closest banking services, or be the first to report
-                a branch or ATM in {suburb.name}.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-                {nearestWithBranches.map((sub) => (
-                  <Link
-                    key={sub.slug}
-                    href={`/${sub.stateSlug}/${sub.slug}`}
-                    className="group bg-black p-6 transition-all duration-500 hover:bg-white/[0.02]"
-                  >
-                    <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
-                      {sub.name}
-                    </h3>
-                    <p className="text-[12px] text-white/30 mt-1">
-                      {sub.postcode}, {sub.state}
-                    </p>
-                    <div className="mt-2 flex gap-3">
-                      {sub.branchCount > 0 && (
-                        <span className="text-[11px] text-emerald-400/60">
-                          {sub.branchCount} {sub.branchCount === 1 ? "branch" : "branches"}
-                        </span>
-                      )}
-                      {sub.atmCount > 0 && (
-                        <span className="text-[11px] text-emerald-400/60">
-                          {sub.atmCount} {sub.atmCount === 1 ? "ATM" : "ATMs"}
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-3 h-px w-0 bg-white/15 transition-all duration-700 group-hover:w-full" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Recent Reports Feed */}
+      {/* Recent Reports Feed */}
       {recentReports.length > 0 && (
         <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
           <div className="max-w-[1000px] mx-auto">
@@ -585,7 +503,7 @@ export default async function SuburbPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([jsonLdPage, jsonLdFaq, ...jsonLdItems]),
+          __html: JSON.stringify([jsonLdPage, ...jsonLdItems]),
         }}
       />
     </div>

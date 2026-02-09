@@ -1,15 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getSuburbsByState, STATE_NAMES, STATE_ABBR, getStateList } from "@/lib/data";
+import { getSuburbsByState, STATE_NAMES, STATE_ABBR } from "@/lib/data";
 
 interface Props {
   params: Promise<{ state: string }>;
-}
-
-export async function generateStaticParams() {
-  const states = await getStateList();
-  return states.map((s) => ({ state: s.stateSlug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -20,9 +15,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Bank Branches & ATMs in ${stateName} - Find Your Local Branch`,
     description: `Find bank branches, ATMs, and banking services across ${stateName}. Browse suburbs, compare opening hours, and track branch closures in ${STATE_ABBR[state]}.`,
-    alternates: {
-      canonical: `https://banknearme.com.au/${state}`,
-    },
   };
 }
 

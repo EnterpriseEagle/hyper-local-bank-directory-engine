@@ -6,17 +6,13 @@ import {
   getBankBySlug, 
   getBankBranchStats, 
   getBankStatesPresence,
-  getAllBanks,
   STATE_NAMES 
 } from "@/lib/data";
+import { generateBankSEOContent } from "@/lib/seo-content";
+import { SwitchOfferCard } from "@/components/switch-banner";
 
 interface PageProps {
   params: Promise<{ bankSlug: string }>;
-}
-
-export async function generateStaticParams() {
-  const allBanks = await getAllBanks();
-  return allBanks.map((b) => ({ bankSlug: b.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -30,10 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
-    alternates: {
-      canonical: `https://banknearme.com.au/bank/${bankSlug}`,
-    },
-    };
+  };
 }
 
 export default async function BankPage({ params }: PageProps) {
@@ -157,37 +150,23 @@ export default async function BankPage({ params }: PageProps) {
         </div>
       </section>
 
-        {/* JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "BankOrCreditUnion",
-                "name": bank.name,
-                "url": bank.website,
-                "description": seo.description,
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressCountry": "AU"
-                }
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                "mainEntity": seo.faq.map((item) => ({
-                  "@type": "Question",
-                  "name": item.q,
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": item.a,
-                  },
-                })),
-              },
-            ]),
-          }}
-        />
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BankOrCreditUnion",
+            "name": bank.name,
+            "url": bank.website,
+            "description": seo.description,
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "AU"
+            }
+          }),
+        }}
+      />
     </div>
   );
 }

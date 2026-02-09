@@ -192,7 +192,7 @@ export default async function HomePage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
               {recentReports.map((r) => {
                 const info = REPORT_LABELS[r.reportType] || {
                   label: r.reportType,
@@ -203,13 +203,13 @@ export default async function HomePage() {
                   <Link
                     key={r.id}
                     href={`/${r.stateSlug}/${r.suburbSlug}`}
-                    className="group bg-white/[0.02] border border-white/[0.05] p-6 flex items-start gap-4 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-0.5"
+                    className="group bg-black p-6 flex items-start gap-4 transition-all duration-300 hover:bg-white/[0.02]"
                   >
-                    <span className="text-2xl mt-0.5 shrink-0 transform transition-transform duration-300 group-hover:scale-110">{info.icon}</span>
+                    <span className="text-xl mt-0.5 shrink-0">{info.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5">
+                      <div className="flex items-center gap-2 mb-1">
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wider ${info.color} bg-white/[0.03] px-1.5 py-0.5`}
+                          className={`text-[11px] font-medium uppercase tracking-wide ${info.color}`}
                         >
                           {info.label}
                         </span>
@@ -217,14 +217,14 @@ export default async function HomePage() {
                           {timeAgo(r.createdAt)}
                         </span>
                       </div>
-                      <p className="text-[15px] font-light text-white truncate group-hover:text-white/90">
+                      <p className="text-[14px] font-light text-white truncate">
                         {r.branchName}
                       </p>
-                      <p className="text-[11px] text-white/25 mt-1 uppercase tracking-wide">
-                        {r.suburbName}, {r.state}
+                      <p className="text-[11px] text-white/25 mt-0.5">
+                        {r.suburbName} {r.postcode}, {r.state}
                       </p>
                     </div>
-                    <span className="text-white/10 mt-1 transition-all duration-300 group-hover:text-white/40 group-hover:translate-x-1 shrink-0">
+                    <span className="text-white/10 mt-1 transition-all duration-300 group-hover:text-white/30 group-hover:translate-x-1 shrink-0">
                       &rarr;
                     </span>
                   </Link>
@@ -233,73 +233,62 @@ export default async function HomePage() {
             </div>
           )}
 
-            {/* View all reports link */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link
-                href="/#states"
-                className="text-[11px] uppercase tracking-[0.2em] text-white/30 hover:text-white/50 transition-colors"
-              >
-                Browse all suburbs to report &amp; view status &rarr;
-              </Link>
-              <Link
-                href="/closures"
-                className="text-[11px] uppercase tracking-[0.2em] text-red-400/50 hover:text-red-400/80 transition-colors"
-              >
-                View National Branch Closures Tracker &rarr;
-              </Link>
-            </div>
-
+          {/* View all reports link */}
+          <div className="mt-6 text-center">
+            <Link
+              href="/#states"
+              className="text-[11px] uppercase tracking-[0.2em] text-white/30 hover:text-white/50 transition-colors"
+            >
+              Browse all suburbs to report &amp; view status &rarr;
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ===== OUTAGE STATS BAR ===== */}
       <section className="border-b border-white/5 bg-black">
-        <div className="mx-auto max-w-[1000px] grid grid-cols-2 md:grid-cols-4">
+        <div className="mx-auto max-w-[1000px] grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
           {[
             {
               label: "ATMs Empty",
               value: outageStats.atmEmpty,
               color: "text-red-400",
-              hoverBg: "hover:bg-red-500/[0.03]",
+              bg: "bg-red-500/5",
               icon: "❌",
             },
             {
               label: "Branches Closed",
               value: outageStats.branchClosed,
               color: "text-red-400",
-              hoverBg: "hover:bg-red-500/[0.03]",
+              bg: "bg-red-500/5",
               icon: "🚫",
             },
             {
               label: "Long Queues",
               value: outageStats.longQueue,
               color: "text-amber-400",
-              hoverBg: "hover:bg-amber-500/[0.03]",
+              bg: "bg-amber-500/5",
               icon: "⏳",
             },
             {
               label: "Confirmed Working",
               value: outageStats.working,
               color: "text-emerald-400",
-              hoverBg: "hover:bg-emerald-500/[0.03]",
+              bg: "bg-emerald-500/5",
               icon: "✅",
             },
-          ].map((card, idx) => (
+          ].map((card) => (
             <div
               key={card.label}
-              className={`p-8 text-center transition-all duration-300 ${card.hoverBg} border-white/[0.03] ${
-                idx < 3 ? "md:border-r" : ""
-              } ${idx % 2 === 0 ? "border-r md:border-r-0" : ""} ${
-                idx < 2 ? "border-b md:border-b-0" : ""
-              }`}
+              className={`${card.bg} bg-black p-6 sm:p-8 text-center`}
             >
-              <span className="text-xl">{card.icon}</span>
+              <span className="text-lg">{card.icon}</span>
               <div
-                className={`text-[clamp(1.5rem,2.5vw,2.25rem)] font-serif font-light mt-2 ${card.color}`}
+                className={`text-[clamp(1.25rem,2.5vw,2rem)] font-serif font-light mt-2 ${card.color}`}
               >
                 {card.value}
               </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-white/30 mt-1">
                 {card.label}
               </div>
             </div>
@@ -319,7 +308,7 @@ export default async function HomePage() {
               <span className="text-white/30">Crowd-sourced. Real-time. Zero login.</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
               {[
                 {
                   step: "01",
@@ -342,25 +331,21 @@ export default async function HomePage() {
               ].map((item) => (
                 <div
                   key={item.step}
-                  className="group relative bg-white/[0.02] border border-white/[0.05] p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:-translate-y-1"
+                  className="bg-black p-6 sm:p-8"
                 >
-                  <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity duration-500 group-hover:opacity-10">
-                    <span className="text-6xl font-serif italic">{item.step}</span>
-                  </div>
-                  <span className="text-3xl mb-6 block transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">{item.icon}</span>
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-semibold">
-                    Phase {item.step}
+                  <span className="text-2xl mb-3 block">{item.icon}</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-medium">
+                    Step {item.step}
                   </span>
-                  <h3 className="font-serif text-[22px] font-light text-white mt-3 mb-3">
+                  <h3 className="font-serif text-[20px] font-light text-white mt-2 mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-[14px] font-light leading-[1.8] text-white/40">
+                  <p className="text-[14px] font-light leading-[1.7] text-white/40">
                     {item.desc}
                   </p>
                 </div>
               ))}
             </div>
-
           </div>
         </section>
 
@@ -528,6 +513,41 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ===== THE MISSION / SEO CONTENT ===== */}
+        <section className="border-b border-white/5 px-6 py-12 sm:px-10 sm:py-16 bg-black">
+        <div className="mx-auto w-full max-w-[640px]">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+            The Mission
+          </p>
+          <h2 className="mb-6 font-serif text-[clamp(1.5rem,3.5vw,2.5rem)] font-light leading-[1.1] text-white">
+            The Consumer Complaint Hub
+            <br />
+            <span className="text-white/30">for Australian Banking.</span>
+          </h2>
+          <div className="space-y-6">
+            <p className="text-[15px] font-light leading-[1.8] text-white/50">
+              BankNearMe.com.au isn&apos;t just a directory. It&apos;s a
+              live, crowd-sourced monitoring platform for every bank branch
+              and ATM in Australia. When the Big Four close another branch or
+              leave an ATM empty for days, we know &mdash; because you tell
+              us.
+            </p>
+            <p className="text-[15px] font-light leading-[1.8] text-white/50">
+              Our database covers {stats.suburbs.toLocaleString()} suburbs,{" "}
+              {stats.openBranches.toLocaleString()} open branches, and{" "}
+              {stats.atms.toLocaleString()} ATMs across all states and
+              territories. Every status report updates the page in real-time,
+              making this the most current banking infrastructure data in the
+              country.
+            </p>
+            <p className="text-[15px] font-light leading-[1.8] text-white/50">
+              Banks publish static data. We publish{" "}
+              <em className="text-white/70">live</em> data. That&apos;s the
+              difference.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ===== BOTTOM CTA ===== */}
         <section className="px-6 py-14 sm:px-10 sm:py-20 bg-black">

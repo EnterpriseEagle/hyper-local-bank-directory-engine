@@ -6,7 +6,6 @@ import {
   getBankBySlug, 
   getBankBranchesInSuburb,
   getSuburbBySlug,
-  getAllBankStateSuburbCombos,
   STATE_NAMES 
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
@@ -15,15 +14,6 @@ import { ErrorReporter } from "@/components/ErrorReporter";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string; suburbSlug: string }>;
-}
-
-export async function generateStaticParams() {
-  const combos = await getAllBankStateSuburbCombos();
-  return combos.map((c) => ({ 
-    bankSlug: c.bankSlug, 
-    stateSlug: c.stateSlug, 
-    suburbSlug: c.suburbSlug 
-  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -45,10 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: seo.title,
     description: seo.description,
-    alternates: {
-      canonical: `https://banknearme.com.au/bank/${bankSlug}/${stateSlug}/${suburbSlug}`,
-    },
-    };
+  };
 }
 
 export default async function BankSuburbPage({ params }: PageProps) {
@@ -206,26 +193,7 @@ export default async function BankSuburbPage({ params }: PageProps) {
             ))}
           </div>
         </div>
-        </section>
-
-        {/* FAQ JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": seo.faq.map((item) => ({
-                "@type": "Question",
-                "name": item.q,
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": item.a,
-                },
-              })),
-            }),
-          }}
-        />
-      </div>
-    );
-  }
+      </section>
+    </div>
+  );
+}
