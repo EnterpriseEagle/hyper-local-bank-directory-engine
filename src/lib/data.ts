@@ -75,12 +75,23 @@ export async function getSuburbsByState(stateSlug: string) {
 }
 
 export async function getSuburbBySlug(slug: string) {
-  const [suburb] = await db
+  // Try exact match first (e.g. "parramatta-2150")
+  const [exact] = await db
     .select()
     .from(suburbs)
     .where(eq(suburbs.slug, slug))
     .limit(1);
-  return suburb;
+  if (exact) return exact;
+
+  // Fallback: match slug without postcode (e.g. "parramatta" matches "parramatta-2150")
+  // Pick the suburb with the most branches for ambiguous matches
+  const [fallback] = await db
+    .select()
+    .from(suburbs)
+    .where(sql`${suburbs.slug} LIKE ${slug + '-%'}`)
+    .orderBy(desc(suburbs.branchCount))
+    .limit(1);
+  return fallback;
 }
 
 export async function getBranchesForSuburb(suburbId: number) {
@@ -141,12 +152,23 @@ export async function getRecentClosures(limit = 10) {
 }
 
 export async function getNearbySuburbs(suburbId: number, stateSlug: string, limit = 6) {
+  // Get the current suburb's coordinates
+  const [current] = await db
+    .select({ lat: suburbs.lat, lng: suburbs.lng })
+    .from(suburbs)
+    .where(eq(suburbs.id, suburbId))
+    .limit(1);
+  if (!current) return [];
+
+  // Order by approximate distance using Euclidean on lat/lng (good enough for nearby)
   return db
     .select()
     .from(suburbs)
     .where(and(eq(suburbs.stateSlug, stateSlug), ne(suburbs.id, suburbId)))
-    .limit(limit)
-    .orderBy(sql`RANDOM()`);
+    .orderBy(
+      sql`(${suburbs.lat} - ${current.lat}) * (${suburbs.lat} - ${current.lat}) + (${suburbs.lng} - ${current.lng}) * (${suburbs.lng} - ${current.lng})`
+    )
+    .limit(limit);
 }
 
 export async function getRecentReportsForSuburb(suburbId: number, limit = 10) {

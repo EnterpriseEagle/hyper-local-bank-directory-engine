@@ -100,7 +100,7 @@ export default async function SuburbPage({ params }: Props) {
       streetAddress: b.address,
       addressLocality: suburb.name,
       addressRegion: abbr,
-      postalCode: b.postcode || suburb.postcode,
+      postalCode: suburb.postcode,
       addressCountry: "AU",
     },
     ...(b.lat && b.lng

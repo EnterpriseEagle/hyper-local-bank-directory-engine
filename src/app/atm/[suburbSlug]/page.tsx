@@ -33,7 +33,7 @@ export default async function ATMSuburbPage({ params }: PageProps) {
   const suburb = await getSuburbBySlug(suburbSlug);
   if (!suburb) notFound();
 
-  const atms = await getAtmsForSuburb(suburbSlug);
+  const atms = await getAtmsForSuburb(suburb.slug);
   const seo = generateATMSEOContent(suburb.name, atms.length);
 
   return (

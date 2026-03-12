@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   if (!bank || !suburb) return { title: "Not Found" };
 
-  const branches = await getBankBranchesInSuburb(bank.id, suburbSlug);
+  const branches = await getBankBranchesInSuburb(bank.id, suburb.slug);
   const openBranches = branches.filter(b => b.type === 'branch' && b.status === 'open').length;
   const atms = branches.filter(b => b.type === 'atm').length;
   const closedBranches = branches.filter(b => b.status === 'closed').length;
@@ -46,7 +46,7 @@ export default async function BankSuburbPage({ params }: PageProps) {
 
   if (!bank || !suburb) notFound();
 
-  const branches = await getBankBranchesInSuburb(bank.id, suburbSlug);
+  const branches = await getBankBranchesInSuburb(bank.id, suburb.slug);
   const openBranchesCount = branches.filter(b => b.type === 'branch' && b.status === 'open').length;
   const atmsCount = branches.filter(b => b.type === 'atm').length;
   const closedCount = branches.filter(b => b.status === 'closed').length;
@@ -124,14 +124,9 @@ export default async function BankSuburbPage({ params }: PageProps) {
                       <p className="text-[14px] text-white/50 font-light mb-4">{b.address}</p>
                       
                       {b.openingHours && (
-                        <div className="text-[12px] text-white/30 grid grid-cols-2 gap-x-4 gap-y-1 max-w-[300px]">
-                          {Object.entries(JSON.parse(b.openingHours)).map(([day, hours]) => (
-                            <div key={day} className="flex justify-between">
-                              <span className="capitalize">{day}:</span>
-                              <span>{hours as string}</span>
-                            </div>
-                          ))}
-                        </div>
+                        <p className="text-[12px] text-white/30">
+                          Hours: {b.openingHours}
+                        </p>
                       )}
 
                       {/* Status Reporter Integration */}
