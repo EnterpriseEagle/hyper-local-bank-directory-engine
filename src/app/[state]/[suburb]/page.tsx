@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  getSuburbBySlug,
+  getSuburbBySlugInState,
   getBranchesForSuburb,
   getNearbySuburbs,
   getRecentReportsForSuburb,
@@ -28,7 +28,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state, suburb: suburbSlug } = await params;
-  const suburb = await getSuburbBySlug(suburbSlug);
+  const suburb = await getSuburbBySlugInState(suburbSlug, state);
   if (!suburb) return {};
 
   const stateName = STATE_NAMES[state] || suburb.state;
@@ -69,7 +69,7 @@ export const revalidate = 60; // Revalidate every 60s for freshness
 
 export default async function SuburbPage({ params }: Props) {
   const { state, suburb: suburbSlug } = await params;
-  const suburb = await getSuburbBySlug(suburbSlug);
+  const suburb = await getSuburbBySlugInState(suburbSlug, state);
   if (!suburb || suburb.stateSlug !== state) notFound();
 
   const [branches, nearby, recentReports, reportCount] = await Promise.all([

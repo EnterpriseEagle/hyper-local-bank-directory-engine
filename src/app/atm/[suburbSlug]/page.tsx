@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const suburb = await getSuburbBySlug(suburbSlug);
   if (!suburb) return { title: "ATMs Not Found" };
 
-  const atms = await getAtmsForSuburb(suburbSlug);
+  const atms = await getAtmsForSuburb(suburb.slug);
   const seo = generateATMSEOContent(suburb.name, atms.length);
 
   return {
@@ -46,7 +46,7 @@ export default async function ATMSuburbPage({ params }: PageProps) {
             <span>/</span>
             <Link href={`/${suburb.stateSlug}`} className="hover:text-white transition-colors">{STATE_NAMES[suburb.stateSlug]}</Link>
             <span>/</span>
-            <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="hover:text-white transition-colors">{suburb.name}</Link>
+            <Link href={`/${suburb.stateSlug}/${suburb.slug}`} className="hover:text-white transition-colors">{suburb.name}</Link>
             <span>/</span>
             <span className="text-white/60">ATMs</span>
           </nav>

@@ -75,23 +75,61 @@ export async function getSuburbsByState(stateSlug: string) {
 }
 
 export async function getSuburbBySlug(slug: string) {
+  return getSuburbBySlugInState(slug);
+}
+
+export async function getSuburbBySlugInState(slug: string, stateSlug?: string) {
+  const exactWhere = stateSlug
+    ? and(eq(suburbs.slug, slug), eq(suburbs.stateSlug, stateSlug))
+    : eq(suburbs.slug, slug);
+
   // Try exact match first (e.g. "parramatta-2150")
   const [exact] = await db
     .select()
     .from(suburbs)
-    .where(eq(suburbs.slug, slug))
+    .where(exactWhere)
     .limit(1);
   if (exact) return exact;
 
-  // Fallback: match slug without postcode (e.g. "parramatta" matches "parramatta-2150")
-  // Pick the suburb with the most branches for ambiguous matches
+  // Fallback: match clean slug to "<slug>-1234", not arbitrary longer prefixes.
+  const fallbackWhere = stateSlug
+    ? and(like(suburbs.slug, `${slug}-____`), eq(suburbs.stateSlug, stateSlug))
+    : like(suburbs.slug, `${slug}-____`);
+
   const [fallback] = await db
     .select()
     .from(suburbs)
-    .where(sql`${suburbs.slug} LIKE ${slug + '-%'}`)
-    .orderBy(desc(suburbs.branchCount))
+    .where(fallbackWhere)
+    .orderBy(
+      desc(sql`${suburbs.branchCount} + ${suburbs.atmCount}`),
+      desc(suburbs.branchCount),
+      asc(suburbs.postcode)
+    )
     .limit(1);
+
   return fallback;
+}
+
+async function syncSuburbBranchStats(suburbId: number) {
+  const [counts] = await db
+    .select({
+      branchCount: sql<number>`COALESCE(SUM(CASE WHEN ${branches.type} = 'branch' AND ${branches.status} = 'open' THEN 1 ELSE 0 END), 0)`,
+      atmCount: sql<number>`COALESCE(SUM(CASE WHEN ${branches.type} = 'atm' AND ${branches.status} = 'open' THEN 1 ELSE 0 END), 0)`,
+      closedBranches: sql<number>`COALESCE(SUM(CASE WHEN ${branches.type} = 'branch' AND ${branches.status} = 'closed' THEN 1 ELSE 0 END), 0)`,
+      closedAtms: sql<number>`COALESCE(SUM(CASE WHEN ${branches.type} = 'atm' AND ${branches.status} = 'closed' THEN 1 ELSE 0 END), 0)`,
+    })
+    .from(branches)
+    .where(eq(branches.suburbId, suburbId));
+
+  await db
+    .update(suburbs)
+    .set({
+      branchCount: counts?.branchCount ?? 0,
+      atmCount: counts?.atmCount ?? 0,
+      closedBranches: counts?.closedBranches ?? 0,
+      closedAtms: counts?.closedAtms ?? 0,
+    })
+    .where(eq(suburbs.id, suburbId));
 }
 
 export async function getBranchesForSuburb(suburbId: number) {
@@ -201,13 +239,46 @@ export async function submitStatusReport(data: {
   reportType: string;
   ipHash?: string;
 }) {
-  return db.insert(statusReports).values({
+  await db.insert(statusReports).values({
     branchId: data.branchId,
     suburbId: data.suburbId,
     reportType: data.reportType,
     createdAt: new Date().toISOString(),
     ipHash: data.ipHash || null,
   });
+
+  if (data.reportType !== "branch_closed") {
+    return;
+  }
+
+  const [branch] = await db
+    .select({
+      id: branches.id,
+      status: branches.status,
+      closedDate: branches.closedDate,
+    })
+    .from(branches)
+    .where(and(eq(branches.id, data.branchId), eq(branches.suburbId, data.suburbId)))
+    .limit(1);
+
+  if (!branch || branch.status === "closed") {
+    return;
+  }
+
+  const closedDateLabel = new Date().toLocaleDateString("en-AU", {
+    month: "short",
+    year: "numeric",
+  });
+
+  await db
+    .update(branches)
+    .set({
+      status: "closed",
+      closedDate: branch.closedDate || closedDateLabel,
+    })
+    .where(eq(branches.id, branch.id));
+
+  await syncSuburbBranchStats(data.suburbId);
 }
 
 export async function getClosureStatsForState(stateSlug: string) {

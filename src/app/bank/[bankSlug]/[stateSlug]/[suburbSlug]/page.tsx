@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { 
   getBankBySlug, 
   getBankBranchesInSuburb,
-  getSuburbBySlug,
+  getSuburbBySlugInState,
   STATE_NAMES 
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
@@ -16,10 +16,10 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { bankSlug, suburbSlug } = await params;
+  const { bankSlug, stateSlug, suburbSlug } = await params;
   const [bank, suburb] = await Promise.all([
     getBankBySlug(bankSlug),
-    getSuburbBySlug(suburbSlug)
+    getSuburbBySlugInState(suburbSlug, stateSlug)
   ]);
   
   if (!bank || !suburb) return { title: "Not Found" };
@@ -41,10 +41,10 @@ export default async function BankSuburbPage({ params }: PageProps) {
   const { bankSlug, stateSlug, suburbSlug } = await params;
   const [bank, suburb] = await Promise.all([
     getBankBySlug(bankSlug),
-    getSuburbBySlug(suburbSlug)
+    getSuburbBySlugInState(suburbSlug, stateSlug)
   ]);
 
-  if (!bank || !suburb) notFound();
+  if (!bank || !suburb || suburb.stateSlug !== stateSlug) notFound();
 
   const branches = await getBankBranchesInSuburb(bank.id, suburb.slug);
   const openBranchesCount = branches.filter(b => b.type === 'branch' && b.status === 'open').length;
