@@ -1,12 +1,16 @@
-import Link from "next/link";
 import { getActiveOffer } from "@/lib/affiliate-offers";
 import { AffiliateLink } from "@/components/affiliate-link";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 /**
  * Full-width "deny" card for the homepage.
  * Pulls the highest-priority active affiliate offer.
  */
 export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) {
+  if (!affiliateFeaturesEnabled) {
+    return null;
+  }
+
   const offer = getActiveOffer();
 
       return (
@@ -95,6 +99,10 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
  * Contextual with the suburb name.
  */
 export function SwitchStickyBar({ suburbName, suburbSlug, stateSlug }: { suburbName: string; suburbSlug?: string; stateSlug?: string }) {
+  if (!affiliateFeaturesEnabled) {
+    return null;
+  }
+
   const offer = getActiveOffer();
 
   // Build contextual CTA text based on offer

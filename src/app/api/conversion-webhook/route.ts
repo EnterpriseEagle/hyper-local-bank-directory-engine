@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { affiliateConversions } from "@/lib/db/schema";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 /**
  * POST /api/conversion-webhook
@@ -12,6 +13,10 @@ import { affiliateConversions } from "@/lib/db/schema";
  * Body: { clickId, offerId, revenue, source, externalRef }
  */
 export async function POST(request: NextRequest) {
+  if (!affiliateFeaturesEnabled) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const token = request.nextUrl.searchParams.get("token");
   const secret = process.env.CRON_SECRET;
 

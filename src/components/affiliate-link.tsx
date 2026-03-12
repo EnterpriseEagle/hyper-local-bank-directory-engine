@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 interface AffiliateLinkProps {
   href: string;
@@ -22,6 +23,10 @@ export function AffiliateLink({
   children,
 }: AffiliateLinkProps) {
   function handleClick() {
+    if (!affiliateFeaturesEnabled) {
+      return;
+    }
+
     // Fire GA event
     if (typeof window !== "undefined" && typeof window.gtag === "function") {
       window.gtag("event", "affiliate_click", {

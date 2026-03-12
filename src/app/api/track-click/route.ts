@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { affiliateClicks } from "@/lib/db/schema";
 import { isRateLimited, getIpHash } from "@/lib/rate-limit";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 export async function POST(request: NextRequest) {
+  if (!affiliateFeaturesEnabled) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   try {
     const ipHash = getIpHash(request);
 

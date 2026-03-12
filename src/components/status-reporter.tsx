@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { statusReportsEnabled } from "@/lib/feature-flags";
 
 interface StatusReporterProps {
   branches?: { id: number; name: string; type: string; status: string }[];
@@ -22,6 +23,34 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+
+  if (!statusReportsEnabled) {
+    if (singleBranchMode) {
+      return (
+        <div className="border border-white/10 bg-white/[0.02] px-4 py-3 text-[12px] font-light text-white/40">
+          Community reporting opens after launch.
+        </div>
+      );
+    }
+
+    return (
+      <div className="border border-white/10 bg-white/[0.02]">
+        <div className="border-b border-white/5 px-6 py-5">
+          <h3 className="font-serif text-[18px] font-light text-white">
+            Community Reporting Opens Soon
+          </h3>
+          <p className="mt-1 text-[12px] text-white/30">
+            We are publishing the directory first. Live reports will be enabled after launch.
+          </p>
+        </div>
+        <div className="px-6 py-6">
+          <p className="text-[13px] font-light leading-relaxed text-white/40">
+            Browse locations now, then switch reporting on once the production database is ready.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const activeBranches = branches?.filter((b) => b.status !== "closed") ?? [];
 

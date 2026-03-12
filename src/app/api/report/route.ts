@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitStatusReport } from "@/lib/data";
 import { isRateLimited, getIpHash } from "@/lib/rate-limit";
+import { statusReportsEnabled } from "@/lib/feature-flags";
 
 const VALID_TYPES = ["working", "atm_empty", "branch_closed", "long_queue"];
 
 export async function POST(request: NextRequest) {
+  if (!statusReportsEnabled) {
+    return NextResponse.json({ error: "Status reporting is not enabled yet." }, { status: 503 });
+  }
+
   try {
     const ipHash = getIpHash(request);
 

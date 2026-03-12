@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateWeeklyReport, saveWeeklyDigest } from "@/lib/revenue";
 import { sendWeeklyEmail } from "@/lib/email";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 /**
  * GET /api/weekly-report
@@ -15,6 +16,10 @@ import { sendWeeklyEmail } from "@/lib/email";
  * 3. Manual: visit /api/weekly-report?token=YOUR_SECRET
  */
 export async function GET(request: NextRequest) {
+  if (!affiliateFeaturesEnabled) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   // Auth check — supports query param, Authorization header, and Vercel cron header
   const token = request.nextUrl.searchParams.get("token");
   const headerToken = request.headers.get("authorization")?.replace("Bearer ", "");

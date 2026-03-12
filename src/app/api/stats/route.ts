@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateWeeklyReport, getLastDigest } from "@/lib/revenue";
+import { affiliateFeaturesEnabled } from "@/lib/feature-flags";
 
 /**
  * GET /api/stats?period=7d
@@ -7,6 +8,10 @@ import { generateWeeklyReport, getLastDigest } from "@/lib/revenue";
  * Protected by CRON_SECRET.
  */
 export async function GET(request: NextRequest) {
+  if (!affiliateFeaturesEnabled) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const token = request.nextUrl.searchParams.get("token");
   const secret = process.env.CRON_SECRET;
 

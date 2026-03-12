@@ -4,7 +4,13 @@
  */
 import { createClient } from "@libsql/client";
 
-const client = createClient({ url: "file:./data/banknearme.db" });
+const databaseUrl = process.env.DATABASE_URL?.trim() || "file:./data/banknearme.db";
+const authToken = process.env.DATABASE_AUTH_TOKEN?.trim();
+
+const client = createClient({
+  url: databaseUrl,
+  ...(authToken ? { authToken } : {}),
+});
 
 async function migrate() {
   console.log("Creating monetization tables...");
