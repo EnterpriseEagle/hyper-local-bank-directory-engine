@@ -71,6 +71,8 @@ async function main() {
   let updated = 0;
   let inserted = 0;
   let notFound = 0;
+  let reopenedAtms = 0;
+  let ambiguous = 0;
 
   for (const c of closures) {
     // Find bank_id
@@ -100,18 +102,31 @@ async function main() {
     const lat = (suburbResult.rows[0].lat as number) || 0;
     const lng = (suburbResult.rows[0].lng as number) || 0;
 
-    // Find existing branch
+    // Reopen any ATMs previously closed by the old suburb-wide update logic.
+    const reopenAtmResult = await db.execute({
+      sql: "UPDATE branches SET status = 'open', closed_date = NULL WHERE bank_id = ? AND suburb_id = ? AND type = 'atm' AND status = 'closed'",
+      args: [bankId, suburbId],
+    });
+    reopenedAtms += reopenAtmResult.rowsAffected;
+
+    // Find existing branch rows only.
     const branchResult = await db.execute({
-      sql: "SELECT id FROM branches WHERE bank_id = ? AND suburb_id = ?",
+      sql: "SELECT id FROM branches WHERE bank_id = ? AND suburb_id = ? AND type = 'branch'",
       args: [bankId, suburbId],
     });
 
     const closedDate = `${c.year}-12-31`;
 
-    if (branchResult.rows.length > 0) {
-      // Update existing branch(es)
+    if (branchResult.rows.length > 1) {
+      console.log(`WARN: Multiple branch rows for ${c.bankName} in ${c.suburb}, ${c.state}; skipping ambiguous closure`);
+      ambiguous++;
+      continue;
+    }
+
+    if (branchResult.rows.length === 1) {
+      // Update the matching branch.
       const res = await db.execute({
-        sql: "UPDATE branches SET status = 'closed', closed_date = ? WHERE bank_id = ? AND suburb_id = ?",
+        sql: "UPDATE branches SET status = 'closed', closed_date = ? WHERE bank_id = ? AND suburb_id = ? AND type = 'branch'",
         args: [closedDate, bankId, suburbId],
       });
       updated += res.rowsAffected;
@@ -128,15 +143,29 @@ async function main() {
     }
   }
 
-  // Recalculate closed_branches counts for all suburbs
+  // Recalculate suburb counts after the closure sync.
   await db.execute({
-    sql: `UPDATE suburbs SET closed_branches = (
-      SELECT COUNT(*) FROM branches
-      WHERE branches.suburb_id = suburbs.id AND branches.status = 'closed'
-    )`,
+    sql: `UPDATE suburbs SET
+      branch_count = (
+        SELECT COUNT(*) FROM branches
+        WHERE branches.suburb_id = suburbs.id AND branches.type = 'branch' AND branches.status = 'open'
+      ),
+      atm_count = (
+        SELECT COUNT(*) FROM branches
+        WHERE branches.suburb_id = suburbs.id AND branches.type = 'atm' AND branches.status = 'open'
+      ),
+      closed_branches = (
+        SELECT COUNT(*) FROM branches
+        WHERE branches.suburb_id = suburbs.id AND branches.type = 'branch' AND branches.status = 'closed'
+      ),
+      closed_atms = (
+        SELECT COUNT(*) FROM branches
+        WHERE branches.suburb_id = suburbs.id AND branches.type = 'atm' AND branches.status = 'closed'
+      )
+    `,
     args: [],
   });
-  console.log("\nRecalculated suburb closed_branches counts.");
+  console.log("\nRecalculated suburb branch/ATM closure counts.");
 
   // Verify
   const verifyResult = await db.execute({
@@ -152,6 +181,8 @@ async function main() {
   console.log(`Total closures to process: ${closures.length}`);
   console.log(`Branches updated (existing): ${updated}`);
   console.log(`Branches inserted (new): ${inserted}`);
+  console.log(`ATMs reopened: ${reopenedAtms}`);
+  console.log(`Ambiguous closures skipped: ${ambiguous}`);
   console.log(`Not found (skipped): ${notFound}`);
   console.log(`Total closed branches in DB: ${verifyResult.rows[0].cnt}`);
   console.log(`Suburbs with closed branches: ${suburbsWithClosed.rows[0].cnt}`);

@@ -1,12 +1,11 @@
-function isDisabled(value: string | undefined): boolean {
-  return value?.trim().toLowerCase() === "false";
+function isEnabled(value: string | undefined): boolean {
+  return value?.trim().toLowerCase() === "true";
 }
 
-// Affiliate and status features are ON by default — set env to "false" to disable
-export const affiliateFeaturesEnabled = !isDisabled(
+export const affiliateFeaturesEnabled = isEnabled(
   process.env.NEXT_PUBLIC_ENABLE_AFFILIATE_FEATURES
 );
 
-export const statusReportsEnabled = !isDisabled(
+export const statusReportsEnabled = isEnabled(
   process.env.NEXT_PUBLIC_ENABLE_STATUS_REPORTS
 );

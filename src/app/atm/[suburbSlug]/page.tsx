@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const suburb = await getSuburbBySlug(suburbSlug);
   if (!suburb) return { title: "ATMs Not Found" };
 
-  const atms = await getAtmsForSuburb(suburbSlug);
+  const atms = await getAtmsForSuburb(suburb.slug);
   const seo = generateATMSEOContent(toTitleCase(suburb.name), atms.length);
 
   return {
@@ -48,7 +48,7 @@ export default async function ATMSuburbPage({ params }: PageProps) {
             <span>/</span>
             <Link href={`/${suburb.stateSlug}`} className="hover:text-white transition-colors">{STATE_NAMES[suburb.stateSlug]}</Link>
             <span>/</span>
-            <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="hover:text-white transition-colors">{displayName}</Link>
+            <Link href={`/${suburb.stateSlug}/${suburb.slug}`} className="hover:text-white transition-colors">{displayName}</Link>
             <span>/</span>
             <span className="text-white/60">ATMs</span>
           </nav>
@@ -96,7 +96,7 @@ export default async function ATMSuburbPage({ params }: PageProps) {
           {atms.length === 0 && (
             <div className="p-20 border border-white/5 text-center bg-white/[0.02]">
                <p className="text-white/40 font-light">No dedicated ATMs mapped in {displayName}.</p>
-               <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="mt-4 inline-block text-white/60 hover:text-white underline text-sm">
+               <Link href={`/${suburb.stateSlug}/${suburb.slug}`} className="mt-4 inline-block text-white/60 hover:text-white underline text-sm">
                   Check bank branches in {displayName}
                </Link>
             </div>

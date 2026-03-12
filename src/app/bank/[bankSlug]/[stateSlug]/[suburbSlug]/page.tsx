@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import {
   getBankBySlug,
   getBankBranchesInSuburb,
-  getSuburbBySlug,
-  STATE_NAMES
+  getSuburbBySlugInState,
+  STATE_NAMES,
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
 import { StatusReporter } from "@/components/status-reporter";
@@ -17,10 +17,10 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { bankSlug, suburbSlug } = await params;
+  const { bankSlug, stateSlug, suburbSlug } = await params;
   const [bank, suburb] = await Promise.all([
     getBankBySlug(bankSlug),
-    getSuburbBySlug(suburbSlug)
+    getSuburbBySlugInState(suburbSlug, stateSlug)
   ]);
   
   if (!bank || !suburb) return { title: "Not Found" };
@@ -42,10 +42,10 @@ export default async function BankSuburbPage({ params }: PageProps) {
   const { bankSlug, stateSlug, suburbSlug } = await params;
   const [bank, suburb] = await Promise.all([
     getBankBySlug(bankSlug),
-    getSuburbBySlug(suburbSlug)
+    getSuburbBySlugInState(suburbSlug, stateSlug)
   ]);
 
-  if (!bank || !suburb) notFound();
+  if (!bank || !suburb || suburb.stateSlug !== stateSlug) notFound();
 
   const displayName = toTitleCase(suburb.name);
   const branches = await getBankBranchesInSuburb(bank.id, suburb.slug);
@@ -154,7 +154,7 @@ export default async function BankSuburbPage({ params }: PageProps) {
                      Did this {bank.name} branch close permanently? Help the community by reporting it.
                   </p>
                   <Link
-                    href={`/${stateSlug}/${suburbSlug}`}
+                    href={`/${stateSlug}/${suburb.slug}`}
                     className="block w-full py-3 text-center text-[11px] uppercase tracking-[0.2em] font-semibold text-red-400 border border-red-500/20 hover:bg-red-500/[0.05] transition-colors"
                   >
                     Report via Status Reporter &rarr;
@@ -166,10 +166,10 @@ export default async function BankSuburbPage({ params }: PageProps) {
                      Nearby {displayName}
                   </h3>
                   <div className="space-y-4">
-                     <Link href={`/${stateSlug}/${suburbSlug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
+                     <Link href={`/${stateSlug}/${suburb.slug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
                         All Banks in {displayName} &rarr;
                      </Link>
-                     <Link href={`/atm/${suburbSlug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
+                     <Link href={`/atm/${suburb.slug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
                         ATMs in {displayName} &rarr;
                      </Link>
                   </div>

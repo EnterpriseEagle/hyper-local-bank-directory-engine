@@ -326,8 +326,10 @@ async function main() {
   console.log("Updating suburb branch/atm counts...");
   await db.execute(`
     UPDATE suburbs SET
-      branch_count = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'branch'),
-      atm_count = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'atm')
+      branch_count = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'branch' AND branches.status = 'open'),
+      atm_count = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'atm' AND branches.status = 'open'),
+      closed_branches = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'branch' AND branches.status = 'closed'),
+      closed_atms = (SELECT COUNT(*) FROM branches WHERE branches.suburb_id = suburbs.id AND branches.type = 'atm' AND branches.status = 'closed')
   `);
 
   // 7) Print statistics
