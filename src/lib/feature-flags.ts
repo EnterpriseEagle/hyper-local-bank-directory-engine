@@ -9,3 +9,7 @@ export const affiliateFeaturesEnabled = isEnabled(
 export const statusReportsEnabled = isEnabled(
   process.env.NEXT_PUBLIC_ENABLE_STATUS_REPORTS
 );
+
+export const reportEvidenceEnabled =
+  statusReportsEnabled &&
+  isEnabled(process.env.NEXT_PUBLIC_ENABLE_REPORT_EVIDENCE);

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { statusReportsEnabled } from "@/lib/feature-flags";
+import { useRef, useState } from "react";
+import { reportEvidenceEnabled, statusReportsEnabled } from "@/lib/feature-flags";
 
 interface StatusReporterProps {
   branches?: { id: number; name: string; type: string; status: string }[];
@@ -22,7 +22,11 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
   const [selectedBranch, setSelectedBranch] = useState<number | null>(branchId ?? null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedMessage, setSubmittedMessage] = useState("");
   const [error, setError] = useState("");
+  const [note, setNote] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
+  const photoInputRef = useRef<HTMLInputElement | null>(null);
 
   if (!statusReportsEnabled) {
     if (singleBranchMode) {
@@ -62,20 +66,49 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
     setSubmitting(true);
     setError("");
     try {
+      const body = reportEvidenceEnabled ? new FormData() : null;
+
+      if (body) {
+        body.append("branchId", String(selectedBranch));
+        body.append("suburbId", String(suburbId));
+        body.append("reportType", reportType);
+        if (note.trim()) {
+          body.append("note", note.trim());
+        }
+        if (photo) {
+          body.append("photo", photo);
+        }
+      }
+
       const res = await fetch("/api/report", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          branchId: selectedBranch,
-          suburbId,
-          reportType,
-        }),
+        ...(body
+          ? { body }
+          : {
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                branchId: selectedBranch,
+                suburbId,
+                reportType,
+              }),
+            }),
       });
-      if (!res.ok) throw new Error("Failed");
+
+      const json = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(json?.error || "Failed");
+      }
+
       setSubmitted(true);
+      setSubmittedMessage(json?.message || "Report submitted.");
+      setNote("");
+      setPhoto(null);
+      if (photoInputRef.current) {
+        photoInputRef.current.value = "";
+      }
       setTimeout(() => setSubmitted(false), 5000);
-    } catch {
-      setError("Failed to submit. Try again.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit. Try again.");
     } finally {
       setSubmitting(false);
     }
@@ -108,7 +141,7 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
             Report Submitted
           </p>
           <p className="text-[13px] text-white/30">
-            Thank you for keeping {suburbName} updated. Page freshness improved.
+            {submittedMessage || `Thank you for keeping ${suburbName} updated.`}
           </p>
         </div>
       ) : (
@@ -150,6 +183,48 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
             </p>
           )}
 
+          {reportEvidenceEnabled && (
+            <div className="mb-5 grid gap-4">
+              <div>
+                <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-2 block">
+                  Optional Note
+                </label>
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value.slice(0, 500))}
+                  rows={3}
+                  placeholder="What did you see? Example: ATM screen said out of service and branch shutters were down."
+                  className="w-full resize-none bg-white/[0.03] border border-white/10 px-4 py-3 text-[13px] font-light text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors duration-300"
+                />
+                <p className="mt-2 text-[11px] text-white/20">
+                  Helps the review queue understand the report faster.
+                </p>
+              </div>
+
+              <div>
+                <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-2 block">
+                  Optional Photo
+                </label>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+                  className="block w-full text-[12px] text-white/60 file:mr-4 file:border-0 file:bg-white/10 file:px-4 file:py-3 file:text-[11px] file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-white/15"
+                />
+                <p className="mt-2 text-[11px] text-white/20">
+                  Snap a sign, ATM screen, or storefront. Max 8MB.
+                </p>
+                {photo && (
+                  <p className="mt-2 text-[12px] text-white/45">
+                    Attached: {photo.name}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Status Buttons */}
           <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-3 block">
             Report Status
@@ -185,7 +260,9 @@ export function StatusReporter({ branches, branchId, suburbId, suburbName }: Sta
           </div>
 
           <p className="mt-4 text-[11px] text-white/20 text-center">
-            One tap. Anonymous. Updates the page timestamp for Google freshness.
+            {reportEvidenceEnabled
+              ? "Anonymous. Evidence goes into a moderation queue before changing live data."
+              : "One tap. Anonymous. Updates the page timestamp for Google freshness."}
           </p>
         </div>
       )}
