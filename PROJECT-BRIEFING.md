@@ -96,8 +96,8 @@ POST /api/conversion-webhook  → Affiliate conversion postback (auth required)
 
 ```
 RESEND_API_KEY=re_xxxxxxxxxxxx          # Resend for email
-REPORT_EMAIL=OPENVERSE@HOTMAIL.COM      # Weekly digest recipient
-CRON_SECRET=bnm-secret-2026             # API auth token
+REPORT_EMAIL=you@example.com            # Weekly digest recipient
+CRON_SECRET=your-random-secret-here     # API auth token
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX          # Google Analytics (optional)
 ```
 
