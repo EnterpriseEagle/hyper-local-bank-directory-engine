@@ -6,6 +6,8 @@ interface AffiliateLinkProps {
   href: string;
   offerId: string;
   placement: string;
+  suburbSlug?: string;
+  stateSlug?: string;
   className?: string;
   children: ReactNode;
 }
@@ -14,11 +16,13 @@ export function AffiliateLink({
   href,
   offerId,
   placement,
+  suburbSlug,
+  stateSlug,
   className,
   children,
 }: AffiliateLinkProps) {
   function handleClick() {
-    // Fire a custom event for any analytics provider
+    // Fire GA event
     if (typeof window !== "undefined" && typeof window.gtag === "function") {
       window.gtag("event", "affiliate_click", {
         offer_id: offerId,
@@ -26,8 +30,20 @@ export function AffiliateLink({
         url: href,
       });
     }
-    // Also log to console for debugging
-    console.log("[affiliate_click]", { offerId, placement, href });
+
+    // Fire server-side tracking (fire-and-forget, don't block navigation)
+    fetch("/api/track-click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        offerId,
+        placement,
+        pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+        suburbSlug,
+        stateSlug,
+      }),
+      keepalive: true, // ensures request completes even as page navigates away
+    }).catch(() => {}); // silently fail - don't block the user
   }
 
   return (

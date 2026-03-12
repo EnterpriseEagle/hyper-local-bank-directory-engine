@@ -3,9 +3,10 @@
 import { useState } from "react";
 
 interface StatusReporterProps {
-  branches: { id: number; name: string; type: string; status: string }[];
+  branches?: { id: number; name: string; type: string; status: string }[];
+  branchId?: number;
   suburbId: number;
-  suburbName: string;
+  suburbName?: string;
 }
 
 const REPORT_TYPES = [
@@ -15,13 +16,14 @@ const REPORT_TYPES = [
   { value: "long_queue", label: "Long Queue", emoji: "⏳", color: "amber" },
 ];
 
-export function StatusReporter({ branches, suburbId, suburbName }: StatusReporterProps) {
-  const [selectedBranch, setSelectedBranch] = useState<number | null>(null);
+export function StatusReporter({ branches, branchId, suburbId, suburbName }: StatusReporterProps) {
+  const singleBranchMode = !!branchId;
+  const [selectedBranch, setSelectedBranch] = useState<number | null>(branchId ?? null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const activeBranches = branches.filter((b) => b.status !== "closed");
+  const activeBranches = branches?.filter((b) => b.status !== "closed") ?? [];
 
   async function handleReport(reportType: string) {
     if (!selectedBranch) {
@@ -62,9 +64,11 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
           <h3 className="font-serif text-[18px] font-light text-white">
             Live Status Reporter
           </h3>
-          <p className="text-[12px] text-white/30 mt-0.5">
-            No login required. Help {suburbName} stay informed.
-          </p>
+          {suburbName && (
+            <p className="text-[12px] text-white/30 mt-0.5">
+              No login required. Help {suburbName} stay informed.
+            </p>
+          )}
         </div>
       </div>
 
@@ -80,34 +84,36 @@ export function StatusReporter({ branches, suburbId, suburbName }: StatusReporte
         </div>
       ) : (
         <div className="px-6 py-6">
-          {/* Branch Selector */}
-          <div className="mb-5">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-2 block">
-              Select Location
-            </label>
-            <select
-              value={selectedBranch || ""}
-              onChange={(e) => {
-                setSelectedBranch(Number(e.target.value) || null);
-                setError("");
-              }}
-              className="w-full bg-white/[0.03] border border-white/10 px-4 py-3 text-[13px] font-light text-white focus:outline-none focus:border-white/25 transition-colors duration-300 appearance-none cursor-pointer"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='rgba(255,255,255,0.3)' stroke-width='1.2'/%3E%3C/svg%3E")`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "right 12px center",
-              }}
-            >
-              <option value="" className="bg-black text-white/50">
-                Choose a branch or ATM...
-              </option>
-              {activeBranches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-black text-white">
-                  {b.name} ({b.type === "atm" ? "ATM" : "Branch"})
+          {/* Branch Selector — only in multi-branch mode */}
+          {!singleBranchMode && (
+            <div className="mb-5">
+              <label className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium mb-2 block">
+                Select Location
+              </label>
+              <select
+                value={selectedBranch || ""}
+                onChange={(e) => {
+                  setSelectedBranch(Number(e.target.value) || null);
+                  setError("");
+                }}
+                className="w-full bg-white/[0.03] border border-white/10 px-4 py-3 text-[13px] font-light text-white focus:outline-none focus:border-white/25 transition-colors duration-300 appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='rgba(255,255,255,0.3)' stroke-width='1.2'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 12px center",
+                }}
+              >
+                <option value="" className="bg-black text-white/50">
+                  Choose a branch or ATM...
                 </option>
-              ))}
-            </select>
-          </div>
+                {activeBranches.map((b) => (
+                  <option key={b.id} value={b.id} className="bg-black text-white">
+                    {b.name} ({b.type === "atm" ? "ATM" : "Branch"})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {error && (
             <p className="mb-4 text-[12px] text-red-400/80 border border-red-500/20 bg-red-500/5 px-3 py-2">

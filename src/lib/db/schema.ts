@@ -51,3 +51,44 @@ export const statusReports = sqliteTable("status_reports", {
   createdAt: text("created_at").notNull(),
   ipHash: text("ip_hash"), // anonymized
 });
+
+// ===== MONETIZATION TRACKING =====
+
+export const affiliateClicks = sqliteTable("affiliate_clicks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  offerId: text("offer_id").notNull(), // e.g. "ing-125", "ubank-30"
+  placement: text("placement").notNull(), // e.g. "homepage-card", "suburb-sticky"
+  pageUrl: text("page_url"), // which page the click came from
+  suburbSlug: text("suburb_slug"), // if on a suburb page
+  stateSlug: text("state_slug"), // if on a state page
+  referrer: text("referrer"), // external referrer (google, direct, etc)
+  userAgent: text("user_agent"),
+  ipHash: text("ip_hash"), // anonymized, for deduplication
+  createdAt: text("created_at").notNull(),
+});
+
+export const affiliateConversions = sqliteTable("affiliate_conversions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  clickId: integer("click_id").references(() => affiliateClicks.id),
+  offerId: text("offer_id").notNull(),
+  status: text("status").notNull().default("pending"), // "pending" | "confirmed" | "rejected"
+  revenueEstimate: real("revenue_estimate"), // estimated $ value
+  source: text("source"), // "commission_factory" | "direct" | "manual"
+  externalRef: text("external_ref"), // external tracking ID from affiliate network
+  createdAt: text("created_at").notNull(),
+  confirmedAt: text("confirmed_at"),
+});
+
+export const weeklyDigests = sqliteTable("weekly_digests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  weekStart: text("week_start").notNull(), // ISO date of Monday
+  weekEnd: text("week_end").notNull(), // ISO date of Sunday
+  totalClicks: integer("total_clicks").notNull().default(0),
+  totalConversions: integer("total_conversions").notNull().default(0),
+  estimatedRevenue: real("estimated_revenue").notNull().default(0),
+  topOffer: text("top_offer"), // best performing offer ID
+  topPage: text("top_page"), // highest click page
+  emailSentAt: text("email_sent_at"),
+  reportJson: text("report_json"), // full report data as JSON
+  createdAt: text("created_at").notNull(),
+});

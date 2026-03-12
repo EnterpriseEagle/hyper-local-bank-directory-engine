@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitStatusReport } from "@/lib/data";
+import { isRateLimited, getIpHash } from "@/lib/rate-limit";
 
 const VALID_TYPES = ["working", "atm_empty", "branch_closed", "long_queue"];
 
 export async function POST(request: NextRequest) {
   try {
+    const ipHash = getIpHash(request);
+
+    // Rate limit: max 5 reports per minute per IP
+    if (isRateLimited(`report:${ipHash}`, 5, 60_000)) {
+      return NextResponse.json({ error: "Too many reports. Try again later." }, { status: 429 });
+    }
+
     const body = await request.json();
     const { branchId, suburbId, reportType } = body;
 
@@ -16,10 +24,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid report type" }, { status: 400 });
     }
 
-    // Simple IP hash for rate limiting (anonymized)
-    const forwarded = request.headers.get("x-forwarded-for");
-    const ip = forwarded?.split(",")[0]?.trim() || "unknown";
-    const ipHash = Buffer.from(ip).toString("base64").slice(0, 12);
+    if (typeof branchId !== "number" || typeof suburbId !== "number") {
+      return NextResponse.json({ error: "Invalid field types" }, { status: 400 });
+    }
 
     await submitStatusReport({
       branchId: Number(branchId),

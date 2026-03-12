@@ -497,7 +497,7 @@ export default async function SuburbPage({ params }: Props) {
       </section>
 
         {/* Sticky "Deny" Banner */}
-        <SwitchStickyBar suburbName={suburb.name} />
+        <SwitchStickyBar suburbName={suburb.name} suburbSlug={suburb.slug} stateSlug={suburb.stateSlug} />
 
       {/* JSON-LD */}
       <script

@@ -10,7 +10,6 @@ import {
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
 import { StatusReporter } from "@/components/status-reporter";
-import { ErrorReporter } from "@/components/ErrorReporter";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string; suburbSlug: string }>;
@@ -157,7 +156,12 @@ export default async function BankSuburbPage({ params }: PageProps) {
                   <p className="text-[13px] text-white/40 font-light mb-6">
                      Did this {bank.name} branch close permanently? Help the community by reporting it.
                   </p>
-                  <ErrorReporter type="branch_closed" context={`${bank.name} ${suburb.name}`} />
+                  <Link
+                    href={`/${stateSlug}/${suburbSlug}`}
+                    className="block w-full py-3 text-center text-[11px] uppercase tracking-[0.2em] font-semibold text-red-400 border border-red-500/20 hover:bg-red-500/[0.05] transition-colors"
+                  >
+                    Report via Status Reporter &rarr;
+                  </Link>
                </div>
 
                <div className="p-6 border border-white/10 bg-white/[0.02]">

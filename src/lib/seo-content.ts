@@ -45,10 +45,8 @@ export function generateBankSEOContent(
     suburb: `${bankName} in ${locationName} serves the local community with banking services. Whether you need to visit a teller or find a fee-free ATM, we provide the latest details on the ${bankName} ${locationName} location.`
   };
 
-  const selectRandom = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-
   return {
-    title: selectRandom(titles[type]),
+    title: titles[type][0],
     description: descriptions[type],
     h1: `${bankName} Locations in ${locationName}`,
     intro: intros[type],

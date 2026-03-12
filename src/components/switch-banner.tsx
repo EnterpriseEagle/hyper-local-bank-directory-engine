@@ -94,7 +94,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
  * Sticky bottom bar for suburb pages.
  * Contextual with the suburb name.
  */
-export function SwitchStickyBar({ suburbName }: { suburbName: string }) {
+export function SwitchStickyBar({ suburbName, suburbSlug, stateSlug }: { suburbName: string; suburbSlug?: string; stateSlug?: string }) {
   const offer = getActiveOffer();
 
   // Build contextual CTA text based on offer
@@ -115,6 +115,8 @@ export function SwitchStickyBar({ suburbName }: { suburbName: string }) {
             href={offer.url}
             offerId={offer.id}
             placement="suburb-sticky"
+            suburbSlug={suburbSlug}
+            stateSlug={stateSlug}
             className={`shrink-0 ${offer.theme.buttonBg} ${offer.theme.buttonText} px-6 py-2.5 text-[10px] uppercase tracking-[0.2em] font-semibold ${offer.theme.buttonHover} transition-all duration-300`}
           >
             {offer.cta} &rarr;
