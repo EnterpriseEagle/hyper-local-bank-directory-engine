@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getSuburbsByState, STATE_NAMES, STATE_ABBR } from "@/lib/data";
+import { toTitleCase } from "@/lib/utils";
 
 interface Props {
   params: Promise<{ state: string }>;
@@ -117,7 +118,7 @@ export default async function StatePage({ params }: Props) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
-                      {sub.name}
+                      {toTitleCase(sub.name)}
                     </h3>
                     <p className="text-[12px] text-white/30 mt-1">
                       {sub.postcode}, {sub.state}

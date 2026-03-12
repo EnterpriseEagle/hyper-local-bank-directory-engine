@@ -13,6 +13,8 @@ import {
 } from "@/lib/data";
 import { StatusReporter } from "@/components/status-reporter";
 import { SwitchStickyBar } from "@/components/switch-banner";
+import { InlineOfferCard } from "@/components/inline-offer";
+import { toTitleCase } from "@/lib/utils";
 
 interface Props {
   params: Promise<{ state: string; suburb: string }>;
@@ -33,13 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const stateName = STATE_NAMES[state] || suburb.state;
   const abbr = STATE_ABBR[state] || suburb.state;
+  const displayName = toTitleCase(suburb.name);
 
   return {
-    title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
-    description: `Find bank branches, ATMs, and live service status in ${suburb.name}, ${stateName} ${suburb.postcode}. Report ATM outages, branch closures, and long queues. Updated by the community.`,
+    title: `Banks and ATMs in ${displayName}, ${abbr} ${suburb.postcode} - Live Status`,
+    description: `Find bank branches, ATMs, and live service status in ${displayName}, ${stateName} ${suburb.postcode}. Report ATM outages, branch closures, and long queues. Updated by the community.`,
     openGraph: {
-      title: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
-      description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}. Report outages, check service status.`,
+      title: `Banks and ATMs in ${displayName}, ${abbr} ${suburb.postcode} - Live Status`,
+      description: `Live crowd-sourced status for banks and ATMs in ${displayName}. Report outages, check service status.`,
       type: "website",
     },
   };
@@ -82,6 +85,8 @@ export default async function SuburbPage({ params }: Props) {
   const stateName = STATE_NAMES[state] || suburb.state;
   const abbr = STATE_ABBR[state] || suburb.state;
 
+  const displayName = toTitleCase(suburb.name);
+
   const openBranches = branches.filter(
     (b) => b.type === "branch" && b.status === "open"
   );
@@ -121,8 +126,8 @@ export default async function SuburbPage({ params }: Props) {
   const jsonLdPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: `Banks and ATMs in ${suburb.name}, ${abbr} ${suburb.postcode} - Live Status`,
-    description: `Live crowd-sourced status for banks and ATMs in ${suburb.name}`,
+    name: `Banks and ATMs in ${displayName}, ${abbr} ${suburb.postcode} - Live Status`,
+    description: `Live crowd-sourced status for banks and ATMs in ${displayName}`,
     dateModified: new Date().toISOString(),
     isPartOf: { "@type": "WebSite", name: "BANK NEAR ME\u00ae" },
   };
@@ -148,7 +153,7 @@ export default async function SuburbPage({ params }: Props) {
             </Link>
             <span className="text-white/15">/</span>
             <span className="text-white/60">
-              {suburb.name} {suburb.postcode}
+              {displayName} {suburb.postcode}
             </span>
           </nav>
         </div>
@@ -178,7 +183,7 @@ export default async function SuburbPage({ params }: Props) {
           </div>
 
           <h1 className="mb-6 font-serif text-[clamp(2rem,5vw,4rem)] font-light leading-[1.05] text-white">
-            Banks and ATMs in {suburb.name},
+            Banks and ATMs in {displayName},
             <br />
             {abbr} {suburb.postcode} &mdash; Live Status
           </h1>
@@ -218,6 +223,71 @@ export default async function SuburbPage({ params }: Props) {
         </div>
       </section>
 
+      {/* Open Branches — FIRST, this is what people came for */}
+      {openBranches.length > 0 && (
+        <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
+          <div className="max-w-[1000px] mx-auto">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+              Open Branches
+            </p>
+            <h2 className="mb-8 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
+              Bank Branches in {displayName}
+            </h2>
+
+            <div className="border-t border-white/5">
+              {openBranches.map((b, i) => (
+                <div key={b.id}>
+                  <div className="py-5 border-b border-white/5 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3">
+                        <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-emerald-400/70 bg-emerald-500/10 px-2 py-0.5">
+                          Open
+                        </span>
+                        <h3 className="text-[15px] font-light text-white truncate">
+                          {b.name}
+                        </h3>
+                      </div>
+                      <p className="text-[12px] text-white/30 mt-1">
+                        {b.address}
+                      </p>
+                      {b.openingHours && (
+                        <p className="text-[11px] text-white/20 mt-1">
+                          Hours: {b.openingHours}
+                        </p>
+                      )}
+                        <div className="flex flex-wrap gap-4 mt-2">
+                          {b.bankName && (
+                            <Link
+                              href={`/bank/${b.bankSlug}/${state}/${suburbSlug}`}
+                              className="text-[11px] text-white/25 hover:text-white underline decoration-white/10"
+                            >
+                              {b.bankName}
+                            </Link>
+                          )}
+                          {b.bsb && (
+                            <span className="text-[11px] text-white/25">
+                              BSB: {b.bsb}
+                            </span>
+                          )}
+                        </div>
+                    </div>
+                  </div>
+                  {/* Inline affiliate card after every 3rd branch */}
+                  {(i + 1) % 3 === 0 && i < openBranches.length - 1 && (
+                    <InlineOfferCard
+                      suburbName={displayName}
+                      suburbSlug={suburb.slug}
+                      stateSlug={suburb.stateSlug}
+                      nearbyBankName={openBranches[i]?.bankName}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Status Reporter */}
       <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
         <div className="max-w-[1000px] mx-auto">
@@ -229,7 +299,7 @@ export default async function SuburbPage({ params }: Props) {
               status: b.status,
             }))}
             suburbId={suburb.id}
-            suburbName={suburb.name}
+            suburbName={displayName}
           />
         </div>
       </section>
@@ -244,7 +314,7 @@ export default async function SuburbPage({ params }: Props) {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-400/70 font-medium">
-                Recent Activity in {suburb.name}
+                Recent Activity in {displayName}
               </p>
             </div>
 
@@ -285,68 +355,6 @@ export default async function SuburbPage({ params }: Props) {
         </section>
       )}
 
-      {/* Open Branches */}
-      {openBranches.length > 0 && (
-        <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
-          <div className="max-w-[1000px] mx-auto">
-            <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
-              Open Branches
-            </p>
-            <h2 className="mb-8 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
-              Bank Branches in {suburb.name}
-            </h2>
-
-            <div className="border-t border-white/5">
-              {openBranches.map((b) => (
-                <div
-                  key={b.id}
-                  className="py-5 border-b border-white/5 flex flex-col sm:flex-row sm:items-center gap-3"
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-emerald-400/70 bg-emerald-500/10 px-2 py-0.5">
-                        Open
-                      </span>
-                      <h3 className="text-[15px] font-light text-white truncate">
-                        {b.name}
-                      </h3>
-                    </div>
-                    <p className="text-[12px] text-white/30 mt-1">
-                      {b.address}
-                    </p>
-                      <div className="flex flex-wrap gap-4 mt-2">
-                        {b.bankName && (
-                          <Link 
-                            href={`/bank/${b.bankSlug}/${state}/${suburbSlug}`}
-                            className="text-[11px] text-white/25 hover:text-white underline decoration-white/10"
-                          >
-                            {b.bankName}
-                          </Link>
-                        )}
-                        {b.bsb && (
-                          <span className="text-[11px] text-white/25">
-                            BSB: {b.bsb}
-                          </span>
-                        )}
-                        {b.distanceKm !== null && (
-                          <span className="text-[11px] text-white/25">
-                            {b.distanceKm}km away
-                          </span>
-                        )}
-                        {b.feeRating && (
-                          <span className="text-[11px] text-white/25">
-                            Fees: {b.feeRating}
-                          </span>
-                        )}
-                      </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ATMs */}
       {atms.length > 0 && (
         <section className="border-b border-white/5 px-6 sm:px-10 py-16 sm:py-20 bg-black">
@@ -355,7 +363,7 @@ export default async function SuburbPage({ params }: Props) {
               ATMs
             </p>
             <h2 className="mb-8 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
-              ATMs in {suburb.name}
+              ATMs in {displayName}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
@@ -392,7 +400,7 @@ export default async function SuburbPage({ params }: Props) {
               Closures
             </p>
             <h2 className="mb-8 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-[1.1] text-white">
-              Closed Branches in {suburb.name}
+              Closed Branches in {displayName}
             </h2>
 
             <div className="border-t border-white/5">
@@ -439,7 +447,7 @@ export default async function SuburbPage({ params }: Props) {
                   className="group bg-black p-6 transition-all duration-500 hover:bg-white/[0.02]"
                 >
                   <h3 className="font-sans text-[15px] font-light text-white transition-all duration-300 group-hover:translate-x-0.5">
-                    {sub.name}
+                    {toTitleCase(sub.name)}
                   </h3>
                   <p className="text-[12px] text-white/30 mt-1">
                     {sub.postcode}, {sub.state}
@@ -472,11 +480,11 @@ export default async function SuburbPage({ params }: Props) {
             About
           </p>
           <h2 className="mb-8 font-serif text-[clamp(1.25rem,3vw,2rem)] font-light leading-[1.1] text-white">
-            Banking in {suburb.name}, {abbr} {suburb.postcode}
+            Banking in {displayName}, {abbr} {suburb.postcode}
           </h2>
           <div className="space-y-5">
             <p className="text-[14px] font-light leading-[1.8] text-white/40">
-              {suburb.name} ({suburb.postcode}) in {stateName} has{" "}
+              {displayName} ({suburb.postcode}) in {stateName} has{" "}
               {openBranches.length} open bank{" "}
               {openBranches.length === 1 ? "branch" : "branches"} and{" "}
               {atms.length} {atms.length === 1 ? "ATM" : "ATMs"} tracked on
@@ -487,7 +495,7 @@ export default async function SuburbPage({ params }: Props) {
               {reportCount === 1 ? "report" : "reports"} for this suburb.
             </p>
             <p className="text-[14px] font-light leading-[1.8] text-white/40">
-              Help keep {suburb.name} updated &mdash; report the live status
+              Help keep {displayName} updated &mdash; report the live status
               of any bank branch or ATM above. No login required. Your
               anonymous report helps thousands of people in your community
               know which services are actually working right now.
@@ -497,7 +505,7 @@ export default async function SuburbPage({ params }: Props) {
       </section>
 
         {/* Sticky "Deny" Banner */}
-        <SwitchStickyBar suburbName={suburb.name} suburbSlug={suburb.slug} stateSlug={suburb.stateSlug} />
+        <SwitchStickyBar suburbName={displayName} suburbSlug={suburb.slug} stateSlug={suburb.stateSlug} />
 
       {/* JSON-LD */}
       <script

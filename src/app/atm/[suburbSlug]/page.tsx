@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { generateATMSEOContent } from "@/lib/seo-content";
 import { StatusReporter } from "@/components/status-reporter";
+import { toTitleCase } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ suburbSlug: string }>;
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!suburb) return { title: "ATMs Not Found" };
 
   const atms = await getAtmsForSuburb(suburbSlug);
-  const seo = generateATMSEOContent(suburb.name, atms.length);
+  const seo = generateATMSEOContent(toTitleCase(suburb.name), atms.length);
 
   return {
     title: seo.title,
@@ -34,7 +35,8 @@ export default async function ATMSuburbPage({ params }: PageProps) {
   if (!suburb) notFound();
 
   const atms = await getAtmsForSuburb(suburb.slug);
-  const seo = generateATMSEOContent(suburb.name, atms.length);
+  const displayName = toTitleCase(suburb.name);
+  const seo = generateATMSEOContent(displayName, atms.length);
 
   return (
     <div className="bg-black text-white">
@@ -46,13 +48,13 @@ export default async function ATMSuburbPage({ params }: PageProps) {
             <span>/</span>
             <Link href={`/${suburb.stateSlug}`} className="hover:text-white transition-colors">{STATE_NAMES[suburb.stateSlug]}</Link>
             <span>/</span>
-            <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="hover:text-white transition-colors">{suburb.name}</Link>
+            <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="hover:text-white transition-colors">{displayName}</Link>
             <span>/</span>
             <span className="text-white/60">ATMs</span>
           </nav>
 
           <h1 className="mb-6 font-serif text-[clamp(2rem,6vw,3.5rem)] font-light leading-[1.1] tracking-tight">
-            ATMs in {suburb.name} <br />
+            ATMs in {displayName} <br />
             <span className="text-white/30">{atms.length} Locations Found</span>
           </h1>
 
@@ -93,9 +95,9 @@ export default async function ATMSuburbPage({ params }: PageProps) {
 
           {atms.length === 0 && (
             <div className="p-20 border border-white/5 text-center bg-white/[0.02]">
-               <p className="text-white/40 font-light">No dedicated ATMs mapped in {suburb.name}.</p>
+               <p className="text-white/40 font-light">No dedicated ATMs mapped in {displayName}.</p>
                <Link href={`/${suburb.stateSlug}/${suburbSlug}`} className="mt-4 inline-block text-white/60 hover:text-white underline text-sm">
-                  Check bank branches in {suburb.name}
+                  Check bank branches in {displayName}
                </Link>
             </div>
           )}

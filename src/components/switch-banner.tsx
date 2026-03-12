@@ -51,7 +51,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
                 <span className={`${offer.theme.accent} text-sm`}>★</span>
               </div>
               <div>
-                <p className="text-[14px] font-medium text-white">{offer.tagline}</p>
+                <p className="text-[14px] font-medium text-white">{offer.brand} &mdash; {offer.tagline}</p>
                 <p className="text-[11px] text-white/30">{offer.badge}</p>
               </div>
             </div>
@@ -77,7 +77,7 @@ export function SwitchOfferCard({ closedBranches }: { closedBranches: number }) 
               >
                 {offer.cta} &rarr;
               </AffiliateLink>
-            <p className="text-[10px] text-white/20 text-center mt-3">
+            <p className="text-[10px] text-white/50 text-center mt-3">
               {offer.finePrint}
             </p>
           </div>

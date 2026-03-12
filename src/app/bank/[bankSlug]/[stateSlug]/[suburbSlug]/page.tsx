@@ -2,14 +2,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { 
-  getBankBySlug, 
+import {
+  getBankBySlug,
   getBankBranchesInSuburb,
   getSuburbBySlug,
-  STATE_NAMES 
+  STATE_NAMES
 } from "@/lib/data";
 import { generateBankSEOContent } from "@/lib/seo-content";
 import { StatusReporter } from "@/components/status-reporter";
+import { toTitleCase } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ bankSlug: string; stateSlug: string; suburbSlug: string }>;
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const atms = branches.filter(b => b.type === 'atm').length;
   const closedBranches = branches.filter(b => b.status === 'closed').length;
 
-  const seo = generateBankSEOContent(bank.name, suburb.name, "suburb", { openBranches, atms, closedBranches });
+  const seo = generateBankSEOContent(bank.name, toTitleCase(suburb.name), "suburb", { openBranches, atms, closedBranches });
 
   return {
     title: seo.title,
@@ -46,12 +47,13 @@ export default async function BankSuburbPage({ params }: PageProps) {
 
   if (!bank || !suburb) notFound();
 
+  const displayName = toTitleCase(suburb.name);
   const branches = await getBankBranchesInSuburb(bank.id, suburb.slug);
   const openBranchesCount = branches.filter(b => b.type === 'branch' && b.status === 'open').length;
   const atmsCount = branches.filter(b => b.type === 'atm').length;
   const closedCount = branches.filter(b => b.status === 'closed').length;
 
-  const seo = generateBankSEOContent(bank.name, suburb.name, "suburb", { 
+  const seo = generateBankSEOContent(bank.name, toTitleCase(suburb.name), "suburb", { 
     openBranches: openBranchesCount, 
     atms: atmsCount, 
     closedBranches: closedCount 
@@ -69,11 +71,11 @@ export default async function BankSuburbPage({ params }: PageProps) {
             <span>/</span>
             <Link href={`/bank/${bankSlug}/${stateSlug}`} className="hover:text-white transition-colors">{STATE_NAMES[stateSlug]}</Link>
             <span>/</span>
-            <span className="text-white/60">{suburb.name}</span>
+            <span className="text-white/60">{displayName}</span>
           </nav>
 
           <h1 className="mb-6 font-serif text-[clamp(2rem,6vw,3.5rem)] font-light leading-[1.1] tracking-tight">
-            {bank.name} in {suburb.name} <br />
+            {bank.name} in {displayName} <br />
             <span className="text-white/30">{suburb.postcode}, {suburb.state}</span>
           </h1>
 
@@ -94,7 +96,7 @@ export default async function BankSuburbPage({ params }: PageProps) {
               
               {branches.length === 0 ? (
                 <div className="p-10 border border-white/5 text-center bg-white/[0.02]">
-                  <p className="text-white/40 font-light">No {bank.name} locations found in {suburb.name}.</p>
+                  <p className="text-white/40 font-light">No {bank.name} locations found in {displayName}.</p>
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -161,14 +163,14 @@ export default async function BankSuburbPage({ params }: PageProps) {
 
                <div className="p-6 border border-white/10 bg-white/[0.02]">
                   <h3 className="font-serif text-[18px] font-light text-white mb-4">
-                     Nearby {suburb.name}
+                     Nearby {displayName}
                   </h3>
                   <div className="space-y-4">
                      <Link href={`/${stateSlug}/${suburbSlug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
-                        All Banks in {suburb.name} &rarr;
+                        All Banks in {displayName} &rarr;
                      </Link>
                      <Link href={`/atm/${suburbSlug}`} className="block text-[14px] text-white/50 hover:text-white transition-colors">
-                        ATMs in {suburb.name} &rarr;
+                        ATMs in {displayName} &rarr;
                      </Link>
                   </div>
                </div>
