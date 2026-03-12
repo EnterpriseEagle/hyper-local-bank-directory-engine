@@ -10,6 +10,14 @@ export const dynamic = "force-dynamic";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
+function shortenHash(hash: string | null) {
+  if (!hash) {
+    return "n/a";
+  }
+
+  return `${hash.slice(0, 10)}...${hash.slice(-6)}`;
+}
+
 async function getQueueData() {
   const [pending, reviewed] = await Promise.all([
     listCommunityReportsByStatus(["pending"], 40),
@@ -175,6 +183,76 @@ export default async function AdminReportsPage({
                     </span>
                     <span>{new Date(report.submitted_at).toLocaleString("en-AU")}</span>
                   </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-white/45 sm:grid-cols-3">
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        Device
+                      </p>
+                      <p className="mt-1">
+                        {report.camera_make || report.camera_model
+                          ? `${report.camera_make ?? ""} ${report.camera_model ?? ""}`.trim()
+                          : "Unknown"}
+                      </p>
+                    </div>
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        Metadata
+                      </p>
+                      <p className="mt-1">{report.photo_metadata_status ?? "none"}</p>
+                    </div>
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        Captured
+                      </p>
+                      <p className="mt-1">
+                        {report.captured_at
+                          ? new Date(report.captured_at).toLocaleString("en-AU")
+                          : "Unknown"}
+                      </p>
+                    </div>
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        GPS
+                      </p>
+                      <p className="mt-1">
+                        {report.capture_distance_km != null
+                          ? `${report.capture_distance_km.toFixed(1)}km from branch`
+                          : report.capture_lat != null && report.capture_lng != null
+                          ? "Present"
+                          : "Missing"}
+                      </p>
+                    </div>
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        Software
+                      </p>
+                      <p className="mt-1">{report.camera_software || "Camera default"}</p>
+                    </div>
+                    <div className="border border-white/8 bg-black/20 px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-white/25">
+                        Hash
+                      </p>
+                      <p className="mt-1">{shortenHash(report.photo_sha256)}</p>
+                    </div>
+                  </div>
+                  {report.photo_metadata_summary && (
+                    <p className="mt-4 border border-white/8 bg-black/20 px-4 py-3 text-sm text-white/55">
+                      {report.photo_metadata_summary}
+                    </p>
+                  )}
+                  {report.vision_summary && (
+                    <p className="mt-4 border border-blue-500/10 bg-blue-500/5 px-4 py-3 text-sm text-white/55">
+                      Vision review ({report.vision_model || "model"}): {report.vision_summary}
+                      {report.vision_authenticity
+                        ? ` Authenticity ${report.vision_authenticity}.`
+                        : ""}
+                      {report.vision_supports_report == null
+                        ? ""
+                        : report.vision_supports_report
+                        ? " Supports the submitted status."
+                        : " Does not support the submitted status."}
+                    </p>
+                  )}
                   {report.agent_summary && (
                     <p className="mt-4 border border-white/8 bg-black/20 px-4 py-3 text-sm text-white/55">
                       {report.agent_summary}

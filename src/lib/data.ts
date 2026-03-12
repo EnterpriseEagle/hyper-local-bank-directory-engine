@@ -1,6 +1,7 @@
 import { db } from "./db";
 import { suburbs, branches, banks, statusReports } from "./db/schema";
 import { eq, sql, and, desc, asc, ne, like, inArray } from "drizzle-orm";
+import { type BranchModerationTarget } from "./reports/types";
 
 export const STATE_NAMES: Record<string, string> = {
   "new-south-wales": "New South Wales",
@@ -286,7 +287,7 @@ export async function getBranchModerationTargets(branchIds: number[]) {
     return [];
   }
 
-  return db
+  return (await db
     .select({
       address: branches.address,
       bankName: banks.name,
@@ -295,6 +296,8 @@ export async function getBranchModerationTargets(branchIds: number[]) {
       branchName: branches.name,
       branchStatus: branches.status,
       branchType: branches.type,
+      lat: branches.lat,
+      lng: branches.lng,
       postcode: suburbs.postcode,
       stateSlug: suburbs.stateSlug,
       suburbName: suburbs.name,
@@ -303,7 +306,7 @@ export async function getBranchModerationTargets(branchIds: number[]) {
     .from(branches)
     .innerJoin(banks, eq(branches.bankId, banks.id))
     .innerJoin(suburbs, eq(branches.suburbId, suburbs.id))
-    .where(inArray(branches.id, branchIds));
+    .where(inArray(branches.id, branchIds))) as BranchModerationTarget[];
 }
 
 export async function getClosureStatsForState(stateSlug: string) {

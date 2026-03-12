@@ -3,6 +3,8 @@ import { getBranchModerationTargets, submitStatusReport } from "@/lib/data";
 import { isRateLimited, getIpHash } from "@/lib/rate-limit";
 import { statusReportsEnabled } from "@/lib/feature-flags";
 import { assessIncomingReport } from "@/lib/reports/agent";
+import { reviewPhotoWithVision } from "@/lib/reports/openai-vision";
+import { preparePhotoEvidence } from "@/lib/reports/photo-metadata";
 import { queueCommunityReport, supabaseReportsConfigured, uploadReportPhoto } from "@/lib/reports/supabase";
 import { MAX_REPORT_NOTE_LENGTH, VALID_REPORT_TYPES, type ReportType } from "@/lib/reports/types";
 import { revalidatePath } from "next/cache";
@@ -99,14 +101,40 @@ export async function POST(request: NextRequest) {
     const uploadedPhoto = photo instanceof File && photo.size > 0 ? photo : null;
 
     if (supabaseReportsConfigured()) {
+      const [branchTarget] = await getBranchModerationTargets([branchId]);
+      if (!branchTarget) {
+        return NextResponse.json({ error: "Branch not found" }, { status: 404 });
+      }
+
+      const preparedPhoto = uploadedPhoto
+        ? await preparePhotoEvidence(uploadedPhoto, branchTarget)
+        : null;
+      const visionReview = preparedPhoto
+        ? await reviewPhotoWithVision({
+            branch: branchTarget,
+            photo: preparedPhoto,
+            payload: {
+              note,
+              reportType: reportType as ReportType,
+            },
+          })
+        : null;
       const assessment = assessIncomingReport({
-        hasPhoto: Boolean(uploadedPhoto),
+        hasPhoto: Boolean(preparedPhoto),
         note,
         reportType: reportType as ReportType,
+      }, {
+        photoMetadata: preparedPhoto?.metadata,
+        vision: visionReview,
       });
 
-      const storedPhoto = uploadedPhoto
-        ? await uploadReportPhoto(branchId, suburbId, uploadedPhoto)
+      const storedPhoto = preparedPhoto
+        ? await uploadReportPhoto({
+            branchId,
+            suburbId,
+            buffer: preparedPhoto.buffer,
+            file: preparedPhoto.file,
+          })
         : null;
 
       await queueCommunityReport({
@@ -118,7 +146,9 @@ export async function POST(request: NextRequest) {
           note,
           ipHash,
         },
+        photoMetadata: preparedPhoto?.metadata,
         uploadedPhoto: storedPhoto,
+        vision: visionReview,
       });
 
       return NextResponse.json({
