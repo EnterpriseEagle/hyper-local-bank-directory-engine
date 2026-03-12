@@ -60,7 +60,7 @@ export function SearchBar() {
   }
 
   return (
-    <div ref={ref} className="relative w-full">
+    <div ref={ref} className="relative z-[70] w-full isolate">
       <div className="relative">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"
@@ -91,7 +91,7 @@ export function SearchBar() {
       </div>
 
       {open && results.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 w-full bg-[#0a0a0a] border border-white/10 max-h-64 overflow-y-auto">
+        <div className="absolute z-[80] top-full mt-2 w-full overflow-hidden border border-white/10 bg-[#0a0a0a]/98 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-sm max-h-64 overflow-y-auto">
           {results.map((r) => (
             <button
               key={r.slug}

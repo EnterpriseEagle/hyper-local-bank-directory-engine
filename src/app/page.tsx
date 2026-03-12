@@ -51,9 +51,9 @@ export default async function HomePage() {
   return (
     <div>
         {/* ===== HERO: Search & Destroy ===== */}
-        <section className="relative flex flex-col justify-center px-6 sm:px-10 pt-16 pb-10 sm:pt-24 sm:pb-14 overflow-hidden bg-black">
+        <section className="relative z-20 flex flex-col justify-center overflow-visible bg-black px-6 pt-16 pb-10 sm:px-10 sm:pt-24 sm:pb-14">
           {/* Blue trust glow */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] max-w-[1100px] max-h-[1100px] rounded-full blur-[180px] opacity-20"
               style={{
@@ -80,7 +80,7 @@ export default async function HomePage() {
             </p>
 
             {/* Search Bar */}
-            <div className="mb-4">
+            <div className="relative z-30 mb-4">
               <HeroSearch />
             </div>
 
@@ -96,7 +96,7 @@ export default async function HomePage() {
         </section>
 
       {/* ===== Bank Marquee ===== */}
-      <section className="relative w-full overflow-hidden border-y border-white/[0.06] py-3 bg-black">
+      <section className="relative z-10 w-full overflow-hidden border-y border-white/[0.06] bg-black py-3">
         <style
           dangerouslySetInnerHTML={{
             __html: `

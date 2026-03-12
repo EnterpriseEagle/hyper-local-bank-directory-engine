@@ -60,7 +60,7 @@ export function HeroSearch() {
   }
 
   return (
-    <div ref={ref} className="relative w-full max-w-[640px]">
+    <div ref={ref} className="relative z-[90] w-full max-w-[640px] isolate">
       <div className="relative">
         <svg
           className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30"
@@ -99,7 +99,7 @@ export function HeroSearch() {
       </div>
 
       {open && results.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 w-full bg-[#0a0a0a] border border-white/10 max-h-72 overflow-y-auto">
+        <div className="absolute z-[100] top-full mt-2 w-full overflow-hidden border border-white/10 bg-[#0a0a0a]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-sm max-h-72 overflow-y-auto">
           {results.map((r) => (
             <button
               key={r.slug}
